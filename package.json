@@ -1,0 +1,35 @@
+{
+  "name": "sailmakers",
+  "version": "1.0.0",
+  "description": "Customer application",
+  "main": "sailmakers.js",
+  "scripts": {
+    "start": "NODE_ENV=dev nodemon sailmakers.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CurtiePi/sailmakers.git"
+  },
+  "author": "TheLoneliestMonk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CurtiePi/sailmakers/issues"
+  },
+  "homepage": "https://github.com/CurtiePi/sailmakers#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
+    "nodeman": "^1.1.2",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "rand-token": "^1.0.1"
+  }
+}
