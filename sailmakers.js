@@ -9,7 +9,7 @@ const https             = require('https');
 const cors              = require('cors');
 const bodyParser        = require('body-parser');
 const cookieParser      = require('cookie-parser');
-//const mongoose          = require('mongoose');
+const mongoose          = require('mongoose');
 const config            = require('./config/config');
 const passport          = require('passport');
 //require('./lib/strategies')(passport)
@@ -17,7 +17,7 @@ const passport          = require('passport');
 /*
  * TODO DECIDE ON DATABASE, MONGO OR MYSQL
  * Set up the database connection
- 
+ */ 
 
 let db_host = config.db.host;
 let db_port = config.db.port;
@@ -25,12 +25,13 @@ let db_name = config.db.name;
 
 let conn_str = `mongodb://${db_host}:${db_port}/${db_name}`;
 
+/*
  * Connection Options Explained
  * useNewUrlParser: allow users to fall back to the old parser if they find a bug in the new parser
  * useUnifiedTopology: server discover and monitor engine
  * useCreateIndex: help Mongoose's default index build avoid deprecation warnings
  * keepAlive: to avoid connection closed errors
- 
+ */
 
 mongoose.connect(conn_str, {useNewUrlParser: true,
                                useUnifiedTopology: true,
@@ -42,7 +43,7 @@ let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 
 console.log(`Database: ${conn_str}`)
-*/
+
 
 var privateKey = fs.readFileSync('./config/dev.sailmakers.com.key', 'utf8');
 var certificate = fs.readFileSync('./config/dev.sailmakers.com.crt', 'utf8');

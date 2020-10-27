@@ -10,7 +10,7 @@ const dev = {
     db: {
         host: process.env.DEV_DB_HOST || 'localhost',
         port: parseInt(process.env.DEV_DB_PORT) || 27017,
-        name: process.env.DEV_DB_NAME || 'book_club'
+        name: process.env.DEV_DB_NAME || 'sailmakers_dev'
     }
 };
 
@@ -22,7 +22,7 @@ const test = {
     db: {
         host: process.env.TEST_DB_HOST || 'localhost',
         port: parseInt(process.env.TEST_DB_PORT) || 27017,
-        name: process.env.TEST_DB_NAME || 'book_club_test'
+        name: process.env.TEST_DB_NAME || 'sailmakers_dev'
     }
 };
 
