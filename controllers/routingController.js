@@ -115,7 +115,6 @@ module.exports = {
     },
     createSalesperson: async (req, res, next) => {
         try {
-            console.log(req.body);
             var salesperson = await dataAccess.createSalesperson(req.body);
             res.status(200).json(salesperson);
         }
@@ -135,5 +134,55 @@ module.exports = {
                 message: `Error retrieving salesperson ${err}` 
             });
         }
-    }
+    },
+    /*
+     * Ports
+     *
+     */
+    getPortsList: async (req, res, next) => {
+        try {
+            var ports = await dataAccess.listPorts();
+            res.status(200).json(ports);
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: `Error retrieving ports list ${err}` 
+            })
+        }
+    },
+    getPortById: async (req, res, next) => {
+        try {
+            var port = await dataAccess.getPortById(req.params.pid);
+            res.status(200).json(port);
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: `Error retrieving port ${err}` 
+            });
+        }
+    },
+    createPort: async (req, res, next) => {
+        try {
+            console.log(req.body);
+            var port = await dataAccess.createPort(req.body);
+            res.status(200).json(port);
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: `Error creating port  ${err}` 
+            });
+        }
+    },
+    updatePort: async (req, res, next) => {
+        try {
+            var port = await dataAccess.updatePort(req.body.criteria, req.body.update);
+            res.status(200).json(port);
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: `Error updating port ${err}` 
+            });
+        }
+    },
+
 }

@@ -65,10 +65,12 @@ smapp.disable('x-powered-by');
 customerRouter = require('./routes/apiCustomer');
 salespersonRouter = require('./routes/apiSalesForce');
 quoteRouter = require('./routes/apiQuote');
+portRouter = require('./routes/apiPort');
 
 smapp.use('/api/customer', customerRouter);
 smapp.use('/api/staff', salespersonRouter);
 smapp.use('/api/quote', quoteRouter);
+smapp.use('/api/port', portRouter);
 
 smapp.use(function(req, res, next) {
     var err = new Error('Not Found');
