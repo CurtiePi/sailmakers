@@ -17,7 +17,8 @@ var SalespersonSchema = new mongoose.Schema({
     phone: {
         type: String,
         required: true
-    }
+    },
+    quotes: [{type: mongoose.Schema.ObjectId, ref: 'Quote'}],
 }, {
     timestamps: true
 });

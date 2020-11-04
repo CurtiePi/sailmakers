@@ -8,6 +8,9 @@ var CustomerSchema = new mongoose.Schema({
     lname: {
         type: String,
     },
+    address: {
+        type: String,
+    },
     email: {
         type: String,
         lowercase: true,
@@ -15,6 +18,7 @@ var CustomerSchema = new mongoose.Schema({
     phone: {
         type: String,
     },
+    quotes: [{type: mongoose.Schema.ObjectId, ref: 'Quote'}],
     boat: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Boat',
@@ -30,11 +34,10 @@ var CustomerSchema = new mongoose.Schema({
 });
 
 
-CustomerSchema.methods.getFullName = function() {
+CustomerSchema.methods.getFullname = function () {
 
     fullName = `${this.fname} ${this.lname}`
     return fullName
-
 }
 
 module.exports = mongoose.model('Customer', CustomerSchema);
