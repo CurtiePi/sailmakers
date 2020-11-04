@@ -30,13 +30,13 @@
   </div>
 </template>
 <script>
-import customerInputs from '@/assets/customerInputs'
+import portInputs from '@/assets/portInputs'
 
 export default {
-  name: 'customerForm',
+  name: 'portForm',
   data () {
     return {
-      inputFields: customerInputs.inputFields,
+      inputFields: portInputs.inputFields,
       form: {}
     }
   }
