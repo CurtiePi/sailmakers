@@ -5,7 +5,7 @@ var PortSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    address: {
+    abbreviation: {
         type: String,
     }
 }, {
