@@ -4,6 +4,7 @@
 
 const express           = require('express');
 const fs                = require('fs');
+const path              = require('path');
 const http              = require('http');
 const https             = require('https');
 const cors              = require('cors');
@@ -50,23 +51,25 @@ var certificate = fs.readFileSync('./config/dev.sailmakers.com.crt', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 
 var smapp = express();
-smapp.use(cors({credentials: true, origin: 'http://192.168.1.4:8080'}));
+smapp.use(cors({credentials: true, origin: 'http://192.168.1.6:8080'}));
 smapp.use(cookieParser());
 
 smapp.use(bodyParser.json());
 smapp.use(bodyParser.urlencoded({ extended: true }));
 smapp.use(passport.initialize());
-
+smapp.use('images', express.static(path.join(__dirname, 'public/images')));
 smapp.disable('x-powered-by');
 /*
  * Set up routing here
- 
-authRouter = require('./routes/auth');
-memberRouter = require('./routes/member');
+ */
+customerRouter = require('./routes/apiCustomer');
+salespersonRouter = require('./routes/apiSalesForce');
+quoteRouter = require('./routes/apiQuote');
 
-smapp.use(authRouter);
-smapp.use(memberRouter);
-*/
+smapp.use('/api/customer', customerRouter);
+smapp.use('/api/staff', salespersonRouter);
+smapp.use('/api/quote', quoteRouter);
+
 smapp.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
