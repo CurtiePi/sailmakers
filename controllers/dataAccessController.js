@@ -149,5 +149,64 @@ module.exports = {
         catch(err) {
             console.log('Received an error creating salesperson');
         }
+    },
+    /**
+     * List all ports in the database
+     *
+     */
+    listPorts: async () => {
+        try {
+            let ports = await Port.find();
+            return ports;
+        }
+        catch (err) {
+            console.log('Received an error getting ports listing');
+        }
+    },
+
+    /**
+     * Get specific port by id
+     *
+     */
+    getPortById: async (id) => {
+        try {
+            var port_id = mongoose.Types.ObjectId(id);
+            let port = await Port.findById({_id: port_id});
+            return port;
+        }
+        catch (err) {
+            console.log('Received an error getting port');
+        }
+    },
+    /**
+     * Create port
+     *
+     */
+    createPort: async (port_data) => {
+        try {
+            var new_port = new Port(port_data);
+            await new_port.save();
+            return new_port;
+        }
+        catch(err) {
+            console.log('Received an error creating salesperson');
+        }
+    },
+    /**
+     * Update specific port
+     *
+     */
+    updatePort: async (criteria, update ) => {
+        if (criteria._id) {
+            criteria._id = mongoose.Types.ObjectId(criteria._id);
+        }
+
+        try {
+            let port = await Port.findOneAndUpdate(criteria, update, {new: true});
+            return port;
+        }
+        catch (err) {
+            console.log('Received an error updating port');
+        }
     }
 }
