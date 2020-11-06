@@ -9,7 +9,7 @@ const deliverQuote = (req, res, next) => {
         service: 'gmail',
         auth: {
             user: 'curtisbklyn@gmail.com',
-            pass: 'xrhzahxeymdydsqc'
+            pass: 'xxxxxxxxxxxxxxx''
         }
     }));
 
