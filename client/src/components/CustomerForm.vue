@@ -108,8 +108,6 @@ export default {
     async createCustomer () {
       let data = {}
 
-      console.log(this.inputFields)
-
       for (var idx = 0; idx < this.inputFields.length; idx++) {
         var inputField = this.inputFields[idx]
         if (inputField.value === 'other') {
@@ -124,7 +122,7 @@ export default {
 
       var customer = await AuthenticationService.customerCreate(payload)
       if (this.singleOp) {
-        this.$router.push({ name: 'CustomersList' })
+        this.$router.push({ name: 'Customers' })
       } else {
         this.$router.push({ name: 'QuoteCreate', params: {'payload': customer} })
       }
