@@ -19,9 +19,8 @@ var CustomerSchema = new mongoose.Schema({
         type: String,
     },
     quotes: [{type: mongoose.Schema.ObjectId, ref: 'Quote'}],
-    boat: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Boat',
+    boat_model: {
+        type: String
     },
     boat_home: {
         type: String,
