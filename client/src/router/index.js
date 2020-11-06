@@ -24,7 +24,7 @@ export default new Router({
     {
       path: '/customer_add',
       name: 'CustomerAdd',
-      component: () => import('../components/CustomerCreate.vue'),
+      component: () => import('../components/CustomerForm.vue'),
       props: true
     },
     {
@@ -53,7 +53,19 @@ export default new Router({
     {
       path: '/new_customer_quote',
       name: 'NewCustomerQuote',
-      components: () => import('../components/CustomerQuoteForm.vue')
+      components: () => import('../components/CustomerForm.vue'),
+      props: true
+    },
+    {
+      path: '/ports',
+      name: 'PortsList',
+      component: () => import('../components/PortsList.vue')
+    },
+    {
+      path: '/port_create',
+      name: 'PortCreate',
+      component: () => import('../components/PortForm.vue'),
+      props: true
     }
   ]
 })

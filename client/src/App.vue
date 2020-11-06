@@ -25,13 +25,17 @@ export default {
           subNavLinks: [
             {
               text: 'Customer List',
-              path: '/customers',
+              name: 'Customers',
               icon: 'people'
             },
             {
               text: 'Add Customer',
-              path: '/customer_add',
-              icon: 'person-add'
+              name: 'CustomerAdd',
+              icon: 'person-add',
+              param: {
+                name: 'atomic',
+                value: true
+              }
             }
           ]
         },
@@ -41,13 +45,17 @@ export default {
           subNavLinks: [
             {
               text: ' Quote List',
-              path: '/quotes',
+              name: 'Quotes',
               icon: 'documents'
             },
             {
               text: 'New Customer Quote',
-              path: '/new_customer_quote',
-              icon: 'document-attach'
+              name: 'CustomerAdd',
+              icon: 'document-attach',
+              param: {
+                name: 'atomic',
+                value: false
+              }
             }
           ]
         },
@@ -57,12 +65,12 @@ export default {
           subNavLinks: [
             {
               text: 'Ports List',
-              path: '/',
+              name: 'PortsList',
               icon: 'list-circle'
             },
             {
               text: 'Add Port',
-              path: '/',
+              name: 'PortCreate',
               icon: 'boat'
             }
           ]

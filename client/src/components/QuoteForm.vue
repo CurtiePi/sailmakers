@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Create New Customer</h1>
+    <h1>Create New Quote</h1>
     <form>
       <div v-for="(input, index) in inputFields" class="input_holder"
         :key="index">
@@ -42,7 +42,7 @@
         </div>
       </div>
       <button type="button" class="btn btn-primary"
-        @click="createCustomer()"
+        @click="createQuote()"
         :disabled="!allowSubmitForm">Create Customer</button>
       <button type="button" class="btn btn-primary"
         @click="checkoutput()"
@@ -50,21 +50,17 @@
     </form>
   </div>
 </template>
+
 <script>
-import AuthenticationService from '@/services/AuthenticationService'
-import customerInputs from '@/assets/customerInputs'
+import quoteInputs from '@/assets/quoteInputs'
 
 export default {
-  name: 'customerForm',
-  props: [ 'atomic' ],
+  name: 'createQuote',
   data () {
     return {
       inputFields: [],
-      selectOptions: null,
-      form: {},
-      singleOp: false,
-      needOther: false,
-      otherValue: null
+      customer: null,
+      form: {}
     }
   },
   computed: {
@@ -92,71 +88,38 @@ export default {
       let payload = data
       console.log(payload)
     },
-    checkForOther (event) {
-      for (var idx in this.inputFields) {
-        const field = this.inputFields[idx]
-        if (field.name === event.target.name) {
-          if (field.value === 'other') {
-            this.needOther = true
-          } else {
-            this.needOther = false
-            this.otherValue = ''
-          }
-        }
-      }
-    },
-    async createCustomer () {
+    async createQuote () {
       let data = {}
 
       console.log(this.inputFields)
 
       for (var idx = 0; idx < this.inputFields.length; idx++) {
         var inputField = this.inputFields[idx]
-        if (inputField.value === 'other') {
-          data[inputField.name] = this.otherValue
-        } else {
+        if (this.hasValue(inputField)) {
           data[inputField.name] = inputField.value
         }
       }
 
       let payload = data
-      this.clearInputs()
 
-      var customer = await AuthenticationService.customerCreate(payload)
-      if (this.singleOp) {
-        this.$router.push({ name: 'CustomersList' })
-      } else {
-        this.$router.push({ name: 'QuoteCreate', params: {'payload': customer} })
-      }
+      await AuthenticationService.createQuote(payload)
+      this.$router.push({ name: 'QuotesList' })
     },
     hasValue (inputField) {
       return inputField.value != null &&
         inputField.value !== undefined &&
         inputField.value !== ''
     },
-    async getPorts () {
-      let response = await AuthenticationService.portList()
-      this.selectOptions = response.data
-    },
-    clearInputs () {
-      for (var idx = 0; idx < this.inputFields.length; idx++) {
-        var inputField = this.inputFields[idx]
-        inputField.value = ''
-        if (this.otherValue) {
-          this.otherValue = ''
-        }
-      }
-    }
   },
   mounted () {
-    this.inputFields = customerInputs.inputFields
-    if (this.atomic) {
-      this.singleOp = this.atomic
+    this.inputFields = quoteInputs.inputFields
+    if (this.payload) {
+      this.customer = this.payload
     }
-    this.getPorts()
   }
 }
 </script>
+
 <style scoped>
 .input_holder {
   position: relative;
