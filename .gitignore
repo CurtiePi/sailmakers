@@ -3,4 +3,5 @@ node_modules
 *.key
 *.crt
 migrate*
+middleware/mailman.js
 sailmakers.json
