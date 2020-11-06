@@ -36,6 +36,13 @@ export default {
       value: null
     },
     {
+      name: 'boat_model',
+      label: 'Boat',
+      type: 'text',
+      placeholder: 'Boat',
+      value: null
+    },
+    {
       name: 'boat_name',
       label: 'Boat Name',
       type: 'text',
