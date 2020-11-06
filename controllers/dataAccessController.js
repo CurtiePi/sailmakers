@@ -2,6 +2,7 @@ const mongoose          = require('mongoose');
 const Customer          = require('../models/customers');
 const Salesperson       = require('../models/salespeople');
 const Quote             = require('../models/quotes');
+const Port              = require('../models/ports');
 
 
 module.exports = {
@@ -31,6 +32,17 @@ module.exports = {
         }
         catch (err) {
             console.log('Received an error getting customer');
+        }
+    },
+    createCustomer: async (customer_data) => {
+        try {
+            var customer = new Customer(customer_data);
+            await customer.save();
+
+            return customer;
+        }
+        catch(err) {
+            console.log('Received an error creating customer');
         }
     },
 
@@ -109,6 +121,7 @@ module.exports = {
             return quote;
         }
         catch(err) {
+            console.log('Received an error creating quote');
         }
     },
     getSalespeople: async () => {
@@ -189,7 +202,7 @@ module.exports = {
             return new_port;
         }
         catch(err) {
-            console.log('Received an error creating salesperson');
+            console.log('Received an error creating a port');
         }
     },
     /**

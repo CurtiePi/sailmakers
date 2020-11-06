@@ -8,7 +8,7 @@ export default {
       value: null
     },
     {
-      name: 'abbr',
+      name: 'abbrev',
       label: 'Abbreviation',
       type: 'text',
       placeholder: 'Abbreviation',

@@ -1,22 +1,11 @@
 import Api from '@/services/Api'
 
 export default {
-  login (credentials) {
-    return Api().secure.post('/login', credentials)
-  },
-  logout (credentials) {
-    let config = {
-      headers: {
-        'Authorization': `Bearer ${credentials}`
-      }
-    }
-    return Api().insecure.get('/logout', config)
-  },
-  refresh () {
-    return Api().secure.get('/refresh')
-  },
   customerList () {
     return Api().insecure.get('/api/customer')
+  },
+  customerCreate (payload) {
+    return Api().insecure.post('/api/customer/create', payload)
   },
   customerUpdate (payload) {
     return Api().insecure.post('/api/customer/update', payload)
@@ -37,5 +26,11 @@ export default {
     let url = `/api/staff/name/${nameParam}`
     console.log(url)
     return Api().insecure.get(url)
+  },
+  createPort (payload) {
+    return Api().insecure.post('/api/port/create', payload)
+  },
+  portList () {
+    return Api().insecure.get('/api/port')
   }
 }

@@ -15,8 +15,15 @@
               v-for="(subNavLink, subindex) in link.subNavLinks"
               :key="subindex"
             >
-              <router-link
-                :to="subNavLink.path"
+              <router-link v-if="subNavLink.param"
+                :to="{name: subNavLink.name , params: { 'atomic': subNavLink.param.value  } }"
+                :style="{color: linkColor || '#DDD'}"
+              >
+                {{ subNavLink.text }}
+                <ion-icon :name="subNavLink.icon"></ion-icon>
+              </router-link>
+              <router-link v-else
+                :to="{ name: subNavLink.name }"
                 :style="{color: linkColor || '#DDD'}"
               >
                 {{ subNavLink.text }}

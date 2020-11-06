@@ -2,13 +2,13 @@
   <div class="container">
     <h1>Create New Port</h1>
     <form>
-      <PortInputs />
+      <PortInputs ref="formInputs"/>
       <button @click="createPort()">Create Port</button> 
     </form>
   </div>
 </template>
 <script>
-import PortInputs from '@/components/CustomerForm'
+import PortInputs from '@/components/PortForm'
 import router from '../router'
 
 export default {
@@ -16,8 +16,10 @@ export default {
   components: {
     PortInputs
   },
+  props: ['inputFields'],
   data () {
     return {
+      inputFields: null
     }
   },
   computed: {
@@ -26,9 +28,10 @@ export default {
     }
   },
   methods: {
-    async create_port () {
-      /*
+    async createPort () {
       let data = {}
+
+      console.log(this.inputFields)
 
       for (var idx = 0; idx < this.inputFields.length; idx++) {
         var inputField = this.inputFields[idx]
@@ -36,13 +39,12 @@ export default {
           data[inputField.name] = inputField.value
         }
       }
-      let payload = {
-        criteria: {'_id': this.customer._id},
-        update: data}
 
-      document.getElementsByClassName('editor')[0].style.display = 'none'
-      let response = await AuthenticationService.customerUpdate(payload)
-      this.customer_data = response.data
+      let payload = data
+      console.log(payload)
+      /*
+      let response = await AuthenticationService.createPort(payload)
+      this.$router.push({ name: 'PortsList' })
       */
     },
     hasValue (inputField) {
@@ -53,6 +55,9 @@ export default {
     goBack () {
       router.go(-1)
     }
+  },
+  mounted () {
+    this.inputFields = this.$refs.formInputs.inputFields
   }
 }
 </script>
