@@ -22,6 +22,7 @@ var QuoteSchema = new mongoose.Schema({
         type: String
     },
     quote_type: {
+        type: [String],
         enum: ['New Sail', 'Sail Repaiar', 'Winter Service', 'Sail Cover']
     },
     battens: {
@@ -56,7 +57,9 @@ var QuoteSchema = new mongoose.Schema({
         default: true
     },
     status: {
-        enum: ['pending', 'deposit', 'production', 'ready', 'pickup', 'delivery', 'paid-in-full']
+        type: String,
+        enum: ['pending', 'deposit', 'production', 'ready', 'pickup', 'delivery', 'paid-in-full'],
+        default: 'pending'
     },
     total_due: {
         type: Number,

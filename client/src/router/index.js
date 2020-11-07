@@ -41,7 +41,7 @@ export default new Router({
     {
       path: '/quote_create',
       name: 'QuoteCreate',
-      component: () => import('../components/QuoteCreate.vue'),
+      component: () => import('../components/QuoteForm.vue'),
       props: true
     },
     {

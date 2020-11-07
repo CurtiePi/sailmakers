@@ -1,66 +1,75 @@
 <template>
   <div class="container">
     <h1>Create New Quote</h1>
-    <form>
-      <div v-for="(input, index) in inputFields" class="input_holder"
-        :key="index">
-        <div v-if="!['submit', 'textarea', 'select'].includes(input.type)">
-          <label>{{ input.label }}</label>
-          <input
-            class="input is-large"
-            :type="input.type"
-            :name="input.name.toLowerCase()"
-            v-model="input.value" />
-        </div>
-        <div v-else-if="input.type == 'textarea'">
-          <label>{{ input.label }}</label>
-          <input
-            class="textarea"
-            :type="input.type"
-            :name="input.name.toLowerCase()"
-            v-model="input.value" />
-        </div>
-        <div v-else-if="input.type == 'select'">
-          <label>{{ input.label }}</label>
-          <select
-            class="select"
-            :name="input.name.toLowerCase()"
-            :id="input.name.toLowerCase()"
-            @change="checkForOther($event)"
-            v-model="input.value">
-            <option v-for="option in selectOptions">
-              {{ option.name }}
-            </option>
-            <option value='other'>Other</option>
-          </select>
-          <div class="otherInput"
-             v-if="needOther" >
-            <label>Specify Other</label>
-            <input type="text"
-              v-model="otherValue" />
+    <br />
+    <div class="row">
+      <form>
+        <div class="column" v-for="(input, index) in inputFields" 
+          :key="index">
+          <div v-if="!['submit', 'textarea', 'checkbox', 'select'].includes(input.type)">
+            <label>{{ input.label }}</label>
+            <input
+              class="input is-large"
+              :type="input.type"
+              :name="input.name.toLowerCase()"
+              v-model="input.value" />
+          </div>
+          <div v-else-if="input.type == 'textarea'">
+            <label>{{ input.label }}</label>
+            <textarea
+              class="textarea"
+              cols="120"
+              rows="6"
+              :type="input.type"
+              :name="input.name.toLowerCase()"
+              v-model="input.value" />
+          </div>
+          <div v-else-if="input.type == 'select'">
+            <label>{{ input.label }}</label>
+            <select
+              class="multiselect-ui form-control" multiple="multiple"
+              :name="input.name.toLowerCase()"
+              :id="input.name.toLowerCase()"
+              @change="checkForOther($event)"
+              v-model="input.value">
+              <option value="" disabled selected>Choose {{ input.label }}</option>
+              <option v-for="option in input.options">
+                {{ option.name }}
+              </option>
+            </select>
+          </div>
+          <div class="row" v-else-if="input.type == 'checkbox'">
+            <p>Quote Type</p>
+            <div class="check" v-for="(option, index) in input.options" :key="index">
+              <input type="checkbox" :value="option.name" @change="setType($event)" :id="key">
+              <label>{{ option.name }}</label>
+            </div>
           </div>
         </div>
-      </div>
-      <button type="button" class="btn btn-primary"
-        @click="createQuote()"
-        :disabled="!allowSubmitForm">Create Customer</button>
-      <button type="button" class="btn btn-primary"
-        @click="checkoutput()"
-        :disabled="!allowSubmitForm">Check Sanity</button>
-    </form>
+      </form>
+    </div>
+    <button type="button" class="btn btn-primary"
+      @click="createQuote()"
+      :disabled="!allowSubmitForm">Create Customer</button>
+    <button type="button" class="btn btn-primary"
+      @click="checkoutput()"
+      :disabled="!allowSubmitForm">Check Sanity</button>
   </div>
 </template>
 
 <script>
+import AuthenticationService from '@/services/AuthenticationService'
 import quoteInputs from '@/assets/quoteInputs'
 
 export default {
   name: 'createQuote',
+  props: ['payload'],
   data () {
     return {
       inputFields: [],
       customer: null,
-      form: {}
+      form: {},
+      quote_type: []
     }
   },
   computed: {
@@ -76,7 +85,7 @@ export default {
 
       for (var idx = 0; idx < this.inputFields.length; idx++) {
         var inputField = this.inputFields[idx]
-        if (this.hasValue(inputField)) {
+        if (this.hasValue(inputField) && inputField.name !== 'customer') {
           if (inputField.value === 'other') {
             data[inputField.name] = this.otherValue
           } else {
@@ -84,6 +93,11 @@ export default {
           }
         }
       }
+
+      data['quote_type'] = this.quote_type
+      data['customer_id'] = this.customer._id
+      let salesperson = JSON.parse(localStorage.sp)
+      data['salesperson_id'] = salesperson._id
 
       let payload = data
       console.log(payload)
@@ -95,14 +109,19 @@ export default {
 
       for (var idx = 0; idx < this.inputFields.length; idx++) {
         var inputField = this.inputFields[idx]
-        if (this.hasValue(inputField)) {
+        if (this.hasValue(inputField) && inputField.name !== 'customer') {
           data[inputField.name] = inputField.value
         }
       }
+      data['quote_type'] = this.quote_type
+      data['customer_id'] = this.customer._id
+      let salesperson = JSON.parse(localStorage.sp)
+      data['salesperson_id'] = salesperson._id
 
       let payload = data
 
-      await AuthenticationService.createQuote(payload)
+      await AuthenticationService.quoteCreate(payload)
+      this.clearInputs()
       this.$router.push({ name: 'QuotesList' })
     },
     hasValue (inputField) {
@@ -110,17 +129,72 @@ export default {
         inputField.value !== undefined &&
         inputField.value !== ''
     },
+    setType (event) {
+      if (event.target.checked) {
+        this.quote_type.push(event.target.value)
+      } else {
+        this.quote_type = this.quote_type.filter((ele) => { return ele !== event.target.value })
+      }
+    },
+    prepareInputs () {
+      for (var idx in this.inputFields) {
+        switch (this.inputFields[idx].name) {
+          case 'customer':
+            this.inputFields[idx].value = `${this.customer.fname} ${this.customer.lname}`
+            break
+          case 'phone':
+            this.inputFields[idx].value = this.customer.phone
+            break
+          case 'address':
+            this.inputFields[idx].value = this.customer.address
+            break
+          case 'email':
+            this.inputFields[idx].value = this.customer.email
+            break
+          case 'boat_type':
+            this.inputFields[idx].value = this.customer.boat_model
+            break
+          case 'boat_name':
+            this.inputFields[idx].value = this.customer.boat_name
+            break
+          case 'home_port':
+            this.inputFields[idx].value = this.customer.boat_home
+            break
+          default:
+        }
+      }
+    },
+    clearInputs () {
+      for (var idx = 0; idx < this.inputFields.length; idx++) {
+        var inputField = this.inputFields[idx]
+        inputField.value = ''
+      }
+    }
   },
   mounted () {
     this.inputFields = quoteInputs.inputFields
     if (this.payload) {
-      this.customer = this.payload
+      this.customer = this.payload.data
+      this.prepareInputs()
     }
   }
 }
 </script>
 
 <style scoped>
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 .input_holder {
   position: relative;
 }
@@ -131,19 +205,7 @@ input[type=text] {
     border-bottom: 1px solid #000000;
 }
 
-.control {
-  display: inline-block;
-  height: calc(1.5em + 0.75rem + 2px);
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  margin-top: 5px;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+.check {
+  margin: 0px 10px;
 }
 </style>
