@@ -12,7 +12,8 @@ module.exports = {
      */
     listCustomers: async () => {
         try {
-            let customers = await Customer.find();
+            let customers = await Customer.find()
+                                          .populate('quotes');
             return customers;
         }
         catch (err) {

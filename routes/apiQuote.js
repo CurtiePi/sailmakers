@@ -27,3 +27,6 @@ apiQuoteRouter.post('/email', mailman.deliverQuote, (req, res, next) => {
 apiQuoteRouter.post('/email', printpress.writeQuoteDoc, mailman.deliverQuote, (req, res, next) => {
     res.status(200).json({message: 'Quote has been sent.'});
 });
+apiQuoteRouter.post('/print', printpress.writeQuoteDoc, (req, res, next) => {
+    res.status(200).json({message: 'Quote has been created.'});
+});

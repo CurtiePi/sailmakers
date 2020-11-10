@@ -124,7 +124,7 @@ export default {
       if (this.singleOp) {
         this.$router.push({ name: 'Customers' })
       } else {
-        this.$router.push({ name: 'QuoteCreate', params: {'payload': customer} })
+        this.$router.push({ name: 'QuoteCreate', params: {'create_payload': customer} })
       }
     },
     hasValue (inputField) {

@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <h1>{{ headerText }}</h1>
+    <h1>Edit Quote</h1>
     <br />
     <div class="row">
       <form>
         <div class="column" v-for="(input, index) in inputFields" 
           :key="index">
-          <div v-if="['text', 'number'].includes(input.type) && (isEditing || !input.isEditOnly)">
+          <div v-if="!['submit', 'textarea', 'checkbox', 'select'].includes(input.type)">
             <label>{{ input.label }}</label>
             <input
               class="input is-large"
@@ -14,7 +14,7 @@
               :name="input.name.toLowerCase()"
               v-model="input.value" />
           </div>
-          <div v-else-if="input.type == 'textarea' && (isEditing || !input.isEditOnly)">
+          <div v-else-if="input.type == 'textarea'">
             <label>{{ input.label }}</label>
             <textarea
               class="textarea"
@@ -24,7 +24,7 @@
               :name="input.name.toLowerCase()"
               v-model="input.value" />
           </div>
-          <div v-else-if="input.type == 'select' && (isEditing || !input.isEditOnly)">
+          <div v-else-if="input.type == 'select'">
             <label>{{ input.label }}</label>
             <select
               class="multiselect-ui form-control" multiple="multiple"
@@ -38,30 +38,19 @@
               </option>
             </select>
           </div>
-          <div class="row" v-else-if="input.type == 'checkbox' && (isEditing || !input.isEditOnly)">
+          <div class="row" v-else-if="input.type == 'checkbox'">
             <p>{{ input.label }}</p>
             <div class="check" v-for="(option, index) in input.options" :key="index">
-              <label>
-                <input type="checkbox" :value="option.name" @change="setType($event)">
-                  {{ option.name }}
-              </label>
-            </div>
-          </div>
-          <div v-else-if="input.type == 'radio' && (isEditing || !input.isEditOnly)">
-            <p>{{ input.label }}</p>
-            <div class="radio" v-for="(option, index) in input.options" :key="index">
-              <label>
-                <input type="radio" :name="input.name" :value="option.name" @change="setType($event)">
-                  {{ option.name }}
-                </label>
+              <input type="checkbox" :value="option.name" @change="setType($event)" :id="key">
+              <label>{{ option.name }}</label>
             </div>
           </div>
         </div>
       </form>
     </div>
     <button type="button" class="btn btn-primary"
-      @click="isEditing ? editQuote() : createQuote()"
-      :disabled="!allowSubmitForm">{{ headerText }}</button>
+      @click="createQuote()"
+      :disabled="!allowSubmitForm">Create Customer</button>
     <button type="button" class="btn btn-primary"
       @click="checkoutput()"
       :disabled="!allowSubmitForm">Check Sanity</button>
@@ -74,23 +63,18 @@ import quoteInputs from '@/assets/quoteInputs'
 
 export default {
   name: 'createQuote',
-  props: ['create_payload', 'edit_payload'],
+  props: ['payload'],
   data () {
     return {
       inputFields: [],
       customer: null,
       form: {},
-      quote_type: [],
-      isEditing: false,
-      quote: null
+      quote_type: []
     }
   },
   computed: {
     allowSubmitForm: function () {
       return this.inputFields.some(this.hasValue)
-    },
-    headerText: function () {
-      return this.isEditing ? 'Edit Quote' : 'Create Quote'
     }
   },
   methods: {
@@ -138,7 +122,7 @@ export default {
 
       await AuthenticationService.quoteCreate(payload)
       this.clearInputs()
-      this.$router.push({ name: 'Quotes' })
+      this.$router.push({ name: 'QuotesList' })
     },
     hasValue (inputField) {
       return inputField.value != null &&
@@ -153,19 +137,30 @@ export default {
       }
     },
     prepareInputs () {
-      console.log('Populating the fields that need populating')
       for (var idx in this.inputFields) {
-        var fieldName = this.inputFields[idx].name
-        if (fieldName === 'customer') {
-          this.inputFields[idx].value = `${this.customer.fname} ${this.customer.lname}`
-        } else if (this.inputFields[idx].inCustomer) {
-          this.inputFields[idx].value = this.customer[fieldName]
-        } else {
-          if (!this.isEditing && fieldName === 'delivery_type') {
-            this.inputFields[idx].value = this.customer.home_port
-          } else {
-            this.inputFields[idx].value = (this.quote !== null) ? this.quote[fieldName] : ''
-          }
+        switch (this.inputFields[idx].name) {
+          case 'customer':
+            this.inputFields[idx].value = `${this.customer.fname} ${this.customer.lname}`
+            break
+          case 'phone':
+            this.inputFields[idx].value = this.customer.phone
+            break
+          case 'address':
+            this.inputFields[idx].value = this.customer.address
+            break
+          case 'email':
+            this.inputFields[idx].value = this.customer.email
+            break
+          case 'boat_type':
+            this.inputFields[idx].value = this.customer.boat_model
+            break
+          case 'boat_name':
+            this.inputFields[idx].value = this.customer.boat_name
+            break
+          case 'home_port':
+            this.inputFields[idx].value = this.customer.boat_home
+            break
+          default:
         }
       }
     },
@@ -178,14 +173,8 @@ export default {
   },
   mounted () {
     this.inputFields = quoteInputs.inputFields
-    if (this.create_payload) {
-      console.log('We have a CREATE PAYLOAD!!')
-      this.customer = this.create_payload.data
-      this.prepareInputs()
-    } else if (this.edit_payload) {
-      console.log('We have an EDIT PAYLOAD!!')
-      this.quote = this.edit_payload
-      this.customer = this.quote.customer.data
+    if (this.payload) {
+      this.customer = this.payload.data
       this.prepareInputs()
     }
   }
@@ -216,23 +205,11 @@ input[type=text] {
     border-bottom: 1px solid #000000;
 }
 
-input[type=number] {
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid #000000;
-}
-
 .check {
   margin: 0px 10px;
 }
 
-.radio {
-  margin: 0px 10px;
-  display: inline-block;
-}
-
 .textarea {
-  display: flex;
-  flex-direction: column;
+  vertical-align: middle;
 }
 </style>

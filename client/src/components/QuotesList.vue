@@ -24,6 +24,7 @@
           <td>{{ quote.paid }}</td>
           <td>{{ quote.balance_due }}</td>
           <td>{{ quote.createdAt }}</td>
+          <td><button @click="viewQuote(quote)">View</button></td>
         </tr>
       </div>
     </div>
@@ -47,6 +48,9 @@ export default {
     },
     testMe: function (value) {
       return {'payload': value.customer}
+    },
+    viewQuote (quoteObj) {
+      this.$router.push({ name: 'QuoteDisplay', params: { 'payload': quoteObj } })
     }
   },
   mounted () {

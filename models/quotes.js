@@ -9,7 +9,7 @@ var QuoteSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customer',
     },
-    boat_type: {
+    boat_model: {
         type: String
     },
     boat_name: {
@@ -58,16 +58,8 @@ var QuoteSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'deposit', 'production', 'ready', 'pickup', 'delivery', 'paid-in-full'],
-        default: 'pending'
-    },
-    total_due: {
-        type: Number,
-        defalut: 0.0
-    },
-    deposit: {
-        type: Number,
-        default: 0.0
+        enum: ['quote request', 'pending', 'production', 'ready', 'delivered'],
+        default: 'quote request'
     },
     amount_paid: {
         type: Number,
