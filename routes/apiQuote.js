@@ -19,6 +19,7 @@ apiQuoteRouter.get('/:id', routeController.getQuoteById);
 apiQuoteRouter.get('/customer/:cid', routeController.getQuotesByCustomer);
 
 apiQuoteRouter.post('/create', routeController.createQuote);
+apiQuoteRouter.post('/update', routeController.updateQuote);
 /*
 apiQuoteRouter.post('/email', mailman.deliverQuote, (req, res, next) => {
     res.status(200).json({message: 'mail sent'});

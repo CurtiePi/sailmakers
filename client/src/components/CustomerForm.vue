@@ -120,7 +120,8 @@ export default {
       let payload = data
       this.clearInputs()
 
-      var customer = await AuthenticationService.customerCreate(payload)
+      var response = await AuthenticationService.customerCreate(payload)
+      var customer = response.data
       if (this.singleOp) {
         this.$router.push({ name: 'Customers' })
       } else {

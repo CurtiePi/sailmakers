@@ -52,10 +52,6 @@ var QuoteSchema = new mongoose.Schema({
     notes: {
         type: String
     },
-    isActive: {
-        type: Boolean,
-        default: true
-    },
     status: {
         type: String,
         enum: ['quote request', 'pending', 'production', 'ready', 'delivered'],

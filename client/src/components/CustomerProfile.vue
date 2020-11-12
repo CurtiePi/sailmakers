@@ -6,7 +6,7 @@
       <p class="title">{{ customer_data.email }}</p>
       <p class="title">{{ customer_data.phone }}</p>
       <p class="title">{{ customer_data.boat_name }}</p>
-      <p class="title">{{ customer_data.boat_home }}</p>
+      <p class="title">{{ customer_data.home_port }}</p>
       <p>
         <button v-if="!isEditing" @click="timeToEdit()">Edit</button>
         <button v-else @click="cancelEdit()">Cancel</button>
@@ -78,7 +78,7 @@ export default {
           value: null
         },
         {
-          name: 'boat_home',
+          name: 'home_port',
           type: 'text',
           placeholder: 'Boat Home',
           value: null
@@ -124,7 +124,7 @@ export default {
     },
     createQuote () {
       let payload = this.customer_data
-      this.$router.push({ name: 'QuoteCreate', params: {payload} })
+      this.$router.push({ name: 'QuoteCreate', params: {'create_payload': payload} })
     },
     goBack () {
       this.$router.go(-1)

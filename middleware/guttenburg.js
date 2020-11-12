@@ -20,7 +20,7 @@ const writeQuoteDoc = async (req, res, next) => {
       'phone': quote.customer.phone,
       'email': quote.customer.email,
       'address': quote.customer.address,
-      'boatType': quote.boat_type,
+      'boatType': quote.boat_model,
       'boatName': quote.boat_name,
       'sailReq': quote.sail_request,
       'battens': quote.battens,

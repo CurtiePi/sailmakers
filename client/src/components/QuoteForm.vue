@@ -11,6 +11,7 @@
             <input
               class="input is-large"
               :type="input.type"
+              step="0.05"
               :name="input.name.toLowerCase()"
               v-model="input.value" />
           </div>
@@ -42,16 +43,26 @@
             <p>{{ input.label }}</p>
             <div class="check" v-for="(option, index) in input.options" :key="index">
               <label>
-                <input type="checkbox" :value="option.name" @change="setType($event)">
+                <input type="checkbox"
+                  :value="option.name"
+                  :name="input.name"
+                  :id="(option.name != '') ? option.name.toLowerCase().replace(' ', '_') : 'active'"
+                  v-model="quote_type">
                   {{ option.name }}
+                </input>
               </label>
             </div>
           </div>
           <div v-else-if="input.type == 'radio' && (isEditing || !input.isEditOnly)">
             <p>{{ input.label }}</p>
-            <div class="radio" v-for="(option, index) in input.options" :key="index">
+            <div class="radio"
+              v-for="(option, index) in input.options"
+              :key="index">
               <label>
-                <input type="radio" :name="input.name" :value="option.name" @change="setType($event)">
+                <input type="radio"
+                  :name="input.name"
+                  :value="option.name.toLowerCase()"
+                  v-model="input.value">
                   {{ option.name }}
                 </label>
             </div>
@@ -60,11 +71,15 @@
       </form>
     </div>
     <button type="button" class="btn btn-primary"
-      @click="isEditing ? editQuote() : createQuote()"
+      @click="isEditing ? updateQuote() : createQuote()"
       :disabled="!allowSubmitForm">{{ headerText }}</button>
     <button type="button" class="btn btn-primary"
       @click="checkoutput()"
       :disabled="!allowSubmitForm">Check Sanity</button>
+    <button type="button" class="btn btn-primary"
+      @click="checkForChanges()">
+      Check Changes
+    </button>
   </div>
 </template>
 
@@ -78,8 +93,8 @@ export default {
   data () {
     return {
       inputFields: [],
+      origInputFields: {},
       customer: null,
-      form: {},
       quote_type: [],
       isEditing: false,
       quote: null
@@ -94,23 +109,35 @@ export default {
     }
   },
   methods: {
+    checkForChanges () {
+      var formData = {}
+      for (var idx = 0; idx < this.inputFields.length; idx++) {
+        var key = this.inputFields[idx].name
+        if (key === 'quote_type') {
+          if (!((this.quote_type.length === this.origInputFields[key].length) && (this.quote_type.every(val => this.origInputFields[key].includes(val))))) {
+            formData[key] = this.quote_type
+          }
+        } else {
+          if (this.inputFields[idx].value !== this.origInputFields[key]) {
+            var value = this.inputFields[idx].value
+            formData[key] = (['balance_due', 'amount_paid'].includes(key)) ? parseFloat(value) : value
+          }
+        }
+      }
+      return formData
+    },
     checkoutput () {
       let data = {}
-
-      console.log(this.inputFields)
 
       for (var idx = 0; idx < this.inputFields.length; idx++) {
         var inputField = this.inputFields[idx]
         if (this.hasValue(inputField) && inputField.name !== 'customer') {
-          if (inputField.value === 'other') {
-            data[inputField.name] = this.otherValue
-          } else {
-            data[inputField.name] = inputField.value
-          }
+          data[inputField.name] = inputField.value
+        } else if (inputField.name === 'quote_type') {
+          data[inputField.name] = this.quote_type
         }
       }
 
-      data['quote_type'] = this.quote_type
       data['customer_id'] = this.customer._id
       let salesperson = JSON.parse(localStorage.sp)
       data['salesperson_id'] = salesperson._id
@@ -118,23 +145,31 @@ export default {
       let payload = data
       console.log(payload)
     },
-    async createQuote () {
-      let data = {}
+    async updateQuote () {
+      let data = this.checkForChanges()
+      let payload = {
+        criteria: {'_id': this.quote_id},
+        update: data}
 
-      console.log(this.inputFields)
+      var response = await AuthenticationService.quoteUpdate(payload)
+      this.quote = response.data
+      this.clearInputs()
+      this.$router.push({ name: 'QuoteDisplay', params: {'payload': this.quote} })
+    },
+    async createQuote () {
+      let payload = {}
 
       for (var idx = 0; idx < this.inputFields.length; idx++) {
         var inputField = this.inputFields[idx]
         if (this.hasValue(inputField) && inputField.name !== 'customer') {
-          data[inputField.name] = inputField.value
+          payload[inputField.name] = inputField.value
+        } else if (inputField.name === 'quote_type') {
+          payload[inputField.name] = this.quote_type
         }
       }
-      data['quote_type'] = this.quote_type
-      data['customer_id'] = this.customer._id
+      payload['customer_id'] = this.customer._id
       let salesperson = JSON.parse(localStorage.sp)
-      data['salesperson_id'] = salesperson._id
-
-      let payload = data
+      payload['salesperson_id'] = salesperson._id
 
       await AuthenticationService.quoteCreate(payload)
       this.clearInputs()
@@ -145,26 +180,40 @@ export default {
         inputField.value !== undefined &&
         inputField.value !== ''
     },
-    setType (event) {
-      if (event.target.checked) {
-        this.quote_type.push(event.target.value)
-      } else {
-        this.quote_type = this.quote_type.filter((ele) => { return ele !== event.target.value })
-      }
-    },
     prepareInputs () {
-      console.log('Populating the fields that need populating')
       for (var idx in this.inputFields) {
+        var haveQuote = this.quote !== null
+        var haveCustomer = this.customer !== null
+        var type = this.inputFields[idx].type
         var fieldName = this.inputFields[idx].name
-        if (fieldName === 'customer') {
-          this.inputFields[idx].value = `${this.customer.fname} ${this.customer.lname}`
-        } else if (this.inputFields[idx].inCustomer) {
-          this.inputFields[idx].value = this.customer[fieldName]
-        } else {
-          if (!this.isEditing && fieldName === 'delivery_type') {
-            this.inputFields[idx].value = this.customer.home_port
+
+        if (['text', 'number'].includes(type)) {
+          if (fieldName === 'customer') {
+            this.inputFields[idx].value = (haveCustomer) ? `${this.customer.fname} ${this.customer.lname}` : ''
+          } else if (this.inputFields[idx].inCustomer) {
+            this.inputFields[idx].value = (haveCustomer) ? this.customer[fieldName] : ''
+          } else if (!this.isEditing && fieldName === 'delivery_type') {
+            this.inputFields[idx].value = (haveCustomer) ? this.customer.home_port : ''
           } else {
-            this.inputFields[idx].value = (this.quote !== null) ? this.quote[fieldName] : ''
+            this.inputFields[idx].value = (haveQuote) ? this.quote[fieldName] : ''
+          }
+        } else if (type === 'checkbox') {
+          if (fieldName === 'quote_type') {
+            this.quote_type = (haveQuote) ? this.quote.quote_type : []
+          } else if (fieldName === 'isActive') {
+            this.is_active = (haveQuote) ? this.quote.isActive : false
+            this.inputFields[idx].value = this.is_active
+          }
+        } else if (type === 'textarea') {
+          this.inputFields[idx].value = (haveQuote) ? this.quote[fieldName] : ''
+        } else if (type === 'radio') {
+          var qValue = (haveQuote) ? this.quote[fieldName] : ''
+          this.inputFields[idx].value = qValue
+        } else if (type === 'select') {
+          this.inputFields[idx].value = (haveQuote) ? this.quote[fieldName] : ''
+          if (this.inputFields[idx].value !== '') {
+            let element = document.getElementById(fieldName)
+            element.value = this.inputFields[idx].value
           }
         }
       }
@@ -174,19 +223,33 @@ export default {
         var inputField = this.inputFields[idx]
         inputField.value = ''
       }
+    },
+    loadData () {
+      this.$nextTick(function () {
+        this.prepareInputs()
+        for (var idx = 0; idx < this.inputFields.length; idx++) {
+          this.origInputFields[this.inputFields[idx].name] = this.inputFields[idx].value
+        }
+        this.origInputFields['quote_type'] = []
+        for (idx = 0; idx < this.quote_type.length; idx++) {
+          this.origInputFields['quote_type'].push(this.quote_type[idx])
+        }
+      })
     }
   },
   mounted () {
     this.inputFields = quoteInputs.inputFields
     if (this.create_payload) {
       console.log('We have a CREATE PAYLOAD!!')
-      this.customer = this.create_payload.data
-      this.prepareInputs()
+      this.loadData()
+      this.customer = this.create_payload
+      this.isEditing = false
     } else if (this.edit_payload) {
       console.log('We have an EDIT PAYLOAD!!')
       this.quote = this.edit_payload
-      this.customer = this.quote.customer.data
-      this.prepareInputs()
+      this.customer = this.quote.customer
+      this.loadData()
+      this.isEditing = true
     }
   }
 }

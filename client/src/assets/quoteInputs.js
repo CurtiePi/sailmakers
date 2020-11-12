@@ -16,17 +16,6 @@ export default {
       value: null
     },
     {
-      name: 'is_active',
-      label: 'Is Active',
-      type: 'checkbox',
-      isEditOnly: true,
-      inCustomer: false,
-      options: [
-        {name: ''}
-      ],
-      value: null
-    },
-    {
       name: 'amount_paid',
       label: 'Amount paid',
       type: 'number',

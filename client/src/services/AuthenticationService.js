@@ -16,11 +16,17 @@ export default {
   quoteCreate (payload) {
     return Api().insecure.post('/api/quote/create', payload)
   },
+  quoteUpdate (payload) {
+    return Api().insecure.post('/api/quote/update', payload)
+  },
   getCustomerQuotes (payload) {
     return Api().insecure.get(`/api/quote/customer/${payload}`)
   },
   emailQuote (payload) {
     return Api().insecure.post('/api/quote/email', payload)
+  },
+  printQuote (payload) {
+    return Api().insecure.post('/api/quote/print', payload)
   },
   salespersonByName (nameParam) {
     let url = `/api/staff/name/${nameParam}`

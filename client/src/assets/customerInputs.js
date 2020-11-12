@@ -50,7 +50,7 @@ export default {
       value: null
     },
     {
-      name: 'boat_home',
+      name: 'home_port',
       label: 'Boat Port',
       type: 'select',
       placeholder: 'Boat Port',

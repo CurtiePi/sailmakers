@@ -45,6 +45,12 @@ export default new Router({
       props: true
     },
     {
+      path: '/quote_edit',
+      name: 'QuoteEdit',
+      component: () => import('../components/QuoteForm.vue'),
+      props: true
+    },
+    {
       path: '/quote_display',
       name: 'QuoteDisplay',
       component: () => import('../components/QuoteDisplay.vue'),

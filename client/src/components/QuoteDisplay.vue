@@ -17,25 +17,10 @@
       <p class="title">Additional Notes: {{ quote.notes }}</p>
       <p>
         <button v-if="!isEditing" @click="timeToEdit()">Edit</button>
-        <button v-else @click="cancelEdit()">Cancel</button>
-        <button @click="emailQuote()">Email Quote</button>
+        <button @click="emailQuote()">Print Quote</button>
         <button @click="goBack()">Home</button>
-    </p>
+      </p>
     </div>     
-    <div class="editor">
-      <form>
-        <div class="form-group">
-          <input v-for="inputField in inputFields"
-            class="test-control" size="25"
-            :type="inputField.type"
-            :placeholder="inputField.placeholder"
-            :name="inputField.name"
-            :id="inputField.name"
-            v-model="inputField.value" />
-        </div>
-        <button type="button" class="btn btn-primary" @click="update_customer()" :disabled="!allowSubmitForm">Submit</button>
-      </form>
-    </div>
   </div>
 </template>
 <script>
@@ -49,81 +34,7 @@ export default {
       quote: null,
       customer: null,
       salesperson: null,
-      message: null,
-      inputFields: [
-        {
-          name: 'boat_type',
-          type: 'text',
-          placeholder: 'Boat Type',
-          value: null
-        },
-        {
-          name: 'boat_name',
-          type: 'text',
-          placeholder: 'Boat Name',
-          value: null
-        },
-        {
-          name: 'sail_request',
-          type: 'text',
-          placeholder: 'Sail Request',
-          value: null
-        },
-        {
-          name: 'battens',
-          type: 'text',
-          placeholder: 'Battens',
-          value: null
-        },
-        {
-          name: 'reefing_pts',
-          type: 'text',
-          placeholder: 'Reefing Points',
-          value: null
-        },
-        {
-          name: 'num_logo',
-          type: 'text',
-          placeholder: 'Numbers/Logo',
-          value: null
-        },
-        {
-          name: 'furl_sys',
-          type: 'text',
-          placeholder: 'Furling System',
-          value: null
-        },
-        {
-          name: 'uv_color',
-          type: 'text',
-          placeholder: 'UV Color',
-          value: null
-        },
-        {
-          name: 'home_port',
-          type: 'text',
-          placeholder: 'Home Port',
-          value: null
-        },
-        {
-          name: 'delivery_type',
-          type: 'text',
-          placeholder: 'Delivery Type',
-          value: null
-        },
-        {
-          name: 'sailing_type',
-          type: 'text',
-          placeholder: 'Type of Sailing',
-          value: null
-        },
-        {
-          name: 'Additional Notes',
-          type: 'textarea',
-          placeholder: 'Additional Notes',
-          value: null
-        }
-      ]
+      message: null
     }
   },
   computed: {
@@ -133,18 +44,13 @@ export default {
   },
   methods: {
     timeToEdit () {
-      this.isEditing = true
-      document.getElementsByClassName('editor')[0].style.display = 'block'
+      this.$router.push({ name: 'QuoteEdit', params: { 'edit_payload': this.quote } })
     },
-    cancelEdit () {
-      this.isEditing = false
-      document.getElementsByClassName('editor')[0].style.display = 'none'
-    },
-    async emailQuote () {
+    async printQuote () {
       let payload = {
         'payload': this.quote
       }
-      let response = await AuthenticationService.emailQuote(payload)
+      let response = await AuthenticationService.printQuote(payload)
       this.message = response.data
     },
     async update_quote () {

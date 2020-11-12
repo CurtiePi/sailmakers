@@ -43,7 +43,7 @@
               <td>{{ customer.phone }}</td>
               <td><router-link v-if="customer.quotes.length > 0" :to="{ name: 'CustomerQuotes', params: { 'payload': customer } }">{{ customer.quotes.length }}</router-link></td>
               <td>{{ customer.boat_name }}</td>
-              <td>{{ customer.boat_home }}</td>
+              <td>{{ customer.home_port }}</td>
           </tr>
       </div>
     </div>

@@ -98,6 +98,17 @@ module.exports = {
             });
         }
     },
+    updateQuote: async (req, res, next) => {
+        try{
+            var quote = await dataAccess.updateQuote(req.body.criteria, req.body.update);
+            res.status(200).json(quote);
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: `Error updating quote ${err}`
+            });
+        }
+    },
     /*
      * Salespeople
      *

@@ -125,6 +125,26 @@ module.exports = {
             console.log('Received an error creating quote');
         }
     },
+    /**
+     * Update specific quote
+     *
+     */
+    updateQuote: async (criteria, update ) => {
+        if (criteria._id) {
+            criteria._id = mongoose.Types.ObjectId(criteria._id);
+        }
+
+        try {
+            let quote = await Quote.findOneAndUpdate(criteria, update, {new: true});
+            await Quote.populate(quote, { path: "customer" });
+            await Quote.populate(quote, { path: "salesperson" });
+            return quote;
+        }
+        catch (err) {
+            console.log('Received an error updating quote');
+        }
+    },
+
     getSalespeople: async () => {
         try {
             let salespeople = await Salesperson.find();
