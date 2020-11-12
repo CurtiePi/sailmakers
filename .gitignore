@@ -4,5 +4,5 @@ node_modules
 *.crt
 migrate*
 config
-files/*
+public/*
 sailmakers.json

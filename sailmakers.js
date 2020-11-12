@@ -58,6 +58,7 @@ smapp.use(bodyParser.json());
 smapp.use(bodyParser.urlencoded({ extended: true }));
 smapp.use(passport.initialize());
 smapp.use('images', express.static(path.join(__dirname, 'public/images')));
+smapp.use('/pdf', express.static('public/files/pdf'))
 smapp.disable('x-powered-by');
 /*
  * Set up routing here

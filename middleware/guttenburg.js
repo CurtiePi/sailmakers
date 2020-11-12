@@ -131,7 +131,7 @@ const writeQuoteDoc = async (req, res, next) => {
         page.drawLine(lines[idx], {color: rgb(0, 0, 0)});
     }
 
-    var filename = `./files/quote_${quote._id}.pdf`;
+    var filename = `./public/files/quote_${quote._id}.pdf`;
     fs.writeFileSync(filename, await doc.save());
     req.attachment = filename;
 
