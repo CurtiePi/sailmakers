@@ -8,6 +8,8 @@ export default () => {
   secure: axios.create({
     baseURL: 'https://192.168.1.6:8993',
     withCredentials: true
-  })
+  }),
+
+  pdfUrl: 'http://192.168.1.6:8860/pdf/'
   }
 }

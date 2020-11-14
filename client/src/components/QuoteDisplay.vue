@@ -16,8 +16,13 @@
       <p class="title">Delivery Type: {{ quote.delivery_type }}</p>
       <p class="title">Additional Notes: {{ quote.notes }}</p>
       <p>
-        <button v-if="!isEditing" @click="timeToEdit()">Edit</button>
+        <button @click="timeToEdit()">Edit</button>
         <button @click="emailQuote()">Print Quote</button>
+        <router-link :to="{ name: 'QuoteViewPDF', params: {'payload': 'test.pdf'} }">
+          <button type="button">
+            PDF View
+          </button>
+        </router-link>
         <button @click="goBack()">Home</button>
       </p>
     </div>     

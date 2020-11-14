@@ -72,6 +72,12 @@ export default new Router({
       name: 'PortCreate',
       component: () => import('../components/PortForm.vue'),
       props: true
+    },
+    {
+      path: '/quote_display_pdf',
+      name: 'QuoteViewPDF',
+      component: () => import('../components/ViewPDF.vue'),
+      props: true
     }
   ]
 })
