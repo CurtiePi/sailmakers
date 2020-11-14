@@ -17,7 +17,12 @@
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "bootstrap-vue": "^2.18.1",
+    "fs": "0.0.1-security",
+    "lodash": "^4.17.20",
+    "module": "^1.2.5",
+    "pdfjs-dist": "^2.5.207",
     "vue": "^2.5.2",
+    "vue-pdf": "^4.2.0",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {
