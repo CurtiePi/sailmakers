@@ -42,8 +42,9 @@ export default {
     }
   },
   methods: {
-    getSource: async function () {
-      this.url = AuthenticationService.pdfView('test.pdf')
+    getSource: async function (quoteId) {
+      var filename = `quote_${quoteId}.pdf`
+      this.url = AuthenticationService.pdfView(filename)
       const pdfjs = await import('pdfjs-dist/build/pdf')
       const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry')
 
@@ -51,10 +52,15 @@ export default {
       pdfjs.getDocument(this.url).promise.then(pdf => {
         this.pdf = pdf
       })
+        .catch(err => {
+          console.log(`We have an error: ${err}`)
+        })
     }
   },
   mounted () {
-    this.getSource()
+    if (this.payload) {
+      this.getSource(this.payload)
+    }
   }
 }
 </script>

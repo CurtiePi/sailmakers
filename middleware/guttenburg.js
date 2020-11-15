@@ -4,10 +4,13 @@ const fs                                        = require('fs');
 const writeQuoteDoc = async (req, res, next) => {
     let quote = req.body.payload;
     const doc = await PDFDocument.create();
-    const page = doc.addPage();
+    let page = doc.addPage();
+    let pageNum = 1;
 
-    const check_blank = (value) => {
-    }
+    // Retrieve needed fonts
+    const boldObliqueFont = await doc.embedFont(StandardFonts.HelveticaBoldOblique);
+    const boldFont = await doc.embedFont(StandardFonts.HelveticaBold);
+    const zingbatFont = await doc.embedFont(StandardFonts.ZapfDingbats);
 
     /**
      * Text constants
@@ -45,7 +48,7 @@ const writeQuoteDoc = async (req, res, next) => {
     const workEmailText = 'dave@uksailmakers-ny.com';
     const officePhoneText ='914.600.8800';
     const webSiteText = 'www.uksailmakers-ny.com';
-    const subHdrText = 'NEW CLIENT SAIL QUOTE REQUEST';
+    const subHdrText = 'NEW QUOTE REQUEST';
     const nameText = `Name: ${txtVals["name"]}`;
     const phoneText = `Phone#: ${txtVals["phone"]}`;
     const emailText = `Email: ${txtVals["email"]}`;
@@ -60,77 +63,123 @@ const writeQuoteDoc = async (req, res, next) => {
     const uvColorText = `UV Color: ${txtVals["uvColor"]}`;
     const homePortText = `Home Port: ${txtVals["homePort"]}`;
     const pickUpText = `Sail pick up/Drop off: ${txtVals["pickUp"]}`;
-    const sailTypeText = `Type of Sailing - ${txtVals["sailType"]}`;
-    const notesText =  `Additional Notes - ${txtVals["notes"]}`;
+    const sailTypeTitle = `Type of Sailing - `;
+    const sailTypeText = `${txtVals["sailType"]}`;
+    const notesTitle =  `Additional Notes - `;
+    const notesText =  `${txtVals["notes"]}`;
 
+    // Header text and options
+    const header = [
+        {'text': salespersonText, 'multi': false, 'options': {x: 175.128, y: 786.39, size: 15, font: boldFont, color: rgb(0, 0, 0)}},
+        {'text': localeText, 'multi': false,  'options': {x: 175.128, y: 774.89, size: 10, color: rgb(0, 0, 0)}},
+        {'text': salesPersonPhoneText, 'multi': false, 'options': {x: 175.128, y: 764.89, size: 10, color: rgb(0, 0, 0)}},
+        {'text': workEmailText, 'multi': false, 'options' : {x: 175.128, y: 754.89, size: 10, color: rgb(0, 0, 0)}},
+        {'text': officePhoneText, 'multi': false, 'options': { x: 175.128, y: 744.89, size: 10, color: rgb(0, 0, 0)}},
+        {'text': webSiteText, 'multi': false, 'options': {x: 175.128, y: 734.89, size: 10, color: rgb(0, 0, 0)}},
+        {'text': subHdrText, 'multi': false, 'options': {x: 29.764, y: 650, size: 18, font: boldObliqueFont, color: rgb(0, 0, 0)}},
+    ]
+
+    // Body text and options
+    const body = [
+        {'text': nameText, 'multi': false, 'length': 41},
+        {'text': phoneText, 'multi': false, 'length': 53},
+        {'text': emailText, 'multi': false, 'length': 41},
+        {'text': addressText, 'multi': false, 'length': 60},
+        {'text': boatTypeText, 'multi': false, 'length': 72},
+        {'text': boatNameText, 'multi': false, 'length': 77},
+        {'text': sailReqText, 'multi': true, 'length': 110, 'indent': 110},
+        {'text': battensText, 'multi': false, 'length': 55},
+        {'text': reefPtText, 'multi': false, 'length': 105},
+        {'text': numLogoText, 'multi': false, 'length': 115},
+        {'text': furlingText, 'multi': false, 'length': 107},
+        {'text': uvColorText, 'multi': false, 'length': 64},
+        {'text': homePortText, 'multi': false, 'length': 76},
+        {'text': pickUpText, 'multi': false, 'length': 148},
+        {'text': sailTypeTitle, 'multi': false, 'length': 105},
+        {'text': sailTypeText, 'multi': false, 'length': 0},
+        {'text': notesTitle, 'multi': false, 'length': 115},
+        {'text': notesText, 'multi': false, 'length': 0}
+    ];
+
+    // Create the Banner
     const {width, height} = page.getSize();
-
-    const boldObliqueFont = await doc.embedFont(StandardFonts.HelveticaBoldOblique);
-    const boldFont = await doc.embedFont(StandardFonts.HelveticaBold);
 
     page.drawRectangle({x: 29.764, y: 801.89, width: width * .9, height: 30, color: rgb(0, 0.55, 0.81)});
     page.drawText(hdrText, {x: 178.584, y: 811.89, size: 20, color: rgb(0.99, 0.99, 0.99)});
-    
+   
+    // Place the logo
     let logo_img = fs.readFileSync('public/images/sailmakers_logo.png');
     const  img = await doc.embedPng(logo_img);
     const imgDims = img.scale(0.60);
     page.drawImage(img, {x: 59.528, y: 719.13, width: imgDims.width, height: imgDims.height});
 
-    const body = [
-        {'text': salespersonText, 'options': {x: 175.128, y: 786.39, size: 15, font: boldFont, color: rgb(0, 0, 0)}},
-        {'text': localeText, 'options': {x: 175.128, y: 774.89, size: 10, color: rgb(0, 0, 0)}},
-        {'text': salesPersonPhoneText, 'options': {x: 175.128, y: 764.89, size: 10, color: rgb(0, 0, 0)}},
-        {'text': workEmailText, 'options' : {x: 175.128, y: 754.89, size: 10, color: rgb(0, 0, 0)}},
-        {'text': officePhoneText, 'options': { x: 175.128, y: 744.89, size: 10, color: rgb(0, 0, 0)}},
-        {'text': webSiteText, 'options': {x: 175.128, y: 734.89, size: 10, color: rgb(0, 0, 0)}},
-        {'text': subHdrText, 'options': {x: 29.764, y: 650, size: 13, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': nameText, 'options': {x: 29.764, y: 615, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': phoneText, 'options': {x: 29.764, y: 580, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': emailText, 'options': {x: 29.764, y: 545, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': addressText, 'options': {x: 29.764, y: 510, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': boatTypeText, 'options': {x: 29.764, y: 475, size: 12, color: rgb(0, 0, 0)}},
-        {'text': boatNameText, 'options': {x: 29.764, y: 440, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': sailReqText, 'options': {x: 29.764, y: 405, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': battensText, 'options': {x: 29.764, y: 370, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': reefPtText, 'options': {x: 29.764, y: 335, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': numLogoText, 'options': {x: 29.764, y: 300, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': furlingText, 'options': {x: 29.764, y: 265, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': uvColorText, 'options': {x: 29.764, y: 230, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': homePortText, 'options': {x: 29.764, y: 195, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': pickUpText, 'options': {x: 29.764, y: 160, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': sailTypeText, 'options': {x: 29.764, y: 125, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}},
-        {'text': notesText, 'options': {x: 29.764, y: 90, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)}}
-    ];
+    // Create the header next to logo
+    for (var content in header) {
+        page.drawText(header[content]['text'], header[content]['options']);
+    }
 
+    // Draw the line for the subheader
+    line_coords = { 'start': { 'x': 29.754, 'y': 649}, 'end': { 'x': 255, 'y': 649 } }
+    page.drawLine(line_coords, {color: rgb(0, 0, 0)});
+
+    // After the subheader set starting x and y positions
+    var xpos = 29.764;
+    var ypos = 625;
+    var options = {size: 16, font: boldObliqueFont, maxWidth: (width - 60), color: rgb(0, 0, 0)};
+
+    // Create the section specifying the type of quote.
+    var q_types = ['New Sail', 'Sail Repair', 'Winter Service', 'Sail Cover'];
+    var offset = (width - (2 * 25)) / q_types.length;
+    for (var idx = 0; idx < q_types.length; idx++) {
+      options['x'] = xpos + (idx * offset);
+      options['y'] = ypos;
+      page.drawRectangle({x: options['x'], y: options['y'], width: 10, height: 10, borderColor: rgb(0, 0, 0),borderWidth: 1.5,});
+      if (quote.quote_type.includes(q_types[idx])) {
+          page.drawText("\u2713", {x: options['x'], y: options['y'], size: 18, font: zingbatFont});
+      }    
+      options['x'] += 12;
+      page.drawText(q_types[idx], options);
+    }
+    
+    // Create the body
+    options['size'] = 15;
     for (var content in body) {
-        page.drawText(body[content]['text'], body[content]['options']);
+        ypos -= (body[content]['length'] != 0) ? 45 : 20;
+        if (ypos < 80) {
+            page.drawText(`${pageNum}`, {x: page.getWidth() / 2, y: 10, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)});
+            pageNum++;
+            page = doc.addPage();
+            ypos = 775;
+            options['y'] = ypos;
+        }
+        options['x'] = xpos;
+        options['y'] = ypos;
+
+        line_coords = { 'start': { 'x': xpos, 'y': ypos-1}, 'end': { 'x': xpos + body[content]['length'], 'y': ypos-1 } }
+        if (body[content]['multi']) {
+            var lines = body[content]['text'].split('\n');
+            page.drawText(lines[0], options);
+            var indent = body[content]['indent'];
+            for (var idx = 1; idx < lines.length; idx++) {
+                options['x'] = xpos + indent;
+                ypos -= (5 + options['size']);
+                options['y'] = ypos
+                page.drawText(lines[idx], options);
+            }
+        } else {
+            page.drawText(body[content]['text'], options);
+        }
+        if (body[content]['length'] != 0) {
+            page.drawLine(line_coords, {color: rgb(0, 0, 0)});
+        } else {
+            ypos -= 15;
+        }
     }
 
-    var lines = [
-        { start: {x: 29.764, y: 649}, end: {x: 260, y: 649} },
-        { start: {x: 29.764, y: 614}, end: {x: 65, y: 614} },
-        { start: {x: 29.764, y: 579}, end: {x: 75, y: 579} },
-        { start: {x: 29.764, y: 544}, end: {x: 65, y: 544} },
-        { start: {x: 29.764, y: 509}, end: {x: 80, y: 509} },
-        { start: {x: 29.764, y: 474}, end: {x: 90, y: 474} },
-        { start: {x: 29.764, y: 439}, end: {x: 95, y: 439} },
-        { start: {x: 29.764, y: 404}, end: {x: 115, y: 404} },
-        { start: {x: 29.764, y: 369}, end: {x: 75, y: 369} },
-        { start: {x: 29.764, y: 334}, end: {x: 120, y: 334} },
-        { start: {x: 29.764, y: 299}, end: {x: 120, y: 299} },
-        { start: {x: 29.764, y: 264}, end: {x: 120, y: 264} },
-        { start: {x: 29.764, y: 229}, end: {x: 85, y: 229} },
-        { start: {x: 29.764, y: 194}, end: {x: 95, y: 194} },
-        { start: {x: 29.764, y: 159}, end: {x: 145, y: 159} },
-        { start: {x: 29.764, y: 124}, end: {x: 115, y: 124} },
-        { start: {x: 29.764, y: 89}, end: {x: 125, y: 89} }
-    ];
+    // Insert the final page number
+    page.drawText(`${pageNum}`, {x: page.getWidth() / 2, y: 10, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)});
 
-
-    for (var idx= 0; idx < lines.length; idx++) {
-        page.drawLine(lines[idx], {color: rgb(0, 0, 0)});
-    }
-
+    // Create the file.
     var filename = `./public/files/pdf/quote_${quote._id}.pdf`;
     fs.writeFileSync(filename, await doc.save());
     req.attachment = filename;

@@ -17,8 +17,8 @@
       <p class="title">Additional Notes: {{ quote.notes }}</p>
       <p>
         <button @click="timeToEdit()">Edit</button>
-        <button @click="emailQuote()">Print Quote</button>
-        <router-link :to="{ name: 'QuoteViewPDF', params: {'payload': 'test.pdf'} }">
+        <button @click="printQuote()">Print Quote</button>
+        <router-link :to="{ name: 'QuoteViewPDF', params: {'payload': quote._id } }">
           <button type="button">
             PDF View
           </button>
@@ -57,24 +57,6 @@ export default {
       }
       let response = await AuthenticationService.printQuote(payload)
       this.message = response.data
-    },
-    async update_quote () {
-      let data = {}
-
-      for (var idx = 0; idx < this.inputFields.length; idx++) {
-        var inputField = this.inputFields[idx]
-        if (this.hasValue(inputField)) {
-          data[inputField.name] = inputField.value
-        }
-      }
-      let payload = {
-        criteria: {'_id': this.quote._id},
-        update: data}
-
-      console.log(payload)
-      document.getElementsByClassName('editor')[0].style.display = 'none'
-      // let response = await AuthenticationService.quoteUpdate(payload)
-      // this.quote = response.data
     },
     hasValue (inputField) {
       return inputField.value != null &&
