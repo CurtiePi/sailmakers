@@ -57,6 +57,10 @@ var QuoteSchema = new mongoose.Schema({
         enum: ['quote request', 'pending', 'production', 'ready', 'delivered'],
         default: 'quote request'
     },
+    quote_price: {
+        type: Number,
+        default: 0.0
+    },
     amount_paid: {
         type: Number,
         default: 0.0
