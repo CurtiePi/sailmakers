@@ -32,18 +32,18 @@
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>Quote No.</th>
               <th>Boat Name</th>
               <th>Boat Home</th>
+              <th>Quotes</th>
           </tr>
           <tr v-for= "customer in customer_display"
               :key="customer._id">
               <td><router-link :to="{ name: 'CustomerProfile', params: { customer } }">{{ customer.fname }} {{ customer.lname }}</router-link></td>
               <td>{{ customer.email }}</td>
               <td>{{ customer.phone }}</td>
-              <td><router-link v-if="customer.quotes.length > 0" :to="{ name: 'CustomerQuotes', params: { 'payload': customer } }">{{ customer.quotes.length }}</router-link></td>
               <td>{{ customer.boat_name }}</td>
               <td>{{ customer.home_port }}</td>
+              <td><router-link v-if="customer.quotes.length > 0" :to="{ name: 'CustomerQuotes', params: { 'payload': customer } }">{{ customer.quotes.length }}</router-link></td>
           </tr>
       </div>
     </div>
@@ -165,7 +165,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
 h1, h2 {
   font-weight: normal;
 }
@@ -187,5 +187,17 @@ a {
 .filter-div > * {
     margin: 0 8px;
     vertical-align: middle;
+}
+
+td, th {
+  padding: 5px;
+}
+
+tr:nth-child(even) {
+    background-color: #eeeeee;
+}
+
+tr:nth-child(odd) {
+    background-color: #cccccc;
 }
 </style>

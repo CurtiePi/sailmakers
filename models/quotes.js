@@ -64,10 +64,6 @@ var QuoteSchema = new mongoose.Schema({
     amount_paid: {
         type: Number,
         default: 0.0
-    },
-    balance_due: {
-        type: Number,
-        default: 0.0
     }
 }, {
     timestamps: true

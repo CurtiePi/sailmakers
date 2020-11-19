@@ -39,18 +39,20 @@
               </option>
             </select>
           </div>
-          <div class="row" v-else-if="input.type == 'checkbox' && (isEditing || !input.isEditOnly)">
+          <div v-else-if="input.type == 'checkbox' && (isEditing || !input.isEditOnly)">
             <p>{{ input.label }}</p>
-            <div class="check" v-for="(option, index) in input.options" :key="index">
-              <label>
-                <input type="checkbox"
-                  :value="option.name"
-                  :name="input.name"
-                  :id="(option.name != '') ? option.name.toLowerCase().replace(' ', '_') : 'active'"
-                  v-model="quote_type">
-                  {{ option.name }}
-                </input>
-              </label>
+            <div class="row">
+              <div v-for="(option, index) in input.options" :key="index">
+                <label>
+                  <input type="checkbox"
+                    :value="option.name"
+                    :name="input.name"
+                    :id="(option.name != '') ? option.name.toLowerCase().replace(' ', '_') : 'active'"
+                    v-model="quote_type">
+                    {{ option.name }}
+                  </input>
+                </label>
+              </div>
             </div>
           </div>
           <div v-else-if="input.type == 'radio' && (isEditing || !input.isEditOnly)">
@@ -285,7 +287,7 @@ input[type=number] {
     border-bottom: 1px solid #000000;
 }
 
-.check {
+input[type=checkbox] {
   margin: 0px 10px;
 }
 

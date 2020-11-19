@@ -1,6 +1,20 @@
 export default {
   inputFields: [
     {
+      name: 'quote_type',
+      label: 'Quote Type',
+      type: 'checkbox',
+      options: [
+        {name: 'New Sail'},
+        {name: 'Sail Repair'},
+        {name: 'Winter Service'},
+        {name: 'Sail Cover'}
+      ],
+      isEditOnly: false,
+      inCustomer: false,
+      value: null
+    },
+    {
       name: 'status',
       label: 'Status',
       type: 'radio',
@@ -16,16 +30,16 @@ export default {
       value: null
     },
     {
-      name: 'amount_paid',
-      label: 'Amount paid',
+      name: 'quote_price',
+      label: 'Price',
       type: 'number',
       isEditOnly: true,
       inCustomer: false,
       value: null
     },
     {
-      name: 'balance_due',
-      label: 'Balance Due',
+      name: 'amount_paid',
+      label: 'Amount paid',
       type: 'number',
       isEditOnly: true,
       inCustomer: false,
@@ -37,20 +51,6 @@ export default {
       type: 'text',
       isEditOnly: false,
       inCustomer: true,
-      value: null
-    },
-    {
-      name: 'quote_type',
-      label: 'Quote Type',
-      type: 'checkbox',
-      options: [
-        {name: 'New Sail'},
-        {name: 'Sail Repair'},
-        {name: 'Winter Service'},
-        {name: 'Sail Cover'}
-      ],
-      isEditOnly: false,
-      inCustomer: false,
       value: null
     },
     {

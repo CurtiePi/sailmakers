@@ -1,20 +1,44 @@
 <template>
   <div class="container">
     <div class="card">
-      <h1>Quote for {{ customer.fname }} {{ customer.lname }}</h1>
-      <h3>Written by {{ salesperson.fname }} {{ salesperson.lname }}</h3>
-      <p class="title">Boat Name: {{ quote.boat_name }}</p>
-      <p class="title">Boat Type: {{ quote.boat_type }}</p>
-      <p class="title">Home Port: {{ quote.home_port }}</p>
-      <p class="title">Numbers/Logo: {{ quote.num_logo }}</p>
-      <p class="title">Sail Request: {{ quote.sail_request }}</p>
-      <p class="title">Battens: {{ quote.battens }}</p>
-      <p class="title">Reefing Points: {{ quote.reefing_pts }}</p>
-      <p class="title">Furling System: {{ quote.furl_sys }}</p>
-      <p class="title">UV Color: {{ quote.uv_color }}</p>
-      <p class="title">Sailing Type: {{ quote.sailing_type }}</p>
-      <p class="title">Delivery Type: {{ quote.delivery_type }}</p>
-      <p class="title">Additional Notes: {{ quote.notes }}</p>
+      <div class="flex-grid">
+        <span class="col hilite">Quote for {{ customer.fname }} {{ customer.lname }}</span>
+      </div>
+      <hr></hr>
+      <div class="flex-grid">
+        <span class="col">Home Port: {{ quote.home_port }}</span>
+      </div>
+      <div class="flex-grid-halfs">
+        <span class="col">Boat Name: {{ quote.boat_name }}</span>
+        <span class="col">Boat Type: {{ quote.boat_type }}</span>
+      </div>
+      <hr></hr>
+      <div class="flex-grid">
+        <span class="col">Sail Request: {{ quote.sail_request }}</span>
+      </div>
+      <div class="flex-grid-halfs">
+        <span class="col">Numbers/Logo: {{ quote.num_logo }}</span>
+        <span class="col">Battens: {{ quote.battens }}</span>
+      </div>
+      <div class="flex-grid-halfs">
+        <span class="col">Reefing Points: {{ quote.reefing_pts }}</span>
+        <span class="col">Furling System: {{ quote.furl_sys }}</span>
+      </div>
+      <div class="flex-grid-halfs">
+        <span class="col">UV Color: {{ quote.uv_color }}</span>
+        <span class="col">Delivery Type: {{ quote.delivery_type }}</span>
+      </div>
+      <div class="flex-grid-halfs">
+        <span class="col">Price: {{ quote.price }}</span>
+        <span class="col">Balance Due: {{ quote.quote_price - quote.amount_paid }}</span>
+      </div>
+      <hr></hr>
+      <div class="flex-grid">
+        <span class="col">Sailing Type: {{ quote.sailing_type }}</span>
+      </div>
+      <div class="flex-grid">
+        <span class="col">Additional Notes: {{ quote.notes }}</span>
+      </div>
       <p>
         <button @click="timeToEdit()">Edit</button>
         <button @click="printQuote()">Print Quote</button>
@@ -77,16 +101,69 @@ export default {
 }
 </script>
 <style scoped>
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 300px;
-  margin: auto;
-  text-align: center;
+.MyComponent {
+  /* Base styles that work for any screen size */
 }
 
-.title {
-  color: grey;
-  font-size: 18px;
+@media (min-width: 36em) {
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    flex-direction: column;
+  }
+
+  .sector {
+    width: 100%;
+    margin: 0 auto;
+    flex-direction: column;
+    padding: 3px;
+  }
+
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 900px;
+  width: 80%;
+  margin: auto;
+  background-color: #F5F5DC;
+  font-size: 19px;
+}
+
+.flex-grid {
+  display: flex;
+}
+
+.flex-grid .col {
+  flex: 1;
+}
+
+.flex-grid-halfs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-grid-halfs .col {
+  .width: 45%;
+}
+
+hr.solid {
+  border-top: 3px solid #bbb;
+  width: 80%;
+  margin: auto;
+}
+
+.hilite {
+  font-weight: bold;
+  font-size: 40px; 
+}
+
+span {
+  color: #000081;
+  font-size: 30px; 
 }
 
 button {
@@ -97,26 +174,4 @@ button:hover, a:hover {
   opacity: 0.7;
 }
 
-.editor {
-  display: none;
-  max-width: 50%;
-  margin: auto;
-  text-align: center;
-}
-
-.test-control {
-  display: inline-block;
-  height: calc(1.5em + 0.75rem + 2px);
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  margin-top: 5px;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
 </style>
