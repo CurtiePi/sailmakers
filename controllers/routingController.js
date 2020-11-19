@@ -54,7 +54,6 @@ module.exports = {
      *
      */
     getQuoteList: async (req, res, next) => {
-        console.log("Getting list of quotes");
         try {
             var quotes = await dataAccess.listQuotes();
             res.status(200).json(quotes);
@@ -185,7 +184,6 @@ module.exports = {
     },
     createPort: async (req, res, next) => {
         try {
-            console.log(req.body);
             var port = await dataAccess.createPort(req.body);
             res.status(200).json(port);
         }
