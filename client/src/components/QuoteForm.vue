@@ -76,11 +76,8 @@
       @click="isEditing ? updateQuote() : createQuote()"
       :disabled="!allowSubmitForm">{{ headerText }}</button>
     <button type="button" class="btn btn-primary"
-      @click="checkoutput()"
-      :disabled="!allowSubmitForm">Check Sanity</button>
-    <button type="button" class="btn btn-primary"
-      @click="checkForChanges()">
-      Check Changes
+      @click="cancel()">
+      Cancel
     </button>
   </div>
 </template>
@@ -107,7 +104,7 @@ export default {
       return this.inputFields.some(this.hasValue)
     },
     headerText: function () {
-      return this.isEditing ? 'Edit Quote' : 'Create Quote'
+      return this.isEditing ? 'Update Quote' : 'Create Quote'
     }
   },
   methods: {
@@ -122,11 +119,18 @@ export default {
         } else {
           if (this.inputFields[idx].value !== this.origInputFields[key]) {
             var value = this.inputFields[idx].value
-            formData[key] = (['balance_due', 'amount_paid'].includes(key)) ? parseFloat(value) : value
+            formData[key] = (key === 'amount_paid') ? parseFloat(value) : value
           }
         }
       }
       return formData
+    },
+    cancel () {
+      if (this.isEditing) {
+        this.$router.push({name: 'QuoteDisplay', params: {'payload': this.quote}})
+      } else {
+        this.$router.push({name: 'Customers'})
+      }
     },
     checkoutput () {
       let data = {}
@@ -150,9 +154,11 @@ export default {
     async updateQuote () {
       let data = this.checkForChanges()
       let payload = {
-        criteria: {'_id': this.quote_id},
+        criteria: {'_id': this.quote._id},
         update: data}
 
+      console.log('Updating quote')
+      console.log(payload)
       var response = await AuthenticationService.quoteUpdate(payload)
       this.quote = response.data
       this.clearInputs()

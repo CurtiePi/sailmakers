@@ -26,7 +26,7 @@
       </div>
       <div class="flex-grid-halfs">
         <span class="col">UV Color: {{ quote.uv_color }}</span>
-        <span class="col">Delivery Type: {{ quote.delivery_type }}</span>
+        <span class="col">Pick-up\Drop-off: {{ quote.pick_drop }}</span>
       </div>
       <div class="flex-grid-halfs">
         <span class="col">Price: {{ quote.price }}</span>
@@ -42,11 +42,8 @@
       <p>
         <button @click="timeToEdit()">Edit</button>
         <button @click="printQuote()">Print Quote</button>
-        <router-link :to="{ name: 'QuoteViewPDF', params: {'payload': quote._id } }">
-          <button type="button">
-            PDF View
-          </button>
-        </router-link>
+        <button v-if="show_view"
+          @click="viewQuotePdf()">View Quote PDF</button>
         <button @click="goBack()">Home</button>
       </p>
     </div>     
@@ -63,7 +60,8 @@ export default {
       quote: null,
       customer: null,
       salesperson: null,
-      message: null
+      message: null,
+      show_view: false
     }
   },
   computed: {
@@ -81,6 +79,12 @@ export default {
       }
       let response = await AuthenticationService.printQuote(payload)
       this.message = response.data
+      if (response.status === 200) {
+        this.show_view = true
+      }
+    },
+    viewQuotePdf () {
+      this.$router.push({ name: 'QuoteViewPDF', params: { 'payload': this.quote._id } })
     },
     hasValue (inputField) {
       return inputField.value != null &&
@@ -88,7 +92,7 @@ export default {
         inputField.value !== ''
     },
     goBack () {
-      this.$router.push({name: 'Hello'})
+      this.$router.push({name: 'Quotes'})
     }
   },
   mounted () {

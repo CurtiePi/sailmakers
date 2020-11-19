@@ -152,7 +152,7 @@ export default {
       value: null
     },
     {
-      name: 'delivery_type',
+      name: 'pick_drop',
       label: 'Sail pick up/Drop off',
       type: 'text',
       isEditOnly: false,
