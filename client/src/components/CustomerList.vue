@@ -6,10 +6,10 @@
       <label>Quote Type:
         <select @change="filterQuoteType($event)">
           <option value="all"></option>
-          <option value="New Sail">New Sail</option>
-          <option value="Sail Repair">Sail Repair</option>
-          <option value="Winter Service">Winter Service</option>
-          <option value="Sail Cover">Sail Cover</option>
+          <option value="new sail">New Sail</option>
+          <option value="sail repair">Sail Repair</option>
+          <option value="winter service">Winter Service</option>
+          <option value="sail cover">Sail Cover</option>
         </select>
      </label>
       <label>Quote Status:
@@ -23,6 +23,16 @@
           <option value="delivery">Delivery</option>
           <option value="paid">Paid</option>
         </select>
+     </label>
+     <label>Alphanumerical
+       <input type="radio" name="sorter" value="alpha"
+         @change="sortList()"
+         v-model="sort_type" />
+     </label>
+     <label>Date
+       <input type="radio" name="sorter" value="temporal"
+         @change="sortList()"
+         v-model="sort_type" />
      </label>
     </div>
     <div class="container">
@@ -42,7 +52,7 @@
               <td>{{ customer.email }}</td>
               <td>{{ customer.phone }}</td>
               <td>{{ customer.boat_name }}</td>
-              <td>{{ customer.home_port }}</td>
+              <td>{{ customer.boat_home }}</td>
               <td><router-link v-if="customer.quotes.length > 0" :to="{ name: 'CustomerQuotes', params: { 'payload': customer } }">{{ customer.quotes.length }}</router-link></td>
           </tr>
       </div>
@@ -59,6 +69,7 @@ export default {
     return {
       customers: [],
       customer_display: [],
+      sort_type: 'alpha',
       f_name: null,
       f_registry: {
         nameFilter: {
@@ -85,6 +96,41 @@ export default {
       let response = await AuthenticationService.customerList()
       this.customers = response.data
       this.customer_display = response.data
+      this.sortList()
+    },
+    temporalSort: function (a, b) {
+      var aQuotes = a.quotes
+      var bQuotes = b.quotes
+      console.log(`First set of quotes have a lenght of ${aQuotes.length}`)
+      console.log(`Second set of quotes have a lenght of ${bQuotes.length}`)
+      if (aQuotes === undefined || aQuotes.length === 0) {
+        return 1
+      }
+      if (bQuotes === undefined || bQuotes.length === 0) {
+        return -1
+      }
+
+      var ftn = (a, b) => {
+        return (a.createdAt > b.createdAt) ? -1 : (a.createdAt < b.createdAt) ? 1 : 0
+      }
+
+      var laq = aQuotes.sort(ftn)[0]
+      var lbq = bQuotes.sort(ftn)[0]
+
+      return (laq.createdAt > lbq.createdAt) ? -1 : (laq.createdAt < lbq.createdAt) ? 1 : 0
+    },
+    alphanumericSort: function (a, b) {
+      return (a.lname < b.lname) ? -1 : (a.name > b.name) ? 1 : 0
+    },
+    sortList () {
+      var ftn
+      if (this.sort_type === 'alpha') {
+        ftn = this.alphanumericSort
+      } else {
+        ftn = this.temporalSort
+      }
+      this.customer_display.sort(ftn)
+      // this.applyFilters()
     },
     filterName: function () {
       this.f_registry.nameFilter.filter = this.customers.filter((value) => { return (`${value.fname} ${value.lname}`).toLowerCase().indexOf(this.f_name.toLowerCase()) !== -1 })

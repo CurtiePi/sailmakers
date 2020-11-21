@@ -34,6 +34,11 @@ export default new Router({
       props: true
     },
     {
+      path: '/message_customers',
+      name: 'MessageCustomers',
+      component: () => import('../components/CustomerMessage.vue')
+    },
+    {
       path: '/quotes',
       name: 'Quotes',
       component: () => import('../components/QuotesList.vue')

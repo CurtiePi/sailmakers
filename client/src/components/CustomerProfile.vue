@@ -5,8 +5,10 @@
       <p class="title">{{ customer_data.address }}</p>
       <p class="title">{{ customer_data.email }}</p>
       <p class="title">{{ customer_data.phone }}</p>
+      <p class="title">{{ customer_data.boat_model }}</p>
       <p class="title">{{ customer_data.boat_name }}</p>
-      <p class="title">{{ customer_data.home_port }}</p>
+      <p class="title">{{ customer_data.boat_home }}</p>
+      <p class="title">{{ customer_data.notes }}</p>
       <p>
         <button v-if="!isEditing" @click="timeToEdit()">Edit</button>
         <button v-else @click="cancelEdit()">Cancel</button>

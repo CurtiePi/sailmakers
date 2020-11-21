@@ -29,6 +29,11 @@ export default {
               icon: 'people'
             },
             {
+              text: 'Message Customers',
+              name: 'MessageCustomers',
+              icon: 'documents'
+            },
+            {
               text: 'Add Customer',
               name: 'CustomerAdd',
               icon: 'person-add',

@@ -6,22 +6,22 @@
       </span>
       <span class="quote_types">
         <label>New Sail
-          <input type="checkbox" name="q_type" value="New Sail" 
+          <input type="checkbox" name="q_type" value="new sail" 
             @change="filterQuoteType()"
             v-model="quote_type" />
         </label>
         <label>Sail Repair
-          <input type="checkbox" name="q_type" value="Sail Repair"
+          <input type="checkbox" name="q_type" value="sail repair"
             @change="filterQuoteType()"
             v-model="quote_type" />
         </label>
         <label>Winter Service
-          <input type="checkbox" name="q_type" value="Winter Servic"e
+          <input type="checkbox" name="q_type" value="winter service"
             @change="filterQuoteType()"
             v-model="quote_type" />
         </label>
         <label>Sail Cover
-          <input type="checkbox" name="q_type" value="Sail Cover"
+          <input type="checkbox" name="q_type" value="sail cover"
             @change="filterQuoteType()"
             v-model="quote_type" />
         </label>
@@ -34,6 +34,7 @@
           <option value="production">In Production</option>
           <option value="ready">Ready</option>
           <option value="delivered">Delivered</option>
+          <option value="closed">Closed</option>
         </select>
        </span>
      </label>
@@ -57,7 +58,7 @@
           <td>{{ quote.customer.email }}</td>
           <td>{{ quote.customer.phone }}</td>
           <td>{{ quote.sail_request.split('-')[0] }}</td>
-          <td>{{ quote.home_port }}</td>
+          <td>{{ quote.boat_home }}</td>
           <td>{{ quote.quote_price }}</td>
           <td>{{ quote.status }}</td>
           <td>

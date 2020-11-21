@@ -6,11 +6,11 @@
       </div>
       <hr></hr>
       <div class="flex-grid">
-        <span class="col">Home Port: {{ quote.home_port }}</span>
+        <span class="col">Home Port: {{ quote.boat_home }}</span>
       </div>
       <div class="flex-grid-halfs">
         <span class="col">Boat Name: {{ quote.boat_name }}</span>
-        <span class="col">Boat Type: {{ quote.boat_type }}</span>
+        <span class="col">Boat Type: {{ quote.boat_model }}</span>
       </div>
       <hr></hr>
       <div class="flex-grid">

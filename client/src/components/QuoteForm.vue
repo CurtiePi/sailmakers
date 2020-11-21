@@ -45,9 +45,9 @@
               <div v-for="(option, index) in input.options" :key="index">
                 <label>
                   <input type="checkbox"
-                    :value="option.name"
+                    :value="option.name.toLowerCase()"
                     :name="input.name"
-                    :id="(option.name != '') ? option.name.toLowerCase().replace(' ', '_') : 'active'"
+                    :id="option.name.toLowerCase().replace(' ', '_')"
                     v-model="quote_type">
                     {{ option.name }}
                   </input>
@@ -200,8 +200,8 @@ export default {
             this.inputFields[idx].value = (haveCustomer) ? `${this.customer.fname} ${this.customer.lname}` : ''
           } else if (this.inputFields[idx].inCustomer) {
             this.inputFields[idx].value = (haveCustomer) ? this.customer[fieldName] : ''
-          } else if (!this.isEditing && fieldName === 'delivery_type') {
-            this.inputFields[idx].value = (haveCustomer) ? this.customer.home_port : ''
+          } else if (!this.isEditing && fieldName === 'pick_drop') {
+            this.inputFields[idx].value = (haveCustomer) ? this.customer.boat_home : ''
           } else {
             this.inputFields[idx].value = (haveQuote) ? this.quote[fieldName] : ''
           }

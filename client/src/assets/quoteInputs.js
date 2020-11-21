@@ -23,7 +23,8 @@ export default {
         {name: 'Pending'},
         {name: 'Production'},
         {name: 'Ready'},
-        {name: 'Delivered'}
+        {name: 'Delivered'},
+        {name: 'Closed'}
       ],
       isEditOnly: true,
       inCustomer: false,
@@ -136,7 +137,7 @@ export default {
       value: null
     },
     {
-      name: 'home_port',
+      name: 'boat_home',
       label: 'Home Port',
       type: 'text',
       isEditOnly: false,

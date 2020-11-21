@@ -27,6 +27,9 @@ var CustomerSchema = new mongoose.Schema({
     },
     boat_name: {
         type: String,
+    },
+    notes: {
+        type: String
     }
 }, {
     timestamps: true

@@ -15,7 +15,7 @@ var QuoteSchema = new mongoose.Schema({
     boat_name: {
         type: String
     },
-    home_port: {
+    boat_home: {
         type: String
     },
     sail_request: {
@@ -23,7 +23,7 @@ var QuoteSchema = new mongoose.Schema({
     },
     quote_type: {
         type: [String],
-        enum: ['New Sail', 'Sail Repaiar', 'Winter Service', 'Sail Cover']
+        enum: ['new sail', 'sail repair', 'winter service', 'sail cover']
     },
     battens: {
         type: String
@@ -40,9 +40,6 @@ var QuoteSchema = new mongoose.Schema({
     uv_color: {
         type: String
     },
-    home_port: {
-        type: String
-    },
     pick_drop: {
         type: String
     },
@@ -54,7 +51,7 @@ var QuoteSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['quote request', 'pending', 'production', 'ready', 'delivered'],
+        enum: ['quote request', 'pending', 'production', 'ready', 'delivered', 'closed'],
         default: 'quote request'
     },
     quote_price: {
