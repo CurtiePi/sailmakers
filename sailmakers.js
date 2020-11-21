@@ -13,6 +13,7 @@ const cookieParser      = require('cookie-parser');
 const mongoose          = require('mongoose');
 const config            = require('./config/config');
 const passport          = require('passport');
+global.Blob             = function() {};
 //require('./lib/strategies')(passport)
 
 /*
@@ -89,8 +90,8 @@ let app_port = config.app.port;
 let sec_app_port = config.app.sec_port;
 httpServer.listen(app_port);
 httpsServer.listen(sec_app_port);
-console.log(`HTTP server is  listeing on port ${app_port}`)
-console.log(`HTTPS server is  listeing on port ${sec_app_port}`)
+console.log(`HTTP server is  listening on port ${app_port}`)
+console.log(`HTTPS server is  listening on port ${sec_app_port}`)
 
 
 module.exports = smapp;

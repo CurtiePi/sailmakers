@@ -109,6 +109,10 @@ module.exports = {
 
             quote_data.customer = customer_id;
             quote_data.salesperson = salesper_id;
+
+            delete quote_data['customer_id'];
+            delete quote_data['salesperson_id'];
+
             var quote = new Quote(quote_data);
             await quote.save();
 
