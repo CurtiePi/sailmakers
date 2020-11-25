@@ -50,10 +50,19 @@ export default {
       value: null
     },
     {
-      name: 'home_port',
+      name: 'boat_home',
       label: 'Boat Port',
       type: 'select',
       placeholder: 'Boat Port',
+      value: null
+    },
+    {
+      name: 'notes',
+      label: 'Things to Know',
+      type: 'textarea',
+      cols: 60,
+      rows: 5,
+      placeholder: 'Things to Know',
       value: null
     }
   ]

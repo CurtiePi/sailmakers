@@ -2,6 +2,7 @@ const express           = require('express');
 const routeController   = require('../controllers/routingController');
 const mailman           = require('../middleware/mailman.js');
 const printpress        = require('../middleware/guttenburg.js');
+const lycanthrope       = require('../middleware/modifier.js');
 const apiQuoteRouter    = express.Router();
 
 module.exports  = apiQuoteRouter;
@@ -30,4 +31,7 @@ apiQuoteRouter.post('/email', printpress.writeQuoteDoc, mailman.deliverQuote, (r
 });
 apiQuoteRouter.post('/print', printpress.writeQuoteDoc, (req, res, next) => {
     res.status(200).json({message: 'Quote has been created.'});
+});
+apiQuoteRouter.post('/modify', lycanthrope.modifyQuote, (req, res, next) => {
+    res.status(200).json({message: 'Quote has been modified.'});
 });

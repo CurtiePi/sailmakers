@@ -22,6 +22,9 @@ export default {
   getCustomerQuotes (payload) {
     return Api().insecure.get(`/api/quote/customer/${payload}`)
   },
+  emailCustomers (payload) {
+    return Api().insecure.post('/api/customer/email', payload)
+  },
   emailQuote (payload) {
     return Api().insecure.post('/api/quote/email', payload)
   },

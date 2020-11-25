@@ -4,7 +4,6 @@ const sendmail      = require('sendmail')();
 const smtpTransport = require('nodemailer-smtp-transport');
 
 const deliverQuote = (req, res, next) => {
-    console.log('Making delivery');
     var file_attachment = req.attachment;
     var transporter = nodemail.createTransport(smtpTransport({
         service: 'gmail',
@@ -29,10 +28,42 @@ const deliverQuote = (req, res, next) => {
            }
 
            console.log(`Message ${info.messageId} sent: ${info.response}`);
+           req.infoMessage = info.messageId
+           next();
+    })
+}
+
+const deliverEmail = (req, res, next) => {
+    var data = req.body
+    var transporter = nodemail.createTransport(smtpTransport({
+        service: 'gmail',
+        auth: {
+            user: config.mail.office,
+            pass: config.mail.access
+        }
+    }));
+
+    var recipients = data.recipients.join(', ');
+    var mailOptions = {
+        from: 'android@reigndesign.com;',
+        to: recipients,
+        subject: data.subject,
+        html: data.body,
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+           if (error){
+               console.log('Error: ' + error);
+               next(error);
+           }
+
+           console.log(`Message ${info.messageId} sent: ${info.response}`);
+           req.infoMessage = info.messageId
            next();
     })
 }
 
 module.exports = {
-    deliverQuote
+    deliverQuote,
+    deliverEmail
 }

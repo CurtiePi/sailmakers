@@ -105,10 +105,6 @@ export default {
 }
 </script>
 <style scoped>
-.MyComponent {
-  /* Base styles that work for any screen size */
-}
-
 @media (min-width: 36em) {
   .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);

@@ -4,14 +4,18 @@
     <div>
         <tr>
             <th>Quote Date</th>
+            <th>Quote Type(s)</th>
             <th>Sail Request</th>
-            <th>Delivery Type</th>
+            <th>Status</th>
+            <th>Price</th>
         </tr>
         <tr v-for= "quote in quotes"
             :key="quote._id">
-            <td><router-link :to="{ name: 'QuoteDisplay', params: { 'payload': quote } }">{{ quote.createdAt }}</router-link></td>
+            <td><router-link :to="{ name: 'QuoteDisplay', params: { 'payload': quote } }">{{ formatDate(quote.createdAt) }}</router-link></td>
+            <td>{{ formatType(quote.quote_type) }}</td>
             <td>{{ quote.sail_request }}</td>
-            <td>{{ quote.delivery_type }}</td>
+            <td>{{ quote.status }}</td>
+            <td>{{ quote.quote_price.toFixed(2) }}</td>
         </tr>
     </div>
   </div>
@@ -30,10 +34,23 @@ export default {
     }
   },
   methods: {
+    formatType: function (quoteTypes) {
+      return quoteTypes.join(', ')
+    },
+    formatDate: function (dateStr) {
+      const d = new Date(dateStr)
+      const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+      const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d)
+      const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
+      return `${da}-${mo}-${ye}`
+    },
+    temporalSort: function (a, b) {
+      return (a.createdAt > b.createdAt) ? -1 : (a.createdAt < b.createdAt) ? 1 : 0
+    },
     getCustomerQuotes: async function (customerId) {
       let response = await AuthenticationService.getCustomerQuotes(customerId)
       this.quotes = response.data
-      console.lot(this.quotes)
+      this.quotes.sort(this.temporalSort)
     }
   },
   mounted () {
@@ -46,7 +63,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style scoped>
 h1, h2 {
   font-weight: normal;
 }
@@ -63,5 +80,22 @@ li {
 
 a {
   color: #35495E;
+}
+
+.filter-div > * {
+    margin: 0 8px;
+    vertical-align: middle;
+}
+
+td, th {
+  padding: 15px;
+}
+
+tr:nth-child(even) {
+    background-color: #eeeeee;
+}
+
+tr:nth-child(odd) {
+    background-color: #cccccc;
 }
 </style>

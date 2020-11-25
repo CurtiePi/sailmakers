@@ -2,7 +2,6 @@
   <div class="container">
     <div class="row filter-div">
       <label>Name:<input type="text" v-model="f_name" @input="filterName()"></input></label>
-      <label>Active Quotes:<input type="checkbox" @change="filterActive($event)"></input></label>
       <label>Quote Type:
         <select @change="filterQuoteType($event)">
           <option value="all"></option>
@@ -34,26 +33,32 @@
          @change="sortList()"
          v-model="sort_type" />
      </label>
+     <button @click="sendMail()">Send Mail</button>
     </div>
     <div class="container">
+      <span v-if="errorMsg" class="errorMsg">{{ errorMsg }}</span>
       <h1>Customer List</h1>
       <div>
           <tr>
+              <th>
+                <label>
+                  <input type="checkbox" name="select_all" 
+                    @input="selectAll()" />Select All
+                </label> 
+              </th>
               <th>Name</th>
               <th>Email</th>
-              <th>Phone</th>
               <th>Boat Name</th>
               <th>Boat Home</th>
-              <th>Quotes</th>
           </tr>
           <tr v-for= "customer in customer_display"
               :key="customer._id">
-              <td><router-link :to="{ name: 'CustomerProfile', params: { 'payload': customer } }">{{ customer.fname }} {{ customer.lname }}</router-link></td>
+              <td><input type="checkbox" name="selectees" :value="customer.email" 
+                v-model="selectees" />
+              <td><router-link :to="{ name: 'CustomerProfile', params: { customer } }">{{ customer.fname }} {{ customer.lname }}</router-link></td>
               <td>{{ customer.email }}</td>
-              <td>{{ customer.phone }}</td>
               <td>{{ customer.boat_name }}</td>
               <td>{{ customer.boat_home }}</td>
-              <td><router-link v-if="customer.quotes.length > 0" :to="{ name: 'CustomerQuotes', params: { 'payload': customer } }">{{ customer.quotes.length }}</router-link></td>
           </tr>
       </div>
     </div>
@@ -64,12 +69,16 @@
 import AuthenticationService from '@/services/AuthenticationService'
 
 export default {
-  name: 'customerList',
+  name: 'customerSelect',
+  props: ['payload'],
   data () {
     return {
       customers: [],
       customer_display: [],
       sort_type: 'alpha',
+      selectees: [],
+      errorMsg: null,
+      message: null,
       f_name: null,
       f_registry: {
         nameFilter: {
@@ -92,11 +101,45 @@ export default {
     }
   },
   methods: {
+    sendMail: async function () {
+      if (this.selectees.length > 0) {
+        var payload = {
+          'subject': this.message.subject,
+          'body': this.message.body,
+          'recipients': this.selectees
+        }
+        console.log(payload)
+        let response = await AuthenticationService.emailCustomers(payload)
+        if (response.status === 200) {
+          this.$router.push({ name: 'Customers' })
+        }
+      } else {
+        this.errorMsg = 'Please select recipients before trying to email your message!'
+      }
+    },
     getCustomers: async function () {
       let response = await AuthenticationService.customerList()
       this.customers = response.data
       this.customer_display = response.data
       this.sortList()
+    },
+    selectAll: function () {
+      var inputs = document.getElementsByTagName('input')
+      var isSelectAll = document.getElementsByName('select_all')[0].checked
+
+      for (var i = 0; i < inputs.length; i++) {
+        if (inputs[i].type.toLowerCase() === 'checkbox' && inputs[i].name !== 'select_all') {
+          inputs[i].checked = isSelectAll
+          if (isSelectAll) {
+            if (!this.selectees.includes(inputs[i].value) && inputs[i].value !== '') {
+              this.selectees.push(inputs[i].value)
+            }
+          } else {
+            var idx = this.selectees.indexOf(inputs[i].value)
+            this.selectees.splice(idx, 1)
+          }
+        }
+      }
     },
     temporalSort: function (a, b) {
       var aQuotes = a.quotes
@@ -130,7 +173,6 @@ export default {
         ftn = this.temporalSort
       }
       this.customer_display.sort(ftn)
-      // this.applyFilters()
     },
     filterName: function () {
       this.f_registry.nameFilter.filter = this.customers.filter((value) => { return (`${value.fname} ${value.lname}`).toLowerCase().indexOf(this.f_name.toLowerCase()) !== -1 })
@@ -206,6 +248,9 @@ export default {
   },
   mounted () {
     this.getCustomers()
+    if (this.payload) {
+      this.message = this.payload
+    }
   }
 }
 </script>
@@ -245,5 +290,11 @@ tr:nth-child(even) {
 
 tr:nth-child(odd) {
     background-color: #cccccc;
+}
+
+.errorMsg {
+  font-weight: bold;
+  color: #FF0000;
+  font-size: 12px;
 }
 </style>

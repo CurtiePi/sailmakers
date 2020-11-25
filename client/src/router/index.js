@@ -28,6 +28,12 @@ export default new Router({
       props: true
     },
     {
+      path: '/customer_edit',
+      name: 'CustomerEdit',
+      component: () => import('../components/CustomerForm.vue'),
+      props: true
+    },
+    {
       path: '/customer_quotes',
       name: 'CustomerQuotes',
       component: () => import('../components/CustomerQuotesList.vue'),
@@ -37,6 +43,12 @@ export default new Router({
       path: '/message_customers',
       name: 'MessageCustomers',
       component: () => import('../components/CustomerMessage.vue')
+    },
+    {
+      path: 'select_customers',
+      name: 'SelectCustomers',
+      component: () => import('../components/CustomerSelect.vue'),
+      props: true
     },
     {
       path: '/quotes',

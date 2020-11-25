@@ -54,12 +54,12 @@
         </tr>
         <tr v-for= "quote in quotes_display"
           :key="quote._id">
-          <td><router-link :to="{ name: 'CustomerProfile', params:  testMe(quote)  }">{{ quote.customer.fname }} {{ quote.customer.lname }}</router-link></td>
+          <td><router-link :to="{ name: 'CustomerProfile', params: { 'payload': quote.customer } }">{{ quote.customer.fname }} {{ quote.customer.lname }}</router-link></td>
           <td>{{ quote.customer.email }}</td>
-          <td>{{ quote.customer.phone }}</td>
+          <td class='phone'>{{ quote.customer.phone }}</td>
           <td>{{ quote.sail_request.split('-')[0] }}</td>
           <td>{{ quote.boat_home }}</td>
-          <td>{{ quote.quote_price }}</td>
+          <td>{{ quote.quote_price.toFixed(2) }}</td>
           <td>{{ quote.status }}</td>
           <td>
             <button @click="viewQuote(quote)">View</button>
@@ -101,9 +101,6 @@ export default {
       let response = await AuthenticationService.quoteList()
       this.quotes = response.data
       this.quotes_display = response.data
-    },
-    testMe: function (value) {
-      return {'payload': value.customer}
     },
     viewQuote (quoteObj) {
       this.$router.push({ name: 'QuoteDisplay', params: { 'payload': quoteObj } })
@@ -198,7 +195,7 @@ a {
 }
 
 td, th {
-  padding: 5px;
+  padding: 8px;
 }
 
 tr:nth-child(even) {
@@ -211,5 +208,9 @@ tr:nth-child(odd) {
 
 .row span {
   margin: 0 8px;
+}
+
+.phone {
+  width: 12%;
 }
 </style>

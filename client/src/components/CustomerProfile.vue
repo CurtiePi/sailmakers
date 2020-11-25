@@ -1,35 +1,35 @@
 <template>
   <div class="container">
     <div class="card">
-      <h1>{{ customer_data.fname }} {{ customer_data.lname }}</h1>
-      <p class="title">{{ customer_data.address }}</p>
-      <p class="title">{{ customer_data.email }}</p>
-      <p class="title">{{ customer_data.phone }}</p>
-      <p class="title">{{ customer_data.boat_model }}</p>
-      <p class="title">{{ customer_data.boat_name }}</p>
-      <p class="title">{{ customer_data.boat_home }}</p>
-      <p class="title">{{ customer_data.notes }}</p>
+      <div class="flex-grid">
+        <span class="col hilite">Profile for {{ customer_data.fname }} {{ customer_data.lname }}</span>
+      </div>
+      <hr></hr>
+      <div class="flex-grid">
+        <span class="col">Address: {{ customer_data.address }}</span>
+      </div>
+      <div class="flex-grid-halfs">
+        <span class="col">Email: {{ customer_data.email }}</span>
+        <span class="col">Phone: {{ customer_data.phone }}</span>
+      </div>
+      <hr></hr>
+      <div class="flex-grid">
+        <span class="col">Home Port: {{ customer_data.boat_home }}</span>
+      </div>
+      <div class="flex-grid-halfs">
+        <span class="col">Boat Name: {{ customer_data.boat_name }}</span>
+        <span class="col">Boat Type: {{ customer_data.boat_model }}</span>
+      </div>
+      <hr></hr>
+      <div class="flex-grid">
+        <span class="col">Things to Know: {{ customer_data.notes }}</span>
+      </div>
       <p>
-        <button v-if="!isEditing" @click="timeToEdit()">Edit</button>
-        <button v-else @click="cancelEdit()">Cancel</button>
+        <button @click="timeToEdit()">Edit</button>
         <button @click="createQuote()">Create Quote</button>
-        <button @click="goBack()">Back</button>
-    </p>
+        <button @click="seeQuotes()">Quotes</button>
+      </p>
     </div>     
-    <div class="editor">
-      <form>
-        <div class="form-group">
-          <input v-for="inputField in inputFields"
-            class="test-control" size="25"
-            :type="inputField.type"
-            :placeholder="inputField.placeholder"
-            :name="inputField.name"
-            :id="inputField.name"
-            v-model="inputField.value" />
-        </div>
-        <button type="button" class="btn btn-primary" @click="update_customer()" :disabled="!allowSubmitForm">Submit</button>
-      </form>
-    </div>
   </div>
 </template>
 <script>
@@ -37,55 +37,11 @@ import AuthenticationService from '@/services/AuthenticationService'
 
 export default {
   name: 'customerProfile',
-  props: ['customer'],
+  props: ['payload'],
   data () {
     return {
       customer_data: null,
-      isEditing: false,
-      inputFields: [
-        {
-          name: 'fname',
-          type: 'text',
-          placeholder: 'First Name',
-          value: null
-        },
-        {
-          name: 'lname',
-          type: 'text',
-          placeholder: 'Last Name',
-          value: null
-        },
-        {
-          name: 'address',
-          type: 'text',
-          placeholder: 'Address',
-          value: null
-        },
-        {
-          name: 'email',
-          type: 'text',
-          placeholder: 'Email',
-          value: null
-        },
-        {
-          name: 'phone',
-          type: 'text',
-          placeholder: 'Phone',
-          value: null
-        },
-        {
-          name: 'boat_name',
-          type: 'text',
-          placeholder: 'Boat Name',
-          value: null
-        },
-        {
-          name: 'home_port',
-          type: 'text',
-          placeholder: 'Boat Home',
-          value: null
-        }
-      ]
+      isEditing: false
     }
   },
   computed: {
@@ -95,12 +51,7 @@ export default {
   },
   methods: {
     timeToEdit () {
-      this.isEditing = true
-      document.getElementsByClassName('editor')[0].style.display = 'block'
-    },
-    cancelEdit () {
-      this.isEditing = false
-      document.getElementsByClassName('editor')[0].style.display = 'none'
+      this.$router.push({ name: 'CustomerEdit', params: { 'edit_payload': this.customer_data } })
     },
     async update_customer () {
       let data = {}
@@ -112,7 +63,7 @@ export default {
         }
       }
       let payload = {
-        criteria: {'_id': this.customer._id},
+        criteria: {'_id': this.customer_data._id},
         update: data}
 
       document.getElementsByClassName('editor')[0].style.display = 'none'
@@ -128,28 +79,77 @@ export default {
       let payload = this.customer_data
       this.$router.push({ name: 'QuoteCreate', params: {'create_payload': payload} })
     },
-    goBack () {
-      this.$router.go(-1)
+    seeQuotes () {
+      this.$router.push({ name: 'CustomerQuotes', params: { 'payload': this.customer_data } })
     }
   },
   mounted () {
-    if (this.customer) {
-      this.customer_data = this.customer
+    if (this.payload) {
+      this.customer_data = this.payload
     }
   }
 }
 </script>
 <style scoped>
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  max-width: 300px;
-  margin: auto;
-  text-align: center;
+@media (min-width: 36em) {
+  .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    flex-direction: column;
+  }
+
+  .sector {
+    width: 100%;
+    margin: 0 auto;
+    flex-direction: column;
+    padding: 3px;
+  }
+
 }
 
-.title {
-  color: grey;
-  font-size: 18px;
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 900px;
+  width: 80%;
+  margin: auto;
+  background-color: #F5F5DC;
+  font-size: 19px;
+}
+
+.flex-grid {
+  display: flex;
+}
+
+.flex-grid .col {
+  flex: 1;
+}
+
+.flex-grid-halfs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flex-grid-halfs .col {
+  .width: 45%;
+}
+
+hr.solid {
+  border-top: 3px solid #bbb;
+  width: 80%;
+  margin: auto;
+}
+
+.hilite {
+  font-weight: bold;
+  font-size: 40px; 
+}
+
+span {
+  color: #000081;
+  font-size: 30px; 
 }
 
 button {
@@ -160,26 +160,4 @@ button:hover, a:hover {
   opacity: 0.7;
 }
 
-.editor {
-  display: none;
-  max-width: 50%;
-  margin: auto;
-  text-align: center;
-}
-
-.test-control {
-  display: inline-block;
-  height: calc(1.5em + 0.75rem + 2px);
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  margin-top: 5px;
-  color: #495057;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
 </style>
