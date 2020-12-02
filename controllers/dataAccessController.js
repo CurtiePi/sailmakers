@@ -185,9 +185,32 @@ module.exports = {
             return salesperson;
         }
         catch(err) {
-            console.log('Received an error creating salesperson');
+            console.log(`Received an error creating salesperson: ${err}`);
         }
     },
+    getSalespeopleToEmail: async () => {
+        try {
+            let salespeople = await Salesperson.find({'get_mail': true});
+            return salespeople;
+        }
+        catch(err) {
+            console.log('Received an error getting salespeople to email');
+        }
+    },
+    updateSalesperson: async (criteria, update ) => {
+        if (criteria._id) {
+            criteria._id = mongoose.Types.ObjectId(criteria._id);
+        }
+
+        try {
+            let salesperson = await Salesperson.findOneAndUpdate(criteria, update, {new: true});
+            return salesperson;
+        }
+        catch (err) {
+            console.log('Received an error updating salesperson');
+        }
+    },
+
     /**
      * List all ports in the database
      *

@@ -39,6 +39,21 @@ export default {
   createPort (payload) {
     return Api().insecure.post('/api/port/create', payload)
   },
+  getPrice (payload) {
+    return Api().insecure.post('/api/quote/price', payload)
+  },
+  getSalespeople () {
+    return Api().insecure.get('/api/staff')
+  },
+  createSalesperson (payload) {
+    return Api().insecure.post('/api/staff/create', payload)
+  },
+  updateSalesperson (payload) {
+    return Api().insecure.post('/api/staff/update', payload)
+  },
+  getEmailSalespeople () {
+    return Api().insecure.get('/api/staff/emaillist')
+  },
   portList () {
     return Api().insecure.get('/api/port')
   },

@@ -24,13 +24,13 @@ export default new Router({
     {
       path: '/customer_add',
       name: 'CustomerAdd',
-      component: () => import('../components/CustomerForm.vue'),
+      component: () => import('../components/CustomerInput.vue'),
       props: true
     },
     {
       path: '/customer_edit',
       name: 'CustomerEdit',
-      component: () => import('../components/CustomerForm.vue'),
+      component: () => import('../components/CustomerInput.vue'),
       props: true
     },
     {
@@ -77,6 +77,29 @@ export default new Router({
       path: '/new_customer_quote',
       name: 'NewCustomerQuote',
       components: () => import('../components/CustomerForm.vue'),
+      props: true
+    },
+    {
+      path: '/staff_list',
+      name: 'StaffList',
+      component: () => import('../components/StaffList.vue')
+    },
+    {
+      path: '/staff_create',
+      name: 'StaffCreate',
+      component: () => import('../components/StaffForm.vue'),
+      props: true
+    },
+    {
+      path: '/staff_edit',
+      name: 'StaffEdit',
+      component: () => import('../components/StaffForm.vue'),
+      props: true
+    },
+    {
+      path: '/staff_profile',
+      name: 'StaffProfile',
+      component: () => import('../components/StaffProfile.vue'),
       props: true
     },
     {

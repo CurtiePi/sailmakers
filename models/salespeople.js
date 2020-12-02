@@ -18,6 +18,9 @@ var SalespersonSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    get_mail: {
+        type: Boolean,
+    },
     quotes: [{type: mongoose.Schema.ObjectId, ref: 'Quote'}],
 }, {
     timestamps: true

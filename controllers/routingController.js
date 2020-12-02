@@ -156,6 +156,28 @@ module.exports = {
             });
         }
     },
+    getSalespeopleToEmail: async (req, res, next) => {
+        try {
+            var salespeople = await dataAccess.getSalespeopleToEmail();
+            res.status(200).json(salespeople);
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: `Error retrieving salesperson email recipients ${err}` 
+            });
+        }
+    },
+    updateSalesperson: async (req, res, next) => {
+        try{
+            var salesperson = await dataAccess.updateSalesperson(req.body.criteria, req.body.update);
+            res.status(200).json(salesperson);
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: `Error updating salesperson ${err}`
+            });
+        }
+    },
     /*
      * Ports
      *
