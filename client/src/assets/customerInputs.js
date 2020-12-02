@@ -36,6 +36,21 @@ export default {
       value: null
     },
     {
+      name: 'club',
+      label: 'Club',
+      type: 'select',
+      placeholder: 'Club',
+      value: null,
+      other: 'clubOther'
+    },
+    {
+      name: 'boat_home',
+      label: 'Boat Port',
+      type: 'text',
+      placeholder: 'Boat Port',
+      value: null
+    },
+    {
       name: 'boat_model',
       label: 'Boat',
       type: 'text',
@@ -47,14 +62,8 @@ export default {
       label: 'Boat Name',
       type: 'text',
       placeholder: 'Boat Name',
-      value: null
-    },
-    {
-      name: 'boat_home',
-      label: 'Boat Port',
-      type: 'select',
-      placeholder: 'Boat Port',
-      value: null
+      value: null,
+      other: 'portOther'
     },
     {
       name: 'notes',

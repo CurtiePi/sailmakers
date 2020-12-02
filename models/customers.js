@@ -19,6 +19,9 @@ var CustomerSchema = new mongoose.Schema({
         type: String,
     },
     quotes: [{type: mongoose.Schema.ObjectId, ref: 'Quote'}],
+    club: {
+        type: String
+    },
     boat_model: {
         type: String
     },

@@ -10,9 +10,11 @@
             <label>{{ input.label }}</label>
             <input
               class="input is-large"
+              :name="input.name.toLowerCase()"
+              :id="input.name"
               :type="input.type"
               step="0.05"
-              :name="input.name.toLowerCase()"
+              ref="inputFields"
               v-model="input.value" />
           </div>
           <div v-else-if="input.type == 'textarea' && (isEditing || !input.isEditOnly)">
@@ -30,9 +32,8 @@
             <select
               class="select"
               :name="input.name.toLowerCase()"
-              :id="input.name.toLowerCase()"
               @change="checkForOther($event)"
-              v-model="selectValue">
+              v-model="input.value">
               <option v-for="option in selectOptions">
                 {{ option.name }}
               </option>
@@ -42,6 +43,7 @@
               v-if="needOther" >
               <label>Specify Other</label>
               <input type="text"
+                :id="input.name"
                 v-model="otherValue" />
             </div>
           </div>
@@ -106,8 +108,7 @@ export default {
       form: {},
       singleOp: false,
       needOther: false,
-      otherValue: null,
-      selectValue: null
+      otherValue: null
     }
   },
   computed: {
@@ -126,6 +127,11 @@ export default {
         var key = this.inputFields[idx].name
         if (key === 'boat_home') {
           console.log('Boat Home is here')
+          if (![this.selectValue, this.otherValue].includes(this.origInputFields[key])) {
+            formData[key] = (this.needOther) ? this.otherValue : this.selectValue
+          }
+        } else if (key === 'club') {
+          console.log('Customer club is here')
           if (![this.selectValue, this.otherValue].includes(this.origInputFields[key])) {
             formData[key] = (this.needOther) ? this.otherValue : this.selectValue
           }
@@ -165,6 +171,21 @@ export default {
       console.log(payload)
     },
     checkForOther (event) {
+      if (event.target.value === 'other') {
+        this.needOther = true
+      } else {
+        this.needOther = false
+        this.otherValue = ''
+        for (var idx in this.inputFields) {
+          if (this.inputFields[idx].name === event.target.name) {
+            this.inputFields[idx].value = event.target.value
+            console.log(this.$refs)
+            this.$refs.inputFields[7].nodeValue = event.target.value
+            // document.getElementById('boat_home').value = event.target.value
+          }
+        }
+      }
+      /*
       for (var idx in this.inputFields) {
         const field = this.inputFields[idx]
         if (field.name === event.target.name) {
@@ -173,9 +194,11 @@ export default {
           } else {
             this.needOther = false
             this.otherValue = ''
+            this.portValue = event.target.value
           }
         }
       }
+      */
     },
     async updateCustomer () {
       let data = this.checkForChanges()

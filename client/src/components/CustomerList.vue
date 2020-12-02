@@ -2,7 +2,6 @@
   <div class="container">
     <div class="row filter-div">
       <label>Name:<input type="text" v-model="f_name" @input="filterName()"></input></label>
-      <label>Active Quotes:<input type="checkbox" @change="filterActive($event)"></input></label>
       <label>Quote Type:
         <select @change="filterQuoteType($event)">
           <option value="all"></option>
@@ -15,13 +14,12 @@
       <label>Quote Status:
         <select @change="filterQuoteStatus($event)">
           <option value="all"></option>
+          <option value="quote request">Quote Request</option>
           <option value="pending">Pending</option>
-          <option value="deposit">Deposit</option>
           <option value="production">In Production</option>
           <option value="ready">Ready</option>
-          <option value="pickup">Pickup</option>
-          <option value="delivery">Delivery</option>
-          <option value="paid">Paid</option>
+          <option value="delivered">Delivered</option>
+          <option value="no sale">No Sale</option>
         </select>
      </label>
      <label>Alphanumerical
@@ -42,6 +40,7 @@
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
+              <th>Club</th>
               <th>Boat Name</th>
               <th>Boat Home</th>
               <th>Quotes</th>
@@ -51,6 +50,7 @@
               <td><router-link :to="{ name: 'CustomerProfile', params: { 'payload': customer } }">{{ customer.fname }} {{ customer.lname }}</router-link></td>
               <td>{{ customer.email }}</td>
               <td>{{ customer.phone }}</td>
+              <td>{{ customer.club }}</td>
               <td>{{ customer.boat_name }}</td>
               <td>{{ customer.boat_home }}</td>
               <td><router-link v-if="customer.quotes.length > 0" :to="{ name: 'CustomerQuotes', params: { 'payload': customer } }">{{ customer.quotes.length }}</router-link></td>
@@ -101,8 +101,6 @@ export default {
     temporalSort: function (a, b) {
       var aQuotes = a.quotes
       var bQuotes = b.quotes
-      console.log(`First set of quotes have a lenght of ${aQuotes.length}`)
-      console.log(`Second set of quotes have a lenght of ${bQuotes.length}`)
       if (aQuotes === undefined || aQuotes.length === 0) {
         return 1
       }
@@ -140,17 +138,6 @@ export default {
         this.f_registry.nameFilter.status = false
       }
 
-      this.applyFilters()
-    },
-    filterActive: function (evt) {
-      if (evt.target.checked) {
-        console.log("I've been checked")
-        this.f_registry.activeFilter.filter = this.customers.filter((value) => { return value.quotes.reduce((acc, val) => { return acc || val.isActive }, false) })
-        this.f_registry.activeFilter.status = true
-      } else {
-        console.log("I've been UNchecked")
-        this.f_registry.activeFilter.status = false
-      }
       this.applyFilters()
     },
     filterQuoteType: function (evt) {

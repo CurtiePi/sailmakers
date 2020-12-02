@@ -14,6 +14,9 @@
       </div>
       <hr></hr>
       <div class="flex-grid">
+        <span class="col">Club: {{ customer_data.club }}</span>
+      </div>
+      <div class="flex-grid">
         <span class="col">Home Port: {{ customer_data.boat_home }}</span>
       </div>
       <div class="flex-grid-halfs">
