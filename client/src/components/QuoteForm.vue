@@ -79,6 +79,8 @@
       @click="cancel()">
       Cancel
     </button>
+    <input type="file" ref="fileInput" class="btn btn-primary"
+      @change="showname()" />
   </div>
 </template>
 
@@ -108,6 +110,22 @@ export default {
     }
   },
   methods: {
+    async showname () {
+      var name = this.$refs.fileInput
+      console.log(name)
+      console.log(`Selected file: ${name.files[0].name}`)
+      console.log(`Selected file: ${name.files[0].size}`)
+      console.log(`Selected file: ${name.files[0].type}`)
+
+      const formData = new FormData()
+      formData.append('file', name.files[0])
+      try {
+        var response = await AuthenticationService.getPrice(formData)
+        console.log(response.data.quote_price)
+      } catch (err) {
+        console.log(err)
+      }
+    },
     checkForChanges () {
       var formData = {}
       for (var idx = 0; idx < this.inputFields.length; idx++) {

@@ -1,9 +1,6 @@
 <template>
   <div class="container">
     <div class="row filter-div">
-      <span>
-        <label>Active Quotes:<input type="checkbox" @change="filterActive($event)" /></label>
-      </span>
       <span class="quote_types">
         <label>New Sail
           <input type="checkbox" name="q_type" value="new sail" 
@@ -34,7 +31,7 @@
           <option value="production">In Production</option>
           <option value="ready">Ready</option>
           <option value="delivered">Delivered</option>
-          <option value="closed">Closed</option>
+          <option value="no sale">No Sale</option>
         </select>
        </span>
      </label>
@@ -53,6 +50,7 @@
           <th></th>
         </tr>
         <tr v-for= "quote in quotes_display"
+          :class="quote.status.replace(' ', '_')"
           :key="quote._id">
           <td><router-link :to="{ name: 'CustomerProfile', params: { 'payload': quote.customer } }">{{ quote.customer.fname }} {{ quote.customer.lname }}</router-link></td>
           <td>{{ quote.customer.email }}</td>
@@ -104,17 +102,6 @@ export default {
     },
     viewQuote (quoteObj) {
       this.$router.push({ name: 'QuoteDisplay', params: { 'payload': quoteObj } })
-    },
-    filterActive: function (evt) {
-      if (evt.target.checked) {
-        console.log("I've been checked")
-        this.f_registry.activeFilter.filter = this.quotes.filter((value) => { return value.status !== 'paid' })
-        this.f_registry.activeFilter.status = true
-      } else {
-        console.log("I've been UNchecked")
-        this.f_registry.activeFilter.status = false
-      }
-      this.applyFilters()
     },
     filterQuoteType: function () {
       console.log(this.quote_type)
@@ -197,7 +184,7 @@ a {
 td, th {
   padding: 8px;
 }
-
+/***
 tr:nth-child(even) {
     background-color: #eeeeee;
 }
@@ -205,12 +192,36 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
     background-color: #cccccc;
 }
-
+***/
 .row span {
   margin: 0 8px;
 }
 
 .phone {
   width: 12%;
+}
+
+.quote_request {
+  background-color: #FFFF99;
+}
+
+.pending {
+  background-color: #00FFFF;
+}
+
+.production {
+  background-color: #98FB98;
+}
+
+.ready {
+  background-color: #CCCCCC;
+}
+
+.delivered {
+  background-color: #C58BE7;
+}
+
+.no_sale {
+  background-color: #FF8000;
 }
 </style>

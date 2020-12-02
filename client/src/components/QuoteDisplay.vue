@@ -41,9 +41,11 @@
       </div>
       <p>
         <button @click="timeToEdit()">Edit</button>
-        <button @click="printQuote()">Print Quote</button>
+        <button v-if="!isPrinted" @click="printQuote()">Print Quote</button>
         <button v-if="show_view"
           @click="viewQuotePdf()">View Quote PDF</button>
+        <button v-if="show_view"
+          @click="emailQuotePdf()">Email PDF</button>
         <button @click="goBack()">Home</button>
       </p>
     </div>     
@@ -61,7 +63,9 @@ export default {
       customer: null,
       salesperson: null,
       message: null,
-      show_view: false
+      attachment: null,
+      show_view: false,
+      isPrinted: false
     }
   },
   computed: {
@@ -78,13 +82,24 @@ export default {
         'payload': this.quote
       }
       let response = await AuthenticationService.printQuote(payload)
-      this.message = response.data
+      this.message = response.data.message
       if (response.status === 200) {
+        this.attachment = response.data.attachment
         this.show_view = true
+        this.isPrinted = true
+        console.log(this.attachment)
       }
     },
     viewQuotePdf () {
       this.$router.push({ name: 'QuoteViewPDF', params: { 'payload': this.quote._id } })
+    },
+    async emailQuotePdf () {
+      var payload = {'attachment': this.attachment, 'recipients': ['teserac_4@hotmail.com']}
+
+      let response = await AuthenticationService.emailQuote(payload)
+      if (response.status === 200) {
+        this.show_view = false
+      }
     },
     hasValue (inputField) {
       return inputField.value != null &&

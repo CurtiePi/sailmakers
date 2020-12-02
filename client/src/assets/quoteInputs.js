@@ -24,7 +24,7 @@ export default {
         {name: 'Production'},
         {name: 'Ready'},
         {name: 'Delivered'},
-        {name: 'Closed'}
+        {name: 'No Sale'}
       ],
       isEditOnly: true,
       inCustomer: false,
