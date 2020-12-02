@@ -7,3 +7,4 @@ migrate*
 config
 public/*
 sailmakers.json
+sailmakers_redacted.json

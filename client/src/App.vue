@@ -41,6 +41,15 @@ export default {
                 name: 'atomic',
                 value: true
               }
+            },
+            {
+              text: 'New Customer Quote',
+              name: 'CustomerAdd',
+              icon: 'document-attach',
+              param: {
+                name: 'atomic',
+                value: false
+              }
             }
           ]
         },
@@ -49,7 +58,7 @@ export default {
           icon: 'document',
           subNavLinks: [
             {
-              text: ' Quote List',
+              text: 'Quote List',
               name: 'Quotes',
               icon: 'documents'
             },
@@ -61,6 +70,22 @@ export default {
                 name: 'atomic',
                 value: false
               }
+            }
+          ]
+        },
+        {
+          text: 'Salespeople',
+          icon: 'people',
+          subNavLinks: [
+            {
+              text: 'Salespeople List',
+              name: 'StaffList',
+              icon: 'list-circle'
+            },
+            {
+              text: 'Add Salesperson',
+              name: 'StaffCreate',
+              icon: 'person'
             }
           ]
         },

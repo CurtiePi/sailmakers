@@ -8,9 +8,12 @@ module.exports = apiStaffRouter;
  * Salespeople routes
  */
 apiStaffRouter.get('/', routeController.getSalespeople);
+apiStaffRouter.get('/emaillist', routeController.getSalespeopleToEmail);
 apiStaffRouter.get('/:id', routeController.getSalespersonById);
 apiStaffRouter.get('/name/:name', routeController.getSalespersonByName);
 
+
 apiStaffRouter.post('/create', routeController.createSalesperson);
+apiStaffRouter.post('/update', routeController.updateSalesperson);
 
 
