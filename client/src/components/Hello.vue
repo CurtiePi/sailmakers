@@ -2,9 +2,6 @@
   <div class="hello">
     <h1>{{ msg }}</h1>
     <h2 :sp="salesperson">Welcome {{ salesperson.fname }} </h2>
-    <ul>
-      <li><router-link to="/customers">Customers</router-link></li>
-    </ul>
   </div>
 </template>
 
