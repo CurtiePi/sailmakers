@@ -79,8 +79,8 @@
       @click="cancel()">
       Cancel
     </button>
-    <input type="file" ref="fileInput" class="btn btn-primary"
-      @change="showname()" />
+    <label>Get File With Price:<input v-if="isEditing" type="file" ref="fileInput" class="btn btn-primary"
+      @change="showname()" /></label>
   </div>
 </template>
 

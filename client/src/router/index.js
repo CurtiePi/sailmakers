@@ -58,13 +58,13 @@ export default new Router({
     {
       path: '/quote_create',
       name: 'QuoteCreate',
-      component: () => import('../components/QuoteForm.vue'),
+      component: () => import('../components/QuoteInput.vue'),
       props: true
     },
     {
       path: '/quote_edit',
       name: 'QuoteEdit',
-      component: () => import('../components/QuoteForm.vue'),
+      component: () => import('../components/QuoteInput.vue'),
       props: true
     },
     {
