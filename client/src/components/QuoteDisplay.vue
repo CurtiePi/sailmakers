@@ -65,7 +65,8 @@ export default {
       message: null,
       attachment: null,
       show_view: false,
-      isPrinted: false
+      isPrinted: false,
+      recipients: []
     }
   },
   computed: {
@@ -94,12 +95,22 @@ export default {
       this.$router.push({ name: 'QuoteViewPDF', params: { 'payload': this.quote._id } })
     },
     async emailQuotePdf () {
-      var payload = {'attachment': this.attachment, 'recipients': ['teserac_4@hotmail.com']}
+      let recipients = await this.getRecipients()
+      var payload = {'attachment': this.attachment, 'recipients': recipients}
 
       let response = await AuthenticationService.emailQuote(payload)
       if (response.status === 200) {
         this.show_view = false
       }
+    },
+    async getRecipients () {
+      let recipientList = []
+      let response = await AuthenticationService.getEmailSalespeople()
+      var salespeople = response.data
+      for (var idx in salespeople) {
+        recipientList.push(salespeople[idx].email)
+      }
+      return recipientList
     },
     hasValue (inputField) {
       return inputField.value != null &&
