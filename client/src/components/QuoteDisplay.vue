@@ -88,11 +88,10 @@ export default {
         this.attachment = response.data.attachment
         this.show_view = true
         this.isPrinted = true
-        console.log(this.attachment)
       }
     },
     viewQuotePdf () {
-      this.$router.push({ name: 'QuoteViewPDF', params: { 'payload': this.quote._id } })
+      this.$router.push({ name: 'QuoteViewPDF', params: { 'payload': this.quote } })
     },
     async emailQuotePdf () {
       let recipients = await this.getRecipients()

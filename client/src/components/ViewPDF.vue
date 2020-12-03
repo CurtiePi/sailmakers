@@ -1,15 +1,17 @@
 <template>
-  <div class="pdf-document">
-    <PDFPage
-      v-for="page in pages"
-      v-bind="{page, scale}"
-      :key="pages.pageNumber"
-    />
+  <div class="container">
+    <button type='button' @click="goBack">Back</button>
+    <div class="pdf-document">
+      <PDFPage
+        v-for="page in pages"
+        v-bind="{page, scale}"
+        :key="pages.pageNumber"
+      />
+    </div>
   </div>
 </template>
 
 <script>
-// import pdfjs from 'pdfjs-dist/webpack'
 import AuthenticationService from '@/services/AuthenticationService'
 import range from 'lodash/range'
 import PDFPage from '@/components/PDFPage'
@@ -24,7 +26,8 @@ export default {
       url: null,
       scale: 1.5,
       pages: [],
-      pdf: undefined
+      pdf: undefined,
+      quote: null
     }
   },
   watch: {
@@ -42,8 +45,8 @@ export default {
     }
   },
   methods: {
-    getSource: async function (quoteId) {
-      var filename = `quote_${quoteId}.pdf`
+    getSource: async function (quote) {
+      var filename = `quote_${this.quote._id}.pdf`
       this.url = AuthenticationService.pdfView(filename)
       const pdfjs = await import('pdfjs-dist/build/pdf')
       const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry')
@@ -55,11 +58,15 @@ export default {
         .catch(err => {
           console.log(`We have an error: ${err}`)
         })
+    },
+    goBack: function () {
+      this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': this.quote } })
     }
   },
   mounted () {
     if (this.payload) {
-      this.getSource(this.payload)
+      this.quote = this.payload
+      this.getSource()
     }
   }
 }
