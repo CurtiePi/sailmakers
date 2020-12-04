@@ -128,8 +128,8 @@ const writeQuoteDoc = async (req, res, next) => {
     var options = {size: 16, font: boldObliqueFont, maxWidth: (width - 60), color: rgb(0, 0, 0)};
 
     // Create the section specifying the type of quote.
-    var q_types = ['new sail', 'sail repair', 'winter service', 'sail cover'];
-    var offset = (width - (2 * 25)) / q_types.length;
+    var q_types = ['new sail', 'sail repair', 'winter service', 'sail cover', 'other'];
+    var offset = 5 + width / q_types.length;
     for (var idx = 0; idx < q_types.length; idx++) {
       options['x'] = xpos + (idx * offset);
       options['y'] = ypos;

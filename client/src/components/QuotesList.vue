@@ -22,6 +22,11 @@
             @change="filterQuoteType()"
             v-model="quote_type" />
         </label>
+        <label>Other
+          <input type="checkbox" name="q_type" value="other"
+            @change="filterQuoteType()"
+            v-model="quote_type" />
+        </label>
       </span>
       <span class="status">
         <select @change="filterQuoteStatus($event)">

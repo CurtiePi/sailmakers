@@ -23,7 +23,7 @@ var QuoteSchema = new mongoose.Schema({
     },
     quote_type: {
         type: [String],
-        enum: ['new sail', 'sail repair', 'winter service', 'sail cover']
+        enum: ['new sail', 'sail repair', 'winter service', 'sail cover', 'other']
     },
     battens: {
         type: String

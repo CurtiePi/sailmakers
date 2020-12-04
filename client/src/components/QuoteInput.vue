@@ -61,6 +61,9 @@
             <input type="checkbox" name="sail_cover" value="sail cover" v-model="quoteFields.quote_type">
               Sail Cover
             </input>
+            <input type="checkbox" name="other" value="other" v-model="quoteFields.quote_type">
+              Other
+            </input>
           </div>
           <div v-if="isEditing" class="col">
             <p>Status:</p>
