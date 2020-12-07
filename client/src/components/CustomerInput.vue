@@ -52,10 +52,10 @@
             <input type="text" name="boat_name" v-model="custFields.boat_name" />
           </label>
         </div>
-        <div class="flex-grid">
+        <!-- div class="flex-grid">
           <label>Things to Know:</label>
           <textarea cols="60" rows="5" name="notes" v-model="custFields.notes" />
-        </div>
+        </div -->
       </form>
       <button type="button" class="btn btn-primary"
         @click="isEditing ? updateCustomer() : createCustomer()"

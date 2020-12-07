@@ -24,9 +24,9 @@
         <span class="col">Boat Type: {{ customer_data.boat_model }}</span>
       </div>
       <hr></hr>
-      <div class="flex-grid">
+      <!-- div class="flex-grid">
         <span class="col">Things to Know: {{ customer_data.notes }}</span>
-      </div>
+      </div -->
       <p>
         <button @click="timeToEdit()">Edit</button>
         <button @click="createQuote()">Create Transaction</button>
