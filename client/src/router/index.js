@@ -45,7 +45,7 @@ export default new Router({
       component: () => import('../components/CustomerMessage.vue')
     },
     {
-      path: 'select_customers',
+      path: '/select_customers',
       name: 'SelectCustomers',
       component: () => import('../components/CustomerSelect.vue'),
       props: true
@@ -100,6 +100,12 @@ export default new Router({
       path: '/staff_profile',
       name: 'StaffProfile',
       component: () => import('../components/StaffProfile.vue'),
+      props: true
+    },
+    {
+      path: '/select_salespeople',
+      name: 'SelectStaff',
+      component: () => import('../components/StaffSelect.vue'),
       props: true
     },
     {

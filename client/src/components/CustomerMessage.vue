@@ -47,8 +47,6 @@ export default {
   },
   methods: {
     getReceivers: function () {
-      console.log(`Message Subject: ${this.message.subject}`)
-      console.log(`Message Body: ${this.message.body}`)
       if (this.message.body === null || this.message.subject === null) {
         this.errorMsg = 'You must have a subject and a message to send to proceed!'
       } else {

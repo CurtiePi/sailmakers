@@ -1,8 +1,5 @@
 <template>
   <div class="container">
-    <div class="row filter-div">
-     <button @click="sendMail()">Send Mail</button>
-    </div>
     <div class="container">
       <span v-if="errorMsg" class="errorMsg">{{ errorMsg }}</span>
       <h1>Salesperson List</h1>
@@ -26,6 +23,9 @@
           </tr>
       </div>
     </div>
+    <div class="row filter-div">
+     <button @click="sendMail()">Send Mail</button>
+    </div>
   </div>
 </template>
 
@@ -34,31 +34,29 @@ import AuthenticationService from '@/services/AuthenticationService'
 
 export default {
   name: 'customerSelect',
-  props: ['payload'],
+  props: ['filename', 'transaction'],
   data () {
     return {
       salespeople: [],
       selectees: [],
+      attachment: null,
+      quote: null,
+      errorMsg: null
     }
   },
   methods: {
     sendMail: async function () {
       if (this.selectees.length > 0) {
-        var payload = {
-          'subject': this.message.subject,
-          'body': this.message.body,
-          'recipients': this.selectees
-        }
-        console.log(payload)
-        let response = await AuthenticationService.emailCustomers(payload)
+        var payload = {'attachment': this.attachment, 'recipients': this.selectees}
+        let response = await AuthenticationService.emailQuote(payload)
         if (response.status === 200) {
-          this.$router.push({ name: 'Customers' })
+          this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': this.quote } })
         }
       } else {
         this.errorMsg = 'Please select recipients before trying to email your message!'
       }
     },
-    getCustomers: async function () {
+    getSalespeople: async function () {
       let response = await AuthenticationService.getSalespeople()
       this.salespeople = response.data
     },
@@ -79,12 +77,15 @@ export default {
           }
         }
       }
-    },
+    }
   },
   mounted () {
     this.getSalespeople()
-    if (this.payload) {
-      this.fileName = this.payload
+    if (this.filename) {
+      this.attachment = this.filename
+    }
+    if (this.transaction) {
+      this.quote = this.transaction
     }
   }
 }
@@ -111,7 +112,7 @@ a {
 }
 
 .filter-div > * {
-    margin: 0 8px;
+    margin: 10 8px;
     vertical-align: middle;
 }
 

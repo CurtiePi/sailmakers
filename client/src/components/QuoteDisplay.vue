@@ -94,6 +94,8 @@ export default {
       this.$router.push({ name: 'QuoteViewPDF', params: { 'payload': this.quote } })
     },
     async emailQuotePdf () {
+      this.$router.push({ name: 'SelectStaff', params: { 'filename': this.attachment, 'transaction': this.quote } })
+      /*
       let recipients = await this.getRecipients()
       var payload = {'attachment': this.attachment, 'recipients': recipients}
 
@@ -101,6 +103,7 @@ export default {
       if (response.status === 200) {
         this.show_view = false
       }
+      */
     },
     async getRecipients () {
       let recipientList = []

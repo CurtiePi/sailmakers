@@ -33,7 +33,6 @@
           </ul>
         </div>   
       </li>
-      <li><a href="http://ilovepdf.com">Modify</a></li>
     </ul>
   </nav>
 </template>
