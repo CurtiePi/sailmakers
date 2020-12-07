@@ -38,7 +38,7 @@ var CustomerSchema = new mongoose.Schema({
     timestamps: true
 });
 
-
+CustomerSchema.index({fname: 1, lname: 1, email: 1}, {unique: true});
 CustomerSchema.methods.getFullname = function () {
 
     fullName = `${this.fname} ${this.lname}`
