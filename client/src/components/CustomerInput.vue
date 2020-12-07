@@ -62,11 +62,11 @@
         :disabled="!allowSubmitForm">{{ headerText }}</button>
       <button type="button" class="btn btn-primary"
         @click="cancel()">Cancel</button>
-      <button type="button" class="btn btn-primary"
+      <!-- button type="button" class="btn btn-primary"
         @click="checkoutput()"
         :disabled="!allowSubmitForm">Check Sanity</button>
       <button type="button" class="btn btn-primary"
-        @click="checkForChanges()">Check Changes</button>
+        @click="checkForChanges()">Check Changes</button -->
   </div>
 </template>
 <script>

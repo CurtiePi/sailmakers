@@ -43,7 +43,7 @@
               <th>Club</th>
               <th>Boat Name</th>
               <th>Boat Home</th>
-              <th>Quotes</th>
+              <th>Transactions</th>
           </tr>
           <tr v-for= "customer in customer_display"
               :key="customer._id">

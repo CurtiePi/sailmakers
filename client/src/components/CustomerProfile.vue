@@ -29,8 +29,8 @@
       </div>
       <p>
         <button @click="timeToEdit()">Edit</button>
-        <button @click="createQuote()">Create Quote</button>
-        <button @click="seeQuotes()">Quotes</button>
+        <button @click="createQuote()">Create Transaction</button>
+        <button @click="seeQuotes()">Transactions</button>
       </p>
     </div>     
   </div>

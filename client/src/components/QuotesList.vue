@@ -42,7 +42,7 @@
      </label>
     </div>
     <div class="container">
-      <h1>Quotes List</h1>
+      <h1>Transactions List</h1>
       <div>
         <tr>
           <th>Customer</th>

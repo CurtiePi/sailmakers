@@ -2,7 +2,7 @@
   <div class="container">
     <div class="card">
       <div class="flex-grid">
-        <span class="col hilite">Quote for {{ customer.fname }} {{ customer.lname }}</span>
+        <span class="col hilite">Transaction for {{ customer.fname }} {{ customer.lname }}</span>
       </div>
       <hr></hr>
       <div class="flex-grid">
@@ -41,9 +41,9 @@
       </div>
       <p>
         <button @click="timeToEdit()">Edit</button>
-        <button v-if="!isPrinted" @click="printQuote()">Print Quote</button>
+        <button v-if="!isPrinted" @click="printQuote()">Print PDF</button>
         <button v-if="show_view"
-          @click="viewQuotePdf()">View Quote PDF</button>
+          @click="viewQuotePdf()">View PDF</button>
         <button v-if="show_view"
           @click="emailQuotePdf()">Email PDF</button>
         <button @click="goBack()">Home</button>

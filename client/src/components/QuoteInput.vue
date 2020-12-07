@@ -89,7 +89,7 @@
         </div>
         <div class="flex-grid-halfs">
           <label class="col">Sail Request:
-            <input type="text" name="sail_request" v-model="quoteFields.sail_request" />
+            <textarea cols="60" rows="5"  name="sail_request" v-model="quoteFields.sail_request" />
           </label>
           <label class="col">Pick Up/Drop Off:
             <input type="text" name="pick_drop" v-model="quoteFields.pick_drop" />
@@ -187,7 +187,7 @@ export default {
       return Object.values(this.quoteFields).some(this.hasValue)
     },
     headerText: function () {
-      return this.isEditing ? 'Update Quote' : 'Create Quote'
+      return this.isEditing ? 'Update Transaction' : 'Create Transaction'
     }
   },
   methods: {
