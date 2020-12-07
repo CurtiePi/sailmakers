@@ -48,7 +48,7 @@ const writeQuoteDoc = async (req, res, next) => {
     const workEmailText = 'dave@uksailmakers-ny.com';
     const officePhoneText ='914.600.8800';
     const webSiteText = 'www.uksailmakers-ny.com';
-    const subHdrText = 'NEW QUOTE REQUEST';
+    const subHdrText = (quote.quote_type.indexOf('winter service') == 0) ? 'NEW WINTER SERVICE REQUEST' : 'NEW QUOTE REQUEST';
     const nameText = `Name: ${txtVals["name"]}`;
     const phoneText = `Phone#: ${txtVals["phone"]}`;
     const emailText = `Email: ${txtVals["email"]}`;
