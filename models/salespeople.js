@@ -15,8 +15,7 @@ var SalespersonSchema = new mongoose.Schema({
         required: true
     },
     phone: {
-        type: String,
-        required: true
+        type: String
     },
     get_mail: {
         type: Boolean,
