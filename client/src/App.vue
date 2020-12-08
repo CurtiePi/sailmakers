@@ -30,7 +30,7 @@ export default {
             },
             {
               text: 'Message Customers',
-              name: 'MessageCustomers',
+              name: 'SelectCustomers',
               icon: 'documents'
             },
             {

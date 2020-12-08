@@ -48,7 +48,7 @@
           <tr v-for= "customer in customer_display"
               :key="customer._id">
               <td><router-link :to="{ name: 'CustomerProfile', params: { 'payload': customer } }">{{ customer.fname }} {{ customer.lname }}</router-link></td>
-              <td>{{ customer.email }}</td>
+              <td><router-link :to="{ name: 'MessageCustomers', params: { 'payload': [customer.email] } }">{{ customer.email }}</router-link></td>
               <td>{{ customer.phone }}</td>
               <td>{{ customer.club }}</td>
               <td>{{ customer.boat_name }}</td>

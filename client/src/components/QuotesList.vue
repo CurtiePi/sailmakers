@@ -58,6 +58,7 @@
           :class="quote.status.replace(' ', '_')"
           :key="quote._id">
           <td><router-link :to="{ name: 'CustomerProfile', params: { 'payload': quote.customer } }">{{ quote.customer.fname }} {{ quote.customer.lname }}</router-link></td>
+              <td><router-link :to="{ name: 'MessageCustomers', params: { 'payload': [quote.customer.email] } }">{{ quote.customer.email }}</router-link></td>
           <td>{{ quote.customer.email }}</td>
           <td class='phone'>{{ quote.customer.phone }}</td>
           <td>{{ quote.sail_request.split('-')[0] }}</td>

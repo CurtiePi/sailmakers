@@ -9,7 +9,12 @@
         <span class="col">Address: {{ customer_data.address }}</span>
       </div>
       <div class="flex-grid-halfs">
-        <span class="col">Email: {{ customer_data.email }}</span>
+        <span class="col">
+          Email:
+          <router-link :to="{ name: 'MessageCustomers', params: { 'payload': [customer_data.email]} }">
+            {{ customer_data.email }}
+          </router-link>
+        </span>
         <span class="col">Phone: {{ customer_data.phone }}</span>
       </div>
       <hr></hr>

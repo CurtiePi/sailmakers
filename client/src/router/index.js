@@ -42,7 +42,8 @@ export default new Router({
     {
       path: '/message_customers',
       name: 'MessageCustomers',
-      component: () => import('../components/CustomerMessage.vue')
+      component: () => import('../components/CustomerMessage.vue'),
+      props: true
     },
     {
       path: '/select_customers',

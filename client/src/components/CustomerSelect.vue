@@ -33,11 +33,11 @@
          @change="sortList()"
          v-model="sort_type" />
      </label>
-     <button @click="sendMail()">Send Mail</button>
+     <button @click="createMessage()">Write Message</button>
     </div>
     <div class="container">
       <span v-if="errorMsg" class="errorMsg">{{ errorMsg }}</span>
-      <h1>Customer List</h1>
+      <h1>Select Customer(s) to Message</h1>
       <div>
           <tr>
               <th>
@@ -101,6 +101,13 @@ export default {
     }
   },
   methods: {
+    createMessage: function () {
+      if (this.selectees.length > 0) {
+        this.$router.push({ name: 'MessageCustomers', params: { 'payload': this.selectees } })
+      } else {
+        this.errorMsg = 'Please select recipients before trying to email your message!'
+      }
+    },
     sendMail: async function () {
       if (this.selectees.length > 0) {
         var payload = {
