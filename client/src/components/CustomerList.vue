@@ -43,7 +43,7 @@
               <th>Club</th>
               <th>Boat Name</th>
               <th>Boat Home</th>
-              <th>Transactions</th>
+              <th></th>
           </tr>
           <tr v-for= "customer in customer_display"
               :key="customer._id">
@@ -53,7 +53,12 @@
               <td>{{ customer.club }}</td>
               <td>{{ customer.boat_name }}</td>
               <td>{{ customer.boat_home }}</td>
-              <td><router-link v-if="customer.quotes.length > 0" :to="{ name: 'CustomerQuotes', params: { 'payload': customer } }">{{ customer.quotes.length }}</router-link></td>
+              <td>
+                <button v-if="customer.quotes.length > 0"
+                  @click="viewQuotes(customer)">
+                  View Transaction({{ customer.quotes.length }})
+                </button>
+              </td>
           </tr>
       </div>
     </div>
@@ -97,6 +102,13 @@ export default {
       this.customers = response.data
       this.customer_display = response.data
       this.sortList()
+    },
+    viewQuotes: function (customer) {
+      if (customer.quotes.length === 1) {
+        this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': customer.quotes[0] } })
+      } else {
+        this.$router.replace({ name: 'CustomerQuotes', params: { 'payload': customer } })
+      }
     },
     temporalSort: function (a, b) {
       var aQuotes = a.quotes
