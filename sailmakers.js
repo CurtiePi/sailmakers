@@ -6,7 +6,6 @@ const express           = require('express');
 const fs                = require('fs');
 const path              = require('path');
 const http              = require('http');
-const https             = require('https');
 const cors              = require('cors');
 const bodyParser        = require('body-parser');
 const cookieParser      = require('cookie-parser');
@@ -46,11 +45,6 @@ db.on('error', console.error.bind(console, 'connection error'));
 
 console.log(`Database: ${conn_str}`)
 
-
-var privateKey = fs.readFileSync('./config/dev.sailmakers.com.key', 'utf8');
-var certificate = fs.readFileSync('./config/dev.sailmakers.com.crt', 'utf8');
-var credentials = {key: privateKey, cert: certificate};
-
 var smapp = express();
 smapp.use(cors({credentials: true, origin: 'http://192.168.1.6:8080'}));
 smapp.use(cookieParser());
@@ -58,6 +52,7 @@ smapp.use(cookieParser());
 smapp.use(bodyParser.json());
 smapp.use(bodyParser.urlencoded({ extended: true }));
 smapp.use(passport.initialize());
+// smapp.use(express.static(path.join(__dirname, './client/dist')));
 smapp.use('images', express.static(path.join(__dirname, 'public/images')));
 smapp.use('/pdf', express.static('public/files/pdf'))
 smapp.disable('x-powered-by');
@@ -73,6 +68,7 @@ smapp.use('/api/customer', customerRouter);
 smapp.use('/api/staff', salespersonRouter);
 smapp.use('/api/quote', quoteRouter);
 smapp.use('/api/port', portRouter);
+// smapp.use('/', express.static(path.join(__dirname, './client/index.html')));
 
 smapp.use(function(req, res, next) {
     var err = new Error('Not Found');
@@ -81,7 +77,6 @@ smapp.use(function(req, res, next) {
 });
 
 var httpServer = http.createServer(smapp);
-var httpsServer = https.createServer(credentials, smapp);
 
 /*
  * Assign port to the app
@@ -89,9 +84,7 @@ var httpsServer = https.createServer(credentials, smapp);
 let app_port = config.app.port;
 let sec_app_port = config.app.sec_port;
 httpServer.listen(app_port);
-httpsServer.listen(sec_app_port);
 console.log(`HTTP server is  listening on port ${app_port}`)
-console.log(`HTTPS server is  listening on port ${sec_app_port}`)
 
 
 module.exports = smapp;
