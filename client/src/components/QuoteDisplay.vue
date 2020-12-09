@@ -6,6 +6,23 @@
       </div>
       <hr></hr>
       <div class="flex-grid">
+        <span class="col">Address: {{ customer.address }}</span>
+      </div>
+      <div class="flex-grid-halfs">
+        <span class="col">
+          Email:
+          <router-link :to="{ name: 'MessageCustomers', params: { 'payload': [customer.email]} }">
+            {{ customer.email }}
+          </router-link>
+        </span>
+        <span class="col">Phone: {{ customer.phone }}</span>
+      </div>
+      <hr></hr>
+      <div class="flex-grid">
+        <span class="col">Club: {{ customer.club }}</span>
+      </div>
+      <hr></hr>
+      <div class="flex-grid">
         <span class="col">Home Port: {{ quote.boat_home }}</span>
       </div>
       <div class="flex-grid-halfs">
@@ -13,6 +30,9 @@
         <span class="col">Boat Type: {{ quote.boat_model }}</span>
       </div>
       <hr></hr>
+      <div class="flex-grid">
+        <span class="col">Request Type: {{ quote.quote_type.join(', ') }}</span>
+      </div>
       <div class="flex-grid">
         <span class="col">Sail Request: {{ quote.sail_request }}</span>
       </div>
