@@ -106,7 +106,7 @@ export default {
       this.quotes_display = response.data
     },
     viewQuote (quoteObj) {
-      this.$router.push({ name: 'QuoteDisplay', params: { 'payload': quoteObj } })
+      this.$router.push({ name: 'QuoteDisplay', params: { 'payload': quoteObj, 'caller': 'Quotes' } })
     },
     filterQuoteType: function () {
       console.log(this.quote_type)

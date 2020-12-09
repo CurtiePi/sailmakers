@@ -66,7 +66,7 @@
           @click="viewQuotePdf()">View PDF</button>
         <button v-if="show_view"
           @click="emailQuotePdf()">Email PDF</button>
-        <button @click="goBack()">Home</button>
+        <button @click="goBack()">Back</button>
       </p>
     </div>     
   </div>
@@ -76,7 +76,7 @@ import AuthenticationService from '@/services/AuthenticationService'
 
 export default {
   name: 'quoteDisplay',
-  props: ['payload'],
+  props: ['payload', 'owner', 'caller'],
   data () {
     return {
       quote: null,
@@ -86,7 +86,8 @@ export default {
       attachment: null,
       show_view: false,
       isPrinted: false,
-      recipients: []
+      recipients: [],
+      callerName: null
     }
   },
   computed: {
@@ -140,14 +141,26 @@ export default {
         inputField.value !== ''
     },
     goBack () {
-      this.$router.push({name: 'Quotes'})
+      if (['Quotes', 'Customers'].includes(this.callerName)) {
+        this.$router.replace({name: this.callerName})
+      } else {
+        this.$router.replace({ name: this.callerName, params: { 'payload': this.customer } })
+      }
     }
   },
   mounted () {
     if (this.payload) {
       this.quote = this.payload
-      this.customer = this.quote.customer
+      if (this.owner) {
+        this.customer = this.owner
+      } else {
+        this.customer = this.quote.customer
+      }
+      if (this.caller) {
+        this.callerName = this.caller
+      }
       this.salesperson = this.quote.salesperson
+      console.log(this.customer)
     }
   }
 }

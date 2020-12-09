@@ -11,7 +11,7 @@
         </tr>
         <tr v-for= "quote in quotes"
             :key="quote._id">
-            <td><router-link :to="{ name: 'QuoteDisplay', params: { 'payload': quote } }">{{ formatDate(quote.createdAt) }}</router-link></td>
+            <td><router-link :to="{ name: 'QuoteDisplay', params: { 'payload': quote, 'caller': 'CustomerQuotes' } }">{{ formatDate(quote.createdAt) }}</router-link></td>
             <td>{{ formatType(quote.quote_type) }}</td>
             <td>{{ quote.sail_request }}</td>
             <td>{{ quote.status }}</td>
