@@ -6,6 +6,7 @@ const smtpTransport = require('nodemailer-smtp-transport');
 const deliverQuote = (req, res, next) => {
     var data = req.body
     var file_attachment = data.attachment;
+    /*
     var transporter = nodemail.createTransport(smtpTransport({
         service: 'gmail',
         auth: {
@@ -13,13 +14,27 @@ const deliverQuote = (req, res, next) => {
             pass: config.mail.access
         }
     }));
+    */
+
+    var transporter = nodemail.createTransport(smtpTransport({
+        host: "smtp-mail.outlook.com",
+        secureConnection: false,
+        port: 587,
+        auth: {
+            user: config.mail.office,
+            pass: config.mail.access
+        },
+        tls: {
+            ciphers: 'SSLv3'
+        }
+    }));
 
     var recipients = data.recipients.join(', ');
     var mailOptions = {
         from: 'dave@uksailmakers-ne.com;',
         to: recipients,
-        subject: ' This is a test',
-        html: '<h1> Test </h1><p>This is a test of sending a quote attachment by email</p>',
+        subject: 'Customer Request',
+        html: 'Please find attached a new customer request</p>',
         attachments: [{path: file_attachment}]
     };
 
