@@ -160,7 +160,6 @@ export default {
         update: data}
 
       console.log('Updating customer')
-      console.log(payload)
       var response = await AuthenticationService.customerUpdate(payload)
       this.customer = response.data
       this.clearInputs()
@@ -198,7 +197,6 @@ export default {
       let response = await AuthenticationService.portList()
       var ports = response.data
       this.selectOptions = ports
-      console.log(ports)
 
       if (this.isEditing) {
         for (var key in this.custFields) {

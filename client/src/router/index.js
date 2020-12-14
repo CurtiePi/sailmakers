@@ -77,7 +77,7 @@ export default new Router({
     {
       path: '/new_customer_quote',
       name: 'NewCustomerQuote',
-      components: () => import('../components/CustomerForm.vue'),
+      components: () => import('../components/CustomerInput.vue'),
       props: true
     },
     {
