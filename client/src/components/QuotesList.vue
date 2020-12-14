@@ -41,16 +41,16 @@
        </span>
      </label>
     </div>
-    <div class="container">
-      <h1>Transactions List</h1>
+    <div class="t_container">
+      <h1>Requests List</h1>
       <div>
         <tr>
           <th>Customer</th>
+          <th>Request Type</th>
           <th>Email</th>
           <th>Phone</th>
           <th>Sail</th>
           <th>Home Port</th>
-          <th>Price</th>
           <th>Status</th>
           <th></th>
         </tr>
@@ -58,11 +58,11 @@
           :class="quote.status.replace(' ', '_')"
           :key="quote._id">
           <td><router-link :to="{ name: 'CustomerProfile', params: { 'payload': quote.customer } }">{{ quote.customer.fname }} {{ quote.customer.lname }}</router-link></td>
+          <td>{{ quote.quote_type.join(', ') }}</td>
           <td><router-link :to="{ name: 'CreateMessage', params: { 'targets': [quote.customer.email] } }">{{ quote.customer.email }}</router-link></td>
           <td class='phone'>{{ quote.customer.phone }}</td>
           <td>{{ quote.sail_request.split('-')[0] }}</td>
           <td>{{ quote.boat_home }}</td>
-          <td>{{ quote.quote_price.toFixed(2) }}</td>
           <td>{{ quote.status }}</td>
           <td>
             <button @click="viewQuote(quote)">View</button>
@@ -168,6 +168,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+html, body{
+    margin:0;
+    padding:0;
+    min-width: 1140px; /* this is the important part*/
+}
+
 h1, h2 {
   font-weight: normal;
 }
@@ -180,6 +186,11 @@ ul {
 li {
   display: inline-block;
   margin: 0 10px;
+}
+
+.t_container {
+  width: 100%;
+    padding:0;
 }
 
 a {
