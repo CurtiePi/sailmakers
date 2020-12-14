@@ -136,9 +136,9 @@
     <!-- button type="button" class="btn btn-primary"
       @click="checkForChanges()">
       Change check
-    </button -->
+    </button>
     <label v-if="isEditing" style="margin-left: 50px">Get File With Price:<input type="file" ref="fileInput" class="btn btn-primary"
-      @change="getPrice()" /></label>
+      @change="getPrice()" /></label -->
   </div>
 </template>
 
