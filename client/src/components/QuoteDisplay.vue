@@ -2,7 +2,7 @@
   <div class="container">
     <div class="card">
       <div class="flex-grid">
-        <span class="col hilite">Transaction for {{ customer.fname }} {{ customer.lname }}</span>
+        <span class="col hilite">Request for {{ customer.fname }} {{ customer.lname }}</span>
       </div>
       <hr></hr>
       <div class="flex-grid">

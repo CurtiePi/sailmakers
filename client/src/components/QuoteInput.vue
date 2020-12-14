@@ -187,7 +187,7 @@ export default {
       return Object.values(this.quoteFields).some(this.hasValue)
     },
     headerText: function () {
-      return this.isEditing ? 'Update Transaction' : 'Create Transaction'
+      return this.isEditing ? 'Update Request' : 'Create Request'
     }
   },
   methods: {

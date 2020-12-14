@@ -43,7 +43,7 @@ export default {
               }
             },
             {
-              text: 'New Customer Transaction',
+              text: 'New Customer Request',
               name: 'CustomerAdd',
               icon: 'document-attach',
               param: {
@@ -54,16 +54,16 @@ export default {
           ]
         },
         {
-          text: 'Transaction',
+          text: 'Request',
           icon: 'document',
           subNavLinks: [
             {
-              text: 'Transaction List',
+              text: 'Request List',
               name: 'Quotes',
               icon: 'documents'
             },
             {
-              text: 'New Customer Transaction',
+              text: 'New Customer Request',
               name: 'CustomerAdd',
               icon: 'document-attach',
               param: {

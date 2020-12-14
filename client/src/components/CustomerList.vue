@@ -56,7 +56,7 @@
               <td>
                 <button v-if="customer.quotes.length > 0"
                   @click="viewQuotes(customer)">
-                  View Transaction({{ customer.quotes.length }})
+                  View Requests({{ customer.quotes.length }})
                 </button>
               </td>
           </tr>
