@@ -38,7 +38,7 @@ import Editor from '@tinymce/tinymce-vue'
 
 export default {
   name: 'customerMessage',
-  props: ['payload'],
+  props: ['targets', 'attachment'],
   components: {
     'editor': Editor
   },
@@ -47,8 +47,9 @@ export default {
       message: {
         subject: null,
         body: null,
-        mce_key: process.env.VUE_APP_MCE_KEY
+        file_attachment: null
       },
+      mce_key: process.env.VUE_APP_MCE_KEY,
       errorMsg: null,
       recipients: null
     }
@@ -61,7 +62,11 @@ export default {
           'body': this.message.body,
           'recipients': this.recipients.split(',')
         }
-        let response = await AuthenticationService.emailCustomers(payload)
+        if (this.message.file_attachment) {
+          payload['attachment'] = this.message.file_attachment
+        }
+
+        let response = await AuthenticationService.sendEmail(payload)
         if (response.status === 200) {
           this.$router.replace({ name: 'Customers' })
         }
@@ -78,8 +83,11 @@ export default {
     }
   },
   mounted () {
-    if (this.payload) {
-      this.recipients = this.payload.join(',')
+    if (this.targets) {
+      this.recipients = this.targets.join(',')
+    }
+    if (this.attachment) {
+      this.message.file_attachment = this.attachment
     }
   }
 }

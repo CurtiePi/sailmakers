@@ -22,11 +22,8 @@ export default {
   getCustomerQuotes (payload) {
     return Api().insecure.get(`/api/quote/customer/${payload}`)
   },
-  emailCustomers (payload) {
-    return Api().insecure.post('/api/customer/email', payload)
-  },
-  emailQuote (payload) {
-    return Api().insecure.post('/api/quote/email', payload)
+  sendEmail (payload) {
+    return Api().insecure.post('/api/utils/email', payload)
   },
   printQuote (payload) {
     return Api().insecure.post('/api/quote/print', payload)
@@ -59,5 +56,8 @@ export default {
   },
   pdfView (filename) {
     return `${Api().pdfUrl}${filename}`
+  },
+  uploadFile (payload) {
+    return Api().insecure.post('api/utils/upload', payload)
   }
 }

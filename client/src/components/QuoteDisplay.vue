@@ -11,7 +11,7 @@
       <div class="flex-grid-halfs">
         <span class="col">
           Email:
-          <router-link :to="{ name: 'MessageCustomers', params: { 'payload': [customer.email]} }">
+          <router-link :to="{ name: 'CreateMessage', params: { 'targets': [customer.email]} }">
             {{ customer.email }}
           </router-link>
         </span>
@@ -59,13 +59,37 @@
       <div class="flex-grid">
         <span class="col">Additional Notes: {{ quote.notes }}</span>
       </div>
+      <hr></hr>
+      <div v-if="haveDocs" class="flex-grid">
+        <div class="col">
+          <tr>
+            <th>Document Name</th>
+            <th></th>
+            <th></th>
+          </tr>
+          <tr v-for= "(doc, index) in quote.doc_path"
+            :key="index">
+            <td>
+              <router-link :to="{ name: 'QuoteViewPDF' , params: {'payload': quote, 'caller': 'QuoteDisplay', 'filename': doc} }">
+                {{ doc }}
+              </router-link>
+            </td>
+            <td>
+              <button @click='emailDocument(doc)'>Email</button>
+            </td>
+          </tr>
+        </div> 
+      </div>
+      <span class="error" v-if="errorMsg">{{ errorMsg }}</span>
       <p>
         <button @click="timeToEdit()">Edit</button>
-        <button v-if="!isPrinted" @click="printQuote()">Print PDF</button>
-        <button v-if="show_view"
-          @click="viewQuotePdf()">View PDF</button>
-        <button v-if="show_view"
-          @click="emailQuotePdf()">Email PDF</button>
+        <button v-if="!haveDocs" @click="printQuote()">Create PDF</button>
+        <button 
+          @click="uploadFile">Upload File</button>
+          <input
+            type="file"
+            ref="file"
+            @change="onSelect" />
         <button @click="goBack()">Back</button>
       </p>
     </div>     
@@ -82,17 +106,17 @@ export default {
       quote: null,
       customer: null,
       salesperson: null,
-      message: null,
-      attachment: null,
-      show_view: false,
-      isPrinted: false,
-      recipients: [],
-      callerName: null
+      callerName: null,
+      file: null,
+      errorMsg: null
     }
   },
   computed: {
     allowSubmitForm: function () {
       return this.inputFields.some(this.hasValue)
+    },
+    haveDocs: function () {
+      return this.quote.doc_path.length > 0
     }
   },
   methods: {
@@ -104,36 +128,43 @@ export default {
         'payload': this.quote
       }
       let response = await AuthenticationService.printQuote(payload)
-      this.message = response.data.message
       if (response.status === 200) {
-        this.attachment = response.data.attachment
-        this.show_view = true
-        this.isPrinted = true
+        this.quote = response.data
       }
     },
     viewQuotePdf () {
       this.$router.push({ name: 'QuoteViewPDF', params: { 'payload': this.quote } })
     },
-    async emailQuotePdf () {
-      this.$router.push({ name: 'SelectStaff', params: { 'filename': this.attachment, 'transaction': this.quote } })
-      /*
-      let recipients = await this.getRecipients()
-      var payload = {'attachment': this.attachment, 'recipients': recipients}
-
-      let response = await AuthenticationService.emailQuote(payload)
-      if (response.status === 200) {
-        this.show_view = false
+    emailDocument (filename) {
+      if (filename.indexOf(this.quote._id) > -1) {
+        this.$router.push({ name: 'SelectStaff', params: { 'attachment': filename, 'transaction': this.quote } })
+      } else {
+        this.$router.push({ name: 'CreateMessage', params: { 'attachment': filename, 'targets': [this.quote.customer.email] } })
       }
-      */
     },
-    async getRecipients () {
-      let recipientList = []
-      let response = await AuthenticationService.getEmailSalespeople()
-      var salespeople = response.data
-      for (var idx in salespeople) {
-        recipientList.push(salespeople[idx].email)
+    onSelect () {
+      const file = this.$refs.file.files[0]
+      this.file = file
+    },
+    async uploadFile () {
+      if (this.file.type === 'application/pdf') {
+        const formData = new FormData()
+        formData.append('file', this.file)
+        formData.append('quote_id', this.quote._id)
+        try {
+          var response = await AuthenticationService.uploadFile(formData)
+          if (response.status === 200) {
+            console.log(response.data)
+            this.quote = response.data
+            this.customer = this.quote.customer
+            this.salesperson = this.quote.salesperson
+          }
+        } catch (err) {
+          this.errorMsg = 'Only .pdf files can be uploaded!'
+        }
+      } else {
+        this.errorMsg = 'Only .pdf files can be uploaded!'
       }
-      return recipientList
     },
     hasValue (inputField) {
       return inputField.value != null &&
@@ -160,7 +191,6 @@ export default {
         this.callerName = this.caller
       }
       this.salesperson = this.quote.salesperson
-      console.log(this.customer)
     }
   }
 }
@@ -233,6 +263,11 @@ button {
 
 button:hover, a:hover {
   opacity: 0.7;
+}
+
+span.error {
+  font-size: 22px;
+  color: #FF0000;
 }
 
 </style>

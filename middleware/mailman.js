@@ -5,6 +5,7 @@ const smtpTransport = require('nodemailer-smtp-transport');
 
 const deliverQuote = (req, res, next) => {
     var data = req.body
+    var filepath = './public/files/pdf/';
     var file_attachment = data.attachment;
     /*
     var transporter = nodemail.createTransport(smtpTransport({
@@ -53,12 +54,18 @@ const deliverQuote = (req, res, next) => {
 const deliverEmail = (req, res, next) => {
     var data = req.body
     var transporter = nodemail.createTransport(smtpTransport({
-        service: 'gmail',
+        host: "smtp-mail.outlook.com",
+        secureConnection: false,
+        port: 587,
         auth: {
             user: config.mail.office,
             pass: config.mail.access
+        },
+        tls: {
+            ciphers: 'SSLv3'
         }
     }));
+
 
     var recipients = data.recipients.join(', ');
     var mailOptions = {
@@ -67,6 +74,11 @@ const deliverEmail = (req, res, next) => {
         subject: data.subject,
         html: data.body,
     };
+
+    if (data.attachment) {
+        var filepath = `./public/files/pdf/${data.attachment}`;
+        mailOptions['attachments'] = [{path: filepath}];
+    }
 
     transporter.sendMail(mailOptions, function (error, info) {
            if (error){

@@ -2,6 +2,20 @@ const { PDFDocument, StandardFonts, rgb }       = require('pdf-lib');
 const fs                                        = require('fs');
 
 const writeQuoteDoc = async (req, res, next) => {
+    const currDate = function formatDate(date) {
+        var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
     let quote = req.body.payload;
     const doc = await PDFDocument.create();
     let page = doc.addPage();
@@ -180,8 +194,10 @@ const writeQuoteDoc = async (req, res, next) => {
     page.drawText(`${pageNum}`, {x: page.getWidth() / 2, y: 10, size: 12, font: boldObliqueFont, color: rgb(0, 0, 0)});
 
     // Create the file.
-    var filename = `./public/files/pdf/quote_${quote._id}.pdf`;
-    fs.writeFileSync(filename, await doc.save());
+    var filedate = currDate(quote.createdAt);
+    var filename = `${quote.customer.lname}_${quote.customer.fname}_${quote._id}_${filedate}.pdf`;
+    var filepath = `./public/files/pdf/${filename}`;
+    fs.writeFileSync(filepath, await doc.save());
     req.attachment = filename;
 
     next();

@@ -148,6 +148,20 @@ module.exports = {
             console.log('Received an error updating quote');
         }
     },
+    addQuoteDoc: async (quoteId, filePath ) => {
+        const criteria = { '_id': mongoose.Types.ObjectId(quoteId) };
+
+        console.log('Adding the quote');
+        try {
+            let quote = await Quote.findByIdAndUpdate(criteria, { $push: { doc_path: filePath} }, {new: true});
+            await Quote.populate(quote, { path: "customer" });
+            await Quote.populate(quote, { path: "salesperson" });
+            return quote;
+        }
+        catch (err) {
+            console.log('Received an error updating quote');
+        }
+    },
 
     getSalespeople: async () => {
         try {

@@ -40,9 +40,9 @@ export default new Router({
       props: true
     },
     {
-      path: '/message_customers',
-      name: 'MessageCustomers',
-      component: () => import('../components/CustomerMessage.vue'),
+      path: '/create_message',
+      name: 'CreateMessage',
+      component: () => import('../components/CreateMessage.vue'),
       props: true
     },
     {

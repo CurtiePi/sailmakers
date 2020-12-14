@@ -1,7 +1,6 @@
 const express           = require('express');
 const routeController   = require('../controllers/routingController');
 const multer            = require('multer');
-const mailman           = require('../middleware/mailman.js');
 const printpress        = require('../middleware/guttenburg.js');
 const lycanthrope       = require('../middleware/modifier.js');
 const apiQuoteRouter    = express.Router();
@@ -26,18 +25,7 @@ apiQuoteRouter.get('/customer/:cid', routeController.getQuotesByCustomer);
 
 apiQuoteRouter.post('/create', routeController.createQuote);
 apiQuoteRouter.post('/update', routeController.updateQuote);
-/*
-apiQuoteRouter.post('/email', mailman.deliverQuote, (req, res, next) => {
-    res.status(200).json({message: 'mail sent'});
-});
-*/
-apiQuoteRouter.post('/email', mailman.deliverQuote, (req, res, next) => {
-    res.status(200).json({message: 'Quote has been sent.'});
-});
-apiQuoteRouter.post('/print', printpress.writeQuoteDoc, (req, res, next) => {
-    var file = req.attachment;
-    res.status(200).json({message: 'Quote has been created.', attachment: file});
-});
+apiQuoteRouter.post('/print', printpress.writeQuoteDoc, routeController.addQuoteDoc);
 apiQuoteRouter.post('/modify', lycanthrope.modifyQuote, (req, res, next) => {
     var totalPrice = req.totalprice;
     res.status(200).json({message: 'Quote has been modified.', quote_price: totalPrice});

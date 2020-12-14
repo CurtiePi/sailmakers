@@ -34,24 +34,25 @@ import AuthenticationService from '@/services/AuthenticationService'
 
 export default {
   name: 'customerSelect',
-  props: ['filename', 'transaction'],
+  props: ['transaction', 'attachment'],
   data () {
     return {
       salespeople: [],
       selectees: [],
-      attachment: null,
+      filename: null,
       quote: null,
       errorMsg: null
     }
   },
   methods: {
-    sendMail: async function () {
+    sendMail: function () {
       if (this.selectees.length > 0) {
-        var payload = {'attachment': this.attachment, 'recipients': this.selectees}
-        let response = await AuthenticationService.emailQuote(payload)
-        if (response.status === 200) {
-          this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': this.quote } })
-        }
+        this.$router.push({ name: 'CreateMessage', params: { 'attachment': this.filename, 'targets': this.selectees } })
+        // var payload = {'attachment': this.attachment, 'recipients': this.selectees}
+        // let response = await AuthenticationService.emailQuote(payload)
+        // if (response.status === 200) {
+        //  this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': this.quote } })
+        // }
       } else {
         this.errorMsg = 'Please select recipients before trying to email your message!'
       }
@@ -81,8 +82,8 @@ export default {
   },
   mounted () {
     this.getSalespeople()
-    if (this.filename) {
-      this.attachment = this.filename
+    if (this.attachment) {
+      this.filename = this.attachment
     }
     if (this.transaction) {
       this.quote = this.transaction

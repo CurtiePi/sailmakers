@@ -61,6 +61,9 @@ var QuoteSchema = new mongoose.Schema({
     amount_paid: {
         type: Number,
         default: 0.0
+    },
+    doc_path: {
+        type: [String]
     }
 }, {
     timestamps: true

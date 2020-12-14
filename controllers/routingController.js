@@ -108,6 +108,34 @@ module.exports = {
             });
         }
     },
+    addQuoteDoc: async (req, res, next) => {
+        var filename = req.attachment;
+        var quote = req.body.payload;
+
+        try{
+            var quote = await dataAccess.addQuoteDoc(quote._id, filename);
+            res.status(200).json(quote);
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: `Error updating quote ${err}`
+            });
+        }
+    },
+    uploadFile: async (req, res, next) => {
+        var quote_id = req.body.quote_id;
+        var filename = req.file.originalname;
+
+        try{
+            var quote = await dataAccess.addQuoteDoc(quote_id, filename);
+            res.status(200).json(quote);
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: `Error updating quote ${err}`
+            });
+        }
+    },
     /*
      * Salespeople
      *

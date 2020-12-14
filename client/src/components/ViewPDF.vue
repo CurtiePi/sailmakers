@@ -17,7 +17,7 @@ import range from 'lodash/range'
 import PDFPage from '@/components/PDFPage'
 
 export default {
-  props: ['payload'],
+  props: ['payload', 'filename', 'caller'],
   components: {
     PDFPage
   },
@@ -45,8 +45,7 @@ export default {
     }
   },
   methods: {
-    getSource: async function (quote) {
-      var filename = `quote_${this.quote._id}.pdf`
+    getSource: async function (filename) {
       this.url = AuthenticationService.pdfView(filename)
       const pdfjs = await import('pdfjs-dist/build/pdf')
       const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry')
@@ -66,7 +65,7 @@ export default {
   mounted () {
     if (this.payload) {
       this.quote = this.payload
-      this.getSource()
+      this.getSource(this.filename)
     }
   }
 }
