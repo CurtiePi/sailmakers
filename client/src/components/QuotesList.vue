@@ -57,7 +57,11 @@
         <tr v-for= "quote in quotes_display"
           :class="quote.status.replace(' ', '_')"
           :key="quote._id">
-          <td><router-link :to="{ name: 'CustomerProfile', params: { 'payload': quote.customer } }">{{ quote.customer.fname }} {{ quote.customer.lname }}</router-link></td>
+          <td>
+            <router-link :to="{ name: 'CustomerProfile', params: { 'payload': quote.customer, 'caller': 'Quotes' } }">
+              {{ quote.customer.fname }} {{ quote.customer.lname }}
+            </router-link>
+          </td>
           <td>{{ quote.quote_type.join(', ') }}</td>
           <td><router-link :to="{ name: 'CreateMessage', params: { 'targets': [quote.customer.email] } }">{{ quote.customer.email }}</router-link></td>
           <td class='phone'>{{ quote.customer.phone }}</td>
@@ -106,7 +110,7 @@ export default {
       this.quotes_display = response.data
     },
     viewQuote (quoteObj) {
-      this.$router.push({ name: 'QuoteDisplay', params: { 'payload': quoteObj, 'caller': 'Quotes' } })
+      this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': quoteObj, 'caller': 'Quotes' } })
     },
     filterQuoteType: function () {
       console.log(this.quote_type)

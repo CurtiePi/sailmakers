@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-if="!isFetching" class="container">
     <div class="card">
       <div class="flex-grid">
         <span class="col hilite">Profile for {{ customer_data.fname }} {{ customer_data.lname }}</span>
@@ -36,6 +36,7 @@
         <button @click="timeToEdit()">Edit</button>
         <button @click="createQuote()">Create Request</button>
         <button @click="seeQuotes()">Requests</button>
+        <button @click="goBack()">Back</button>
       </p>
     </div>     
   </div>
@@ -45,11 +46,13 @@ import AuthenticationService from '@/services/AuthenticationService'
 
 export default {
   name: 'customerProfile',
-  props: ['payload'],
+  props: ['payload', 'caller'],
   data () {
     return {
       customer_data: null,
-      isEditing: false
+      isEditing: false,
+      callerName: 'Customers',
+      isFetching: true
     }
   },
   computed: {
@@ -59,7 +62,7 @@ export default {
   },
   methods: {
     timeToEdit () {
-      this.$router.push({ name: 'CustomerEdit', params: { 'edit_payload': this.customer_data } })
+      this.$router.replace({ name: 'CustomerEdit', params: { 'edit_payload': this.customer_data } })
     },
     async update_customer () {
       let data = {}
@@ -85,16 +88,27 @@ export default {
     },
     createQuote () {
       let payload = this.customer_data
-      this.$router.push({ name: 'QuoteCreate', params: {'create_payload': payload} })
+      this.$router.replace({ name: 'QuoteCreate', params: {'create_payload': payload} })
     },
     seeQuotes () {
-      this.$router.push({ name: 'CustomerQuotes', params: { 'payload': this.customer_data } })
+      this.$router.replace({ name: 'CustomerQuotes', params: { 'payload': this.customer_data } })
+    },
+    goBack () {
+      if (['Quotes', 'Customers'].includes(this.callerName)) {
+        this.$router.replace({name: this.callerName})
+      } else {
+        this.$router.replace({ name: this.callerName, params: { 'payload': this.customer } })
+      }
     }
   },
   mounted () {
     if (this.payload) {
       this.customer_data = this.payload
     }
+    if (this.caller) {
+      this.callerName = this.caller
+    }
+    this.isFetching = false
   }
 }
 </script>

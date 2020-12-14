@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-if="!isFetching" class="container">
     <h1>Quotes for {{ customer.fname }} {{ customer.lname }}</h1>
     <div>
         <tr>
@@ -30,7 +30,8 @@ export default {
   data () {
     return {
       quotes: [],
-      customer: null
+      customer: null,
+      isFetching: true
     }
   },
   methods: {
@@ -57,6 +58,7 @@ export default {
     if (this.payload) {
       this.customer = this.payload
       this.getCustomerQuotes(this.customer._id)
+      this.isFetching = false
     }
   }
 }

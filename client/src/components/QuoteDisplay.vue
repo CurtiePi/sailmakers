@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-if="!isFetching" class="container">
     <div class="card">
       <div class="flex-grid">
         <span class="col hilite">Request for {{ customer.fname }} {{ customer.lname }}</span>
@@ -112,9 +112,10 @@ export default {
       quote: null,
       customer: null,
       salesperson: null,
-      callerName: null,
+      callerName: 'Quotes',
       file: null,
-      errorMsg: null
+      errorMsg: null,
+      isFetching: true
     }
   },
   computed: {
@@ -127,7 +128,7 @@ export default {
   },
   methods: {
     timeToEdit () {
-      this.$router.push({ name: 'QuoteEdit', params: { 'edit_payload': this.quote } })
+      this.$router.replace({ name: 'QuoteEdit', params: { 'edit_payload': this.quote } })
     },
     async getFile (filename) {
       console.log(`Getting ${filename}`)
@@ -151,9 +152,9 @@ export default {
     },
     emailDocument (filename) {
       if (filename.indexOf(this.quote._id) > -1) {
-        this.$router.push({ name: 'SelectStaff', params: { 'attachment': filename, 'transaction': this.quote } })
+        this.$router.replace({ name: 'SelectStaff', params: { 'attachment': filename, 'transaction': this.quote } })
       } else {
-        this.$router.push({ name: 'CreateMessage', params: { 'attachment': filename, 'targets': [this.quote.customer.email] } })
+        this.$router.replace({ name: 'CreateMessage', params: { 'attachment': filename, 'targets': [this.quote.customer.email] } })
       }
     },
     onSelect () {
@@ -200,6 +201,7 @@ export default {
       if (this.caller) {
         this.callerName = this.caller
       }
+      this.isFetching = false
     }
   }
 }
