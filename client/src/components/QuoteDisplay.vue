@@ -49,7 +49,7 @@
         <span class="col">Pick-up\Drop-off: {{ quote.pick_drop }}</span>
       </div>
       <div class="flex-grid-halfs">
-        <span class="col">Price: {{ quote.price }}</span>
+        <span class="col">Price: {{ quote.quote_price }}</span>
         <span class="col">Balance Due: {{ quote.quote_price - quote.amount_paid }}</span>
       </div>
       <hr></hr>

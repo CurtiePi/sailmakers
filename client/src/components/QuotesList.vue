@@ -108,9 +108,17 @@ export default {
       let response = await AuthenticationService.quoteList()
       this.quotes = response.data
       this.quotes_display = response.data
+      this.sortList()
     },
     viewQuote (quoteObj) {
       this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': quoteObj, 'caller': 'Quotes' } })
+    },
+    temporalSort: function (a, b) {
+      return (a.createdAt < b.createdAt) ? 1 : (a.createdAt > b.createdAt) ? -1 : 0
+    },
+    sortList () {
+      const ftn = this.temporalSort
+      this.quotes_display.sort(ftn)
     },
     filterQuoteType: function () {
       console.log(this.quote_type)

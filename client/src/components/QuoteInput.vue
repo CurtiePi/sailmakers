@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div v-if="!isFetching" class="container">
     <h1>{{ headerText }}</h1>
     <br />
     <div>
@@ -20,13 +20,13 @@
           </div>
         </div>
         <div class="flex-grid">
-          <label class="col">Address
+          <label class="col">Address:
             <span>{{ custFields.address }}</span>
           </label>
-          <label class="col">Email
+          <label class="col">Email:
             <span>{{ custFields.email }} </span>
           </label>
-          <label class="col">Phone
+          <label class="col">Phone:
             <span>{{ custFields.phone }}</span>
           </label>
         </div>
@@ -35,15 +35,15 @@
             <span>{{ custFields.club }}</span>
           </label>
           <label class="col">Boat Port:
-            <span>{{ custFields.boat_home }} </span>
+            <input type="text" name="boat_home" v-model="custFields.boat_home" />
           </label>
         </div>
         <div class="flex-grid-halfs">
           <label class="col">Boat Model:
-            <span>{{ custFields.boat_model }}</span>
+            <input type="text" name="boat_model" v-model="custFields.boat_model" />
           </label>
           <label class="col">Boat Name:
-            <span>{{ custFields.boat_name }}</span>
+            <input type="text" name="boat_name" v-model="custFields.boat_name" />
           </label>
         </div>
         <div class="flex-grid-halfs">
@@ -134,6 +134,10 @@
       Cancel
     </button>
     <!-- button type="button" class="btn btn-primary"
+      @click="checkoutput()">
+      Check New Quote
+    </button>
+    <button type="button" class="btn btn-primary"
       @click="checkForChanges()">
       Change check
     </button>
@@ -179,7 +183,8 @@ export default {
         amount_paid: null,
         quote_price: null,
         quote_type: []
-      }
+      },
+      isFetching: true
     }
   },
   computed: {
@@ -211,6 +216,16 @@ export default {
           formData[key] = (['amount_paid', 'quote_price'].includes(key)) ? parseFloat(value) : value
         }
       }
+
+      const boatFields = ['boat_name', 'boat_home', 'boat_model']
+      for (var idx = 0; idx < boatFields.length; idx++) {
+        var field = boatFields[idx]
+        if (this.custFields[field] !== this.origQuoteFields[field]) {
+          formData[field] = this.custFields[field]
+        }
+      }
+
+      console.log(formData)
       return formData
     },
     cancel () {
@@ -229,11 +244,19 @@ export default {
         }
       }
 
+      const boatFields = ['boat_name', 'boat_home', 'boat_model']
+      for (key in this.custFields) {
+        if (this.hasValue(this.custFields[key]) && boatFields.includes(key)) {
+          data[key] = this.custFields[key]
+        }
+      }
+
       data['customer_id'] = this.customer._id
       let salesperson = JSON.parse(localStorage.sp)
       data['salesperson_id'] = salesperson._id
 
       let payload = data
+      console.log(payload)
       return payload
     },
     async updateQuote () {
@@ -275,8 +298,13 @@ export default {
           this.quoteFields[key] = this.quote[key]
           this.origQuoteFields[key] = this.quote[key]
         }
+        const boatFields = ['boat_name', 'boat_home', 'boat_model']
+        for (var idx = 0; idx < boatFields.length; idx++) {
+          var field = boatFields[idx]
+          this.origQuoteFields[field] = this.quote[field]
+        }
       } else {
-        this.quotesField['pick_drop'] = this.customer.boat_home
+        this.quoteFields['pick_drop'] = this.customer.boat_home
       }
     },
     clearInputs () {
@@ -292,14 +320,15 @@ export default {
   },
   mounted () {
     if (this.create_payload) {
-      this.loadData()
+      console.log(this.create_payload)
       this.customer = this.create_payload
     } else if (this.edit_payload) {
       this.quote = this.edit_payload
       this.customer = this.quote.customer
-      this.loadData()
       this.isEditing = true
     }
+    this.prepareInputs()
+    this.isFetching = false
   }
 }
 </script>
