@@ -70,10 +70,11 @@
           <tr v-for= "(doc, index) in quote.doc_path"
             :key="index">
             <td>
-              <router-link :to="{ name: 'QuoteViewPDF' , params: {'payload': quote, 'caller': 'QuoteDisplay', 'filename': doc} }">
+              <router-link :to="{ name: 'QuoteViewPDF' , params: {'payload': quote, 'caller': ['QuoteDisplay', callerName], 'filename': doc} }">
                 {{ doc }}
               </router-link>
             </td>
+            <td></td>
             <td>
               <button @click='emailDocument(doc)'>Email</button>
             </td>
@@ -131,9 +132,6 @@ export default {
       if (response.status === 200) {
         this.quote = response.data
       }
-    },
-    viewQuotePdf () {
-      this.$router.push({ name: 'QuoteViewPDF', params: { 'payload': this.quote } })
     },
     emailDocument (filename) {
       if (filename.indexOf(this.quote._id) > -1) {

@@ -13,13 +13,10 @@ export default {
   },
   methods: {
     drawPage () {
-      console.log('Do we have a renderTask yet?')
       if (this.renderTask) {
-        console.log('Apparently we do not have a renderTask!')
         return
       }
 
-      console.log('Yes, we have a renderTask!')
       const {viewport} = this
       const canvasContext = this.$refs.canvas.getContext('2d')
       const renderContext = {canvasContext, viewport}
@@ -84,7 +81,6 @@ export default {
       const {width: actualSizeWidth, height: actualSizeHeight} = this.actualSizeViewport
       const pixelRatio = window.devicePixelRatio || 1
       const [pixelWidth, pixelHeight] = [actualSizeWidth, actualSizeHeight].map(dim => Math.ceil(dim / pixelRatio))
-      console.log(`width: ${pixelWidth}px; height: ${pixelHeight}px;`)
       return `width: ${pixelWidth}px; height: ${pixelHeight}px;`
     },
 
@@ -98,7 +94,6 @@ export default {
     }
   },
   mounted () {
-    console.log('Drawing the page')
     this.drawPage()
   }
 }

@@ -27,7 +27,8 @@ export default {
       scale: 1.5,
       pages: [],
       pdf: undefined,
-      quote: null
+      quote: null,
+      callerName: null
     }
   },
   watch: {
@@ -35,7 +36,6 @@ export default {
       this.pages = []
 
       const pageNums = range(1, (1 + pdf.numPages))
-      console.log(pageNums)
       const promises = pageNums.map(number => pdf.getPage(number))
 
       Promise.all(promises)
@@ -59,13 +59,16 @@ export default {
         })
     },
     goBack: function () {
-      this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': this.quote } })
+      this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': this.quote, 'caller': this.caller } })
     }
   },
   mounted () {
     if (this.payload) {
       this.quote = this.payload
       this.getSource(this.filename)
+    }
+    if (this.caller) {
+      this.callerName = this.caller.shift()
     }
   }
 }
