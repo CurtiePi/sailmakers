@@ -63,7 +63,7 @@ customerRouter = require('./routes/apiCustomer');
 salespersonRouter = require('./routes/apiSalesForce');
 quoteRouter = require('./routes/apiQuote');
 portRouter = require('./routes/apiPort');
-utilsRouter = require('./routes/apiutils');
+utilsRouter = require('./routes/apiUtils');
 
 smapp.use('/api/customer', customerRouter);
 smapp.use('/api/staff', salespersonRouter);
