@@ -59,5 +59,10 @@ export default {
   },
   uploadFile (payload) {
     return Api().insecure.post('api/utils/upload', payload)
+  },
+  downloadFile (filename) {
+    return Api().insecure.get(`/api/utils/download/${filename}`, {
+      responseType: 'blob'
+    })
   }
 }

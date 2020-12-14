@@ -69,18 +69,23 @@
           </tr>
           <tr v-for= "(doc, index) in quote.doc_path"
             :key="index">
-            <td>
+            <td style="width: 90%;">
               <router-link :to="{ name: 'QuoteViewPDF' , params: {'payload': quote, 'caller': ['QuoteDisplay', callerName], 'filename': doc} }">
                 {{ doc }}
               </router-link>
             </td>
-            <td></td>
-            <td>
+            <td style="width: 5%;">
               <button @click='emailDocument(doc)'>Email</button>
+            </td>
+            <td style="width: 5%;">
+              <a @click="getFile(doc)">
+                <ion-icon name="download"></ion-icon>
+              </a>
             </td>
           </tr>
         </div> 
       </div>
+      <hr></hr>
       <span class="error" v-if="errorMsg">{{ errorMsg }}</span>
       <p>
         <button @click="timeToEdit()">Edit</button>
@@ -123,6 +128,17 @@ export default {
   methods: {
     timeToEdit () {
       this.$router.push({ name: 'QuoteEdit', params: { 'edit_payload': this.quote } })
+    },
+    async getFile (filename) {
+      console.log(`Getting ${filename}`)
+      var response = await AuthenticationService.downloadFile(filename)
+      const downloadUrl = window.URL.createObjectURL(new Blob([response.data]))
+      const link = document.createElement('a')
+      link.href = downloadUrl
+      link.setAttribute('download', filename) // any other extension
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
     },
     async printQuote () {
       let payload = {

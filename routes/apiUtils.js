@@ -34,3 +34,8 @@ apiUtilsRouter.post('/email', mailman.deliverEmail, (req, res, next) => {
 
 apiUtilsRouter.post('/upload', upload.single('file'), uploadFilter.checkUpload, uploadFilter.renameUpload, routeController.uploadFile);
 
+apiUtilsRouter.get('/download/:name', (req, res, next) => {
+    var filepath = `./public/files/pdf/${req.params.name}`;
+    res.download(filepath);
+});
+
