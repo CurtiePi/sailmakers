@@ -100,7 +100,7 @@ import AuthenticationService from '@/services/AuthenticationService'
 
 export default {
   name: 'quoteDisplay',
-  props: ['payload', 'owner', 'caller'],
+  props: ['payload', 'caller'],
   data () {
     return {
       quote: null,
@@ -154,7 +154,6 @@ export default {
         try {
           var response = await AuthenticationService.uploadFile(formData)
           if (response.status === 200) {
-            console.log(response.data)
             this.quote = response.data
             this.customer = this.quote.customer
             this.salesperson = this.quote.salesperson
@@ -182,15 +181,11 @@ export default {
   mounted () {
     if (this.payload) {
       this.quote = this.payload
-      if (this.owner) {
-        this.customer = this.owner
-      } else {
-        this.customer = this.quote.customer
-      }
+      this.customer = this.quote.customer
+      this.salesperson = this.quote.salesperson
       if (this.caller) {
         this.callerName = this.caller
       }
-      this.salesperson = this.quote.salesperson
     }
   }
 }

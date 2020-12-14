@@ -13,7 +13,17 @@ module.exports = {
     listCustomers: async () => {
         try {
             let customers = await Customer.find()
-                                          .populate('quotes');
+                                          .populate({
+                                              path: 'quotes',
+                                              populate: [{
+                                                path: 'customer',
+                                                model: 'Customer'
+                                              },
+                                              { path: 'salesperson',
+                                                model: 'Salesperson'
+                                              }]
+                                           });
+
             return customers;
         }
         catch (err) {

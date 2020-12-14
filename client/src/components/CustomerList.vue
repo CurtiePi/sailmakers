@@ -105,7 +105,7 @@ export default {
     },
     viewQuotes: function (customer) {
       if (customer.quotes.length === 1) {
-        this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': customer.quotes[0], 'owner': customer, caller: 'Customers' } })
+        this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': customer.quotes[0], caller: 'Customers' } })
       } else {
         this.$router.replace({ name: 'CustomerQuotes', params: { 'payload': customer } })
       }
