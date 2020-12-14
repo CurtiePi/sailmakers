@@ -59,10 +59,10 @@ const writeQuoteDoc = async (req, res, next) => {
     const salespersonText = `${txtVals["salesperson"]}`;
     const localeText = '10 Midland Ave - M-04, Portchester NY, 10573';
     const salesPersonPhoneText = `${txtVals["salesPersonPhone"]}`;
-    const workEmailText = 'dave@uksailmakers-ny.com';
+    const workEmailText = 'dave@uksailmakers-ne.com';
     const officePhoneText ='914.600.8800';
     const webSiteText = 'www.uksailmakers-ny.com';
-    const subHdrText = (quote.quote_type.indexOf('winter service') == 0) ? 'NEW WINTER SERVICE REQUEST' : 'NEW QUOTE REQUEST';
+    const subHdrText = (quote.quote_type.length > 1) ? 'NEW CUSTOMER REQUEST' : `NEW ${quote.quote_type[0].toUpperCase()} REQUEST`;
     const nameText = `Name: ${txtVals["name"]}`;
     const phoneText = `Phone#: ${txtVals["phone"]}`;
     const emailText = `Email: ${txtVals["email"]}`;
@@ -133,7 +133,9 @@ const writeQuoteDoc = async (req, res, next) => {
     }
 
     // Draw the line for the subheader
-    line_coords = { 'start': { 'x': 29.754, 'y': 649}, 'end': { 'x': 255, 'y': 649 } }
+    var line_start = 29.754;
+    var line_end = line_start + subHdrText.length * 11.5;
+    line_coords = { 'start': { 'x': line_start, 'y': 649}, 'end': { 'x': line_end, 'y': 649 } }
     page.drawLine(line_coords, {color: rgb(0, 0, 0)});
 
     // After the subheader set starting x and y positions
