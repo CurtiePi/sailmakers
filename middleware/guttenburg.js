@@ -197,7 +197,9 @@ const writeQuoteDoc = async (req, res, next) => {
 
     // Create the file.
     var filedate = currDate(quote.createdAt);
-    var filename = `${quote.customer.lname}_${quote.customer.fname}_${quote._id}_${filedate}.pdf`;
+    var quoteStr = (quote.quote_type.length > 1) ? 'customer_request' : `${quote.quote_type[0].replace(' ', '_')}_request`;
+
+    var filename = `${quote.customer.lname}_${quote.customer.fname}_${quoteStr}_${filedate}.pdf`;
     filename = filename.replace(/[\(\)\&\']+/g,'_').replace(/__+/g, '_');
     var filepath = `./public/files/pdf/${filename}`;
     fs.writeFileSync(filepath, await doc.save());
