@@ -5,10 +5,10 @@
       <form>
         <div class="flex-grid-halfs">
           <label class="col">First Name
-            <input type="text" name="fname" v-model="custFields.fname" />
+            <input type="text" name="fname" v-model.trim="custFields.fname" />
           </label>
           <label class="col">Last Name
-            <input type="text" name="lname" v-model="custFields.lname" />
+            <input type="text" name="lname" v-model.trim="custFields.lname" />
           </label>
         </div>
         <div class="flex-grid">
@@ -18,7 +18,7 @@
         </div>
         <div class="flex-grid-halfs">
           <label class="col">Email
-            <input type="text" size="15" name="email" v-model="custFields.email" />
+            <input type="text" size="15" name="email" v-model.trim="custFields.email" />
           </label>
           <label class="col">Phone
             <input type="text" size="15" name="phone" v-model="custFields.phone" />
