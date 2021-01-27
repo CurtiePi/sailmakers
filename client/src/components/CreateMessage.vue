@@ -7,6 +7,8 @@
      <label>Recipients
        <input type='text' size="70" v-model="recipients"/>
      </label>
+     <span v-if="message.file_attachment">Attachment: {{ message.file_attachment }} </span>
+     <br />
      <button type="button"
        @click="sendMessage()">
        Send Mail

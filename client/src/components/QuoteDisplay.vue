@@ -112,6 +112,7 @@ export default {
       quote: null,
       customer: null,
       salesperson: null,
+      salesRecipients: [],
       callerName: 'Quotes',
       file: null,
       errorMsg: null,
@@ -151,8 +152,10 @@ export default {
       }
     },
     emailDocument (filename) {
-      if (filename.indexOf(this.quote._id) > -1) {
-        this.$router.replace({ name: 'SelectStaff', params: { 'attachment': filename, 'transaction': this.quote } })
+      let regex = new RegExp(`${this.customer.lname}_${this.customer.fname}.+\\d{4}-\\d{1,2}-\\d{1,2}.pdf`)
+
+      if (regex.test(filename)) {
+        this.$router.replace({ name: 'CreateMessage', params: { 'attachment': filename, 'targets': this.salesRecipients } })
       } else {
         this.$router.replace({ name: 'CreateMessage', params: { 'attachment': filename, 'targets': [this.quote.customer.email] } })
       }
@@ -160,6 +163,16 @@ export default {
     onSelect () {
       const file = this.$refs.file.files[0]
       this.file = file
+    },
+    async getSalespeopleToEmail () {
+      var response = await AuthenticationService.getEmailSalespeople()
+      if (response.status === 200) {
+        let salespeople = response.data
+        for (var idx = 0; idx < salespeople.length; idx++) {
+          let salesPerson = salespeople[idx]
+          this.salesRecipients.push(salesPerson.email)
+        }
+      }
     },
     async uploadFile () {
       if (this.file.type === 'application/pdf') {
@@ -201,6 +214,7 @@ export default {
       if (this.caller) {
         this.callerName = this.caller
       }
+      this.getSalespeopleToEmail()
       this.isFetching = false
     }
   }
