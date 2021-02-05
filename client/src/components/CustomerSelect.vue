@@ -78,7 +78,6 @@ export default {
       sort_type: 'alpha',
       selectees: [],
       errorMsg: null,
-      message: null,
       f_name: null,
       f_registry: {
         nameFilter: {
@@ -103,23 +102,7 @@ export default {
   methods: {
     createMessage: function () {
       if (this.selectees.length > 0) {
-        this.$router.push({ name: 'MessageCustomers', params: { 'payload': this.selectees } })
-      } else {
-        this.errorMsg = 'Please select recipients before trying to email your message!'
-      }
-    },
-    sendMail: async function () {
-      if (this.selectees.length > 0) {
-        var payload = {
-          'subject': this.message.subject,
-          'body': this.message.body,
-          'recipients': this.selectees
-        }
-        console.log(payload)
-        let response = await AuthenticationService.emailCustomers(payload)
-        if (response.status === 200) {
-          this.$router.push({ name: 'Customers' })
-        }
+        this.$router.push({ name: 'CreateMessage', params: { 'targets': this.selectees } })
       } else {
         this.errorMsg = 'Please select recipients before trying to email your message!'
       }
@@ -255,9 +238,6 @@ export default {
   },
   mounted () {
     this.getCustomers()
-    if (this.payload) {
-      this.message = this.payload
-    }
   }
 }
 </script>
