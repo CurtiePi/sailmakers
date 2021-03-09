@@ -18,6 +18,11 @@
               <input type="number" step="0.05" name="amount_paid" v-model="quoteFields.amount_paid" />
             </label>
           </div>
+          <div v-else class="col">
+            <label class="col">Customer Notes:
+            <textarea cols="60" rows="5"  name="customer_notes" v-model="custFields.cnotes" />
+          </label>
+          </div>
         </div>
         <div class="flex-grid">
           <label class="col">Address:
@@ -159,6 +164,7 @@ export default {
       quote_type: [],
       isEditing: false,
       quote: null,
+      original_customer_notes: null,
       custFields: {
         customer: null,
         address: null,
@@ -167,7 +173,8 @@ export default {
         club: null,
         boat_home: null,
         boat_model: null,
-        boat_name: null
+        boat_name: null,
+        cnotes: null
       },
       quoteFields: {
         sail_request: null,
@@ -255,7 +262,11 @@ export default {
       let salesperson = JSON.parse(localStorage.sp)
       data['salesperson_id'] = salesperson._id
 
-      let payload = data
+      let payload = {'quoteObj': data}
+      if (this.original_customer_notes !== this.custFields.cnotes) {
+        payload['customerObj'] = { 'criteria': { '_id': this.customer._id }, 'data': { 'cnotes': this.custFields.cnotes } }
+      }
+
       console.log(payload)
       return payload
     },
@@ -305,6 +316,7 @@ export default {
         }
       } else {
         this.quoteFields['pick_drop'] = this.customer.boat_home
+        this.original_customer_notes = this.customer.cnotes
       }
     },
     clearInputs () {

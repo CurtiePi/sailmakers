@@ -88,7 +88,13 @@ module.exports = {
     },
     createQuote: async (req, res, next) => {
         try{
-            var quote = await dataAccess.createQuote(req.body);
+            // console.log(req.body.quoteObj)
+            var quote = await dataAccess.createQuote(req.body.quoteObj);
+            if (req.body.customerObj) {
+                var criteria = req.body.customerObj.criteria;
+                var data = req.body.customerObj.data;
+                var customer = await dataAccess.updateCustomer(criteria, data); 
+            }
             res.status(200).json(quote);
         }
         catch(err) {
