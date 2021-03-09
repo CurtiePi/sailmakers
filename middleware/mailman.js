@@ -2,6 +2,7 @@ const config        = require('../config/config');
 const nodemail      = require('nodemailer');
 const sendmail      = require('sendmail')();
 const smtpTransport = require('nodemailer-smtp-transport');
+const signature     = require('../config/signature');
 
 const deliverQuote = (req, res, next) => {
     var data = req.body
@@ -67,17 +68,23 @@ const deliverEmail = (req, res, next) => {
     }));
 
 
+    var messageBody = `${data.body}<p>${signature}</p>`;
     var recipients = data.recipients.join(', ');
     var mailOptions = {
         from: 'dave@uksailmakers-ne.com;',
         to: recipients,
         subject: data.subject,
-        html: data.body,
+        html: messageBody,
+        attachments: [{
+            filename: 'sailmakers_logo.png',
+            path: './public/images/sailmakers_logo.png',
+            cid: 'dave@uk-sailmakers-ne.com'
+        }]
     };
 
     if (data.attachment) {
         var filepath = `./public/files/pdf/${data.attachment}`;
-        mailOptions['attachments'] = [{path: filepath}];
+        mailOptions['attachments'].push({path: filepath});
     }
 
     transporter.sendMail(mailOptions, function (error, info) {
