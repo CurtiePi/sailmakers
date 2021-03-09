@@ -118,7 +118,7 @@
           <td>{{ quote.quote_type.join(', ') }}</td>
           <td><router-link :to="{ name: 'CreateMessage', params: { 'targets': [quote.customer.email] } }">{{ quote.customer.email }}</router-link></td>
           <td class='phone'>{{ quote.customer.phone }}</td>
-          <td>{{ quote.sail_request.split('-')[0] }}</td>
+          <td>{{ quote.sail_request }}</td>
           <td>{{ quote.boat_home }}</td>
           <td>{{ quote.status }}</td>
           <td>

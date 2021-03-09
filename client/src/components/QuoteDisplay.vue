@@ -34,7 +34,7 @@
         <span class="col">Request Type: {{ quote.quote_type.join(', ') }}</span>
       </div>
       <div class="flex-grid">
-        <span class="col">Sail Request: {{ quote.sail_request }}</span>
+        <span class="col" style="white-space: pre-wrap;">Sail Request: {{ quote.sail_request }}</span>
       </div>
       <div class="flex-grid-halfs">
         <span class="col">Numbers/Logo: {{ quote.num_logo }}</span>
@@ -58,7 +58,7 @@
       </div>
       <hr></hr>
       <div class="flex-grid">
-        <span class="col">Additional Notes: {{ quote.notes }}</span>
+        <span class="col" style="white-space: pre-wrap;">Additional Notes: {{ quote.notes }}</span>
       </div>
       <hr></hr>
       <div v-if="haveDocs" class="flex-grid">
