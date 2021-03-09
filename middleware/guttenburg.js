@@ -125,7 +125,7 @@ const writeQuoteDoc = async (req, res, next) => {
     let logo_img = fs.readFileSync('public/images/sailmakers_logo.png');
     const  img = await doc.embedPng(logo_img);
     const imgDims = img.scale(0.60);
-    page.drawImage(img, {x: 59.528, y: 719.13, width: imgDims.width, height: imgDims.height});
+    page.drawImage(img, {x: 59.528, y: 724.13, width: imgDims.width, height: imgDims.height});
 
     // Create the header next to logo
     for (var content in header) {

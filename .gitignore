@@ -5,6 +5,6 @@ node_modules
 *.local
 migrate*
 */config.js
-public/*
+public/files/*
 sailmakers.json
 sailmakers_redacted.json
