@@ -56,6 +56,7 @@
       <div class="flex-grid">
         <span class="col">Sailing Type: {{ quote.sailing_type }}</span>
       </div>
+      <hr></hr>
       <div class="flex-grid">
         <span class="col">Additional Notes: {{ quote.notes }}</span>
       </div>
