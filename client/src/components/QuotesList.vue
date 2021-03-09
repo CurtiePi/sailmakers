@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div class="row filter-div">
+      Request Filter 
       <span class="quote_types">
         <label>New Sail
           <input type="checkbox" name="q_type" value="new sail" 
@@ -28,18 +29,70 @@
             v-model="quote_type" />
         </label>
       </span>
+    </div>  
+    <div class="row filter-div">
+      Status Filter
       <span class="status">
-        <select @change="filterQuoteStatus($event)">
-          <option value="all"></option>
-          <option value="quote request">Quote Request</option>
-          <option value="pending">Pending</option>
-          <option value="production">In Production</option>
-          <option value="ready">Ready</option>
-          <option value="delivered">Delivered</option>
-          <option value="no sale">No Sale</option>
-        </select>
-       </span>
-     </label>
+       <label>
+         <input type="checkbox" name="status" value="quote request" 
+           @change="filterQuoteStatus()"
+           v-model="f_registry.statusFilter.status_list" />
+           Quote Request
+       </label>
+       <label>
+         <input type="checkbox" name="status" value="pending"
+           @change="filterQuoteStatus()"
+           v-model="f_registry.statusFilter.status_list" />
+           Pending
+       </label>
+       <label>
+         <input type="checkbox" name="status" value="production"
+           @change="filterQuoteStatus()"
+           v-model="f_registry.statusFilter.status_list" />
+           In Production
+       </label>
+       <label>
+         <input type="checkbox" name="status" value="ready"
+           @change="filterQuoteStatus()"
+           v-model="f_registry.statusFilter.status_list" />
+           Ready
+       </label>
+       <label>
+         <input type="checkbox" name="status" value="delivered"
+           @change="filterQuoteStatus()"
+           v-model="f_registry.statusFilter.status_list" />
+           Delivered
+       </label>
+       <label>
+         <input type="checkbox" name="status" value="no sale"
+           @change="filterQuoteStatus()"
+           v-model="f_registry.statusFilter.status_list" />
+           No Sale
+       </label>
+      </span>
+      <span class="stat_controller"
+        <label>
+          <input type="radio" name="s_control" value="all" 
+            @change="updateStatusView()"
+            v-model="status_view">
+            All
+          </input>
+        </label>
+        <label>
+          <input type="radio" name="s_control" value="active"
+            @change="updateStatusView()"
+            v-model="status_view">
+            Active
+          </input>
+        </label>
+        <label>
+          <input type="radio" name="s_control" value="inactive" 
+            @change="updateStatusView()"
+            v-model="status_view">
+            Inactive
+          </input>
+        </label>
+      </span>
     </div>
     <div class="t_container">
       <h1>Requests List</h1>
@@ -87,6 +140,7 @@ export default {
       quotes: [],
       quotes_display: [],
       quote_type: [],
+      status_view: 'active',
       f_registry: {
         activeFilter: {
           filter: [],
@@ -97,6 +151,7 @@ export default {
           status: false
         },
         statusFilter: {
+          status_list: ['quote request', 'pending', 'production', 'ready'],
           filter: [],
           status: false
         }
@@ -109,6 +164,7 @@ export default {
       this.quotes = response.data
       this.quotes_display = response.data
       this.sortList()
+      this.filterQuoteStatus()
     },
     viewQuote (quoteObj) {
       this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': quoteObj, 'caller': 'Quotes' } })
@@ -120,6 +176,17 @@ export default {
       const ftn = this.temporalSort
       this.quotes_display.sort(ftn)
     },
+    updateStatusView: function () {
+      switch (this.status_view) {
+        case 'all': this.f_registry.statusFilter.status_list = []
+          break
+        case 'active': this.f_registry.statusFilter.status_list = ['quote request', 'pending', 'production', 'ready']
+          break
+        case 'inactive': this.f_registry.statusFilter.status_list = ['delivered', 'no sale']
+          break
+      }
+      this.filterQuoteStatus()
+    },
     filterQuoteType: function () {
       console.log(this.quote_type)
       if (this.quote_type.length !== 0) {
@@ -130,11 +197,12 @@ export default {
       }
       this.applyFilters()
     },
-    filterQuoteStatus: function (evt) {
-      if (evt.target.value !== 'all') {
-        this.f_registry.statusFilter.filter = this.quotes.filter((quote) => { return quote.status === evt.target.value })
+    filterQuoteStatus: function () {
+      if (this.f_registry.statusFilter.status_list.length !== 0) {
+        this.f_registry.statusFilter.filter = this.quotes.filter((quote) => { return this.f_registry.statusFilter.status_list.includes(quote.status) })
         this.f_registry.statusFilter.status = true
       } else {
+        this.f_registry.statusFilter.status_list = []
         this.f_registry.statusFilter.status = false
       }
       this.applyFilters()
@@ -212,15 +280,12 @@ a {
 td, th {
   padding: 8px;
 }
-/***
-tr:nth-child(even) {
-    background-color: #eeeeee;
+
+label {
+  margin-left: 5px;
+  margin-right: 3px;
 }
 
-tr:nth-child(odd) {
-    background-color: #cccccc;
-}
-***/
 .row span {
   margin: 0 8px;
 }
@@ -251,5 +316,16 @@ tr:nth-child(odd) {
 
 .no_sale {
   background-color: #FF8000;
+}
+
+.status {
+  margin-top: 3px;
+  margin-right: 5px;
+  padding: 2px;
+}
+
+.quote_types {
+  margin-bottom: 3px;
+  padding: 2px;
 }
 </style>
