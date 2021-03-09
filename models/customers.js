@@ -31,7 +31,7 @@ var CustomerSchema = new mongoose.Schema({
     boat_name: {
         type: String,
     },
-    notes: {
+    cnotes: {
         type: String
     }
 }, {

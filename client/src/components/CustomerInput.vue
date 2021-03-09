@@ -52,10 +52,10 @@
             <input type="text" name="boat_name" v-model="custFields.boat_name" />
           </label>
         </div>
-        <!-- div class="flex-grid">
-          <label>Things to Know:</label>
-          <textarea cols="60" rows="5" name="notes" v-model="custFields.notes" />
-        </div -->
+        <div class="flex-grid">
+          <label>Customer Notes:</label>
+          <textarea cols="60" rows="5" name="notes" v-model="custFields.cnotes" />
+        </div>
       </form>
       <button type="button" class="btn btn-primary"
         @click="isEditing ? updateCustomer() : createCustomer()"
@@ -94,7 +94,7 @@ export default {
         boat_home: null,
         boat_model: null,
         boat_name: null,
-        notes: null
+        cnotes: null
       }
     }
   },

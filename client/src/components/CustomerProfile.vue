@@ -29,9 +29,10 @@
         <span class="col">Boat Type: {{ customer_data.boat_model }}</span>
       </div>
       <hr></hr>
-      <!-- div class="flex-grid">
-        <span class="col">Things to Know: {{ customer_data.notes }}</span>
-      </div -->
+      <div class="flex-grid">
+        <span class="col" style="white-space: pre-wrap;">Customer Notes:<br/>  {{ customer_data.cnotes }}</span>
+      </div>
+      <hr></hr>
       <p>
         <button @click="timeToEdit()">Edit</button>
         <button @click="createQuote()">Create Request</button>
@@ -58,6 +59,16 @@ export default {
   computed: {
     allowSubmitForm: function () {
       return this.inputFields.some(this.hasValue)
+    },
+    multilineData: function (dataString) {
+      console.log(dataString)
+      var result = dataString
+      if (dataString != null) {
+        result = dataString.replace('\n', '<br/>')
+      } else {
+        result = ''
+      }
+      return result
     }
   },
   methods: {
