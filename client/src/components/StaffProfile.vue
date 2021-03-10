@@ -6,7 +6,11 @@
       </div>
       <hr></hr>
       <div class="flex-grid-halfs">
-        <span class="col">Email: {{ salesperson.email }}</span>
+        <span class="col">Email: 
+          <router-link :to="{ name: 'CreateMessage', params: { 'targets': [salesperson.email], 'caller': ['StaffProfile', callerName], 'cbdata': salesperson} }">
+            {{ salesperson.email }}
+          </router-link>
+        </span>
         <span class="col">Phone: {{ salesperson.phone }}</span>
       </div>
       <hr></hr>
@@ -15,7 +19,7 @@
       </div>
       <p>
         <button @click="timeToEdit()">Edit</button>
-        <button><router-link :to="{ name: 'StaffList' }">List</router-link></button>
+        <button @click="goBack()">Back</button>
       </p>
     </div>     
   </div>
@@ -24,21 +28,32 @@
 
 export default {
   name: 'staffProfile',
-  props: ['payload'],
+  props: ['payload', 'caller'],
   data () {
     return {
-      salesperson: null
+      salesperson: null,
+      callerName: 'StaffList'
     }
   },
   methods: {
     timeToEdit () {
       this.$router.push({ name: 'StaffEdit', params: { 'edit_payload': this.salesperson } })
+    },
+    goBack () {
+      if (['Quotes', 'Customers', 'StaffList'].includes(this.callerName)) {
+        this.$router.replace({name: this.callerName})
+      } else {
+        this.$router.replace({ name: this.callerName, params: { 'payload': this.customer } })
+      }
     }
   },
   mounted () {
     if (this.payload) {
       console.log(this.payload)
       this.salesperson = this.payload
+    }
+    if (this.caller) {
+      this.callerName = this.caller
     }
   }
 }

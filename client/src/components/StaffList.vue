@@ -11,8 +11,8 @@
           </tr>
           <tr v-for= "salesperson in salespeople"
               :key="salesperson._id">
-              <td><router-link :to="{ name: 'StaffProfile', params: { 'payload': salesperson } }">{{ salesperson.fname }} {{ salesperson.lname }}</router-link></td>
-              <td>{{ salesperson.email }}</td>
+              <td><router-link :to="{ name: 'StaffProfile', params: { 'payload': salesperson, 'caller': 'StaffList' } }">{{ salesperson.fname }} {{ salesperson.lname }}</router-link></td>
+              <td><router-link :to="{ name: 'CreateMessage', params: { 'targets': [salesperson.email], 'caller': 'StaffList' } }">{{ salesperson.email }}</router-link></td>
               <td>{{ salesperson.phone }}</td>
               <td>{{ (salesperson.get_mail) ? 'Y' : 'N' }}</td>
           </tr>

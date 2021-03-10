@@ -200,10 +200,10 @@ export default {
         inputField.value !== ''
     },
     goBack () {
-      if (['Quotes', 'Customers'].includes(this.callerName)) {
+      if (['Quotes', 'Customers', 'StaffList'].includes(this.callerName)) {
         this.$router.replace({name: this.callerName})
       } else {
-        this.$router.replace({ name: this.callerName, params: { 'payload': this.customer } })
+        this.$router.replace({ name: this.callerName[0], params: { 'payload': this.customer, 'caller': this.callerName.splice(1) } })
       }
     }
   },
