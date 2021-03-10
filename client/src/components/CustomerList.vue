@@ -52,7 +52,7 @@
                   {{ customer.fname }}  {{ customer.lname }}
                 </router-link>
               </td>
-              <td><router-link :to="{ name: 'CreateMessage', params: { 'targets': [customer.email] } }">{{ customer.email }}</router-link></td>
+              <td><router-link :to="{ name: 'CreateMessage', params: { 'targets': [customer.email], 'caller': 'Customers' } }">{{ customer.email }}</router-link></td>
               <td>{{ customer.phone }}</td>
               <td>{{ customer.club }}</td>
               <td>{{ customer.boat_name }}</td>

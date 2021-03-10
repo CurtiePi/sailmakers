@@ -11,7 +11,7 @@
       <div class="flex-grid-halfs">
         <span class="col">
           Email:
-          <router-link :to="{ name: 'CreateMessage', params: { 'targets': [customer.email]} }">
+          <router-link :to="{ name: 'CreateMessage', params: {'targets': [customer.email], 'cbdata': quote, 'caller': ['QuoteDisplay', callerName]} }">
             {{ customer.email }}
           </router-link>
         </span>

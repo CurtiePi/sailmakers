@@ -9,9 +9,13 @@
      </label>
      <span v-if="message.file_attachment">Attachment: {{ message.file_attachment }} </span>
      <br />
-     <button type="button"
+     <button type="button" class="sendBtn"
        @click="sendMessage()">
        Send Mail
+     </button>
+     <button type="button" class="cancelBtn"
+       @click="cancelEmail()">
+       Cancel
      </button>
      <br />
      <span class="errorMsg" v-if="errorMsg">{{ errorMsg }}</span>
@@ -40,7 +44,7 @@ import Editor from '@tinymce/tinymce-vue'
 
 export default {
   name: 'customerMessage',
-  props: ['targets', 'attachment'],
+  props: ['targets', 'attachment', 'caller', 'cbdata'],
   components: {
     'editor': Editor
   },
@@ -53,7 +57,9 @@ export default {
       },
       mce_key: process.env.VUE_APP_MCE_KEY,
       errorMsg: null,
-      recipients: null
+      recipients: null,
+      callback_data: null,
+      callerName: 'Customers'
     }
   },
   methods: {
@@ -82,6 +88,13 @@ export default {
       } else {
         this.$router.push({ name: 'SelectCustomers', params: { 'payload': this.message } })
       }
+    },
+    cancelEmail: function () {
+      if (['Quotes', 'Customers'].includes(this.callerName)) {
+        this.$router.replace({ name: this.callerName })
+      } else {
+        this.$router.replace({ name: this.callerName[0], params: { 'payload': this.callback_data, 'caller': this.callerName.splice(1) } })
+      }
     }
   },
   mounted () {
@@ -91,6 +104,12 @@ export default {
     if (this.attachment) {
       this.message.file_attachment = this.attachment
     }
+    if (this.caller) {
+      this.callerName = this.caller
+      if (this.cbdata) {
+        this.callback_data = this.cbdata
+      }
+    }
   }
 }
 </script>
@@ -99,5 +118,13 @@ export default {
   font-weight: bold;
   color: #FF0000;
   font-size: 22px;
+}
+
+.cancelBtn {
+  margin-left:25px;
+}
+
+.sendBtn {
+  margin-right: 5px;
 }
 </style>
