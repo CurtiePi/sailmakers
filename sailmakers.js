@@ -46,12 +46,13 @@ db.on('error', console.error.bind(console, 'connection error'));
 console.log(`Database: ${conn_str}`)
 
 var smapp = express();
-smapp.use(cors({credentials: true, origin: 'http://192.168.1.4:8080'}));
+smapp.use(cors({credentials: true, origin: 'http://192.168.1.9:8080'}));
 smapp.use(cookieParser());
 
 smapp.use(bodyParser.json());
 smapp.use(bodyParser.urlencoded({ extended: true }));
 smapp.use(passport.initialize());
+// **** UNCOMMENT NEXT LINE **** //
 // smapp.use(express.static(path.join(__dirname, './client/dist')));
 smapp.use('images', express.static(path.join(__dirname, 'public/images')));
 smapp.use('/pdf', express.static('public/files/pdf'))
@@ -70,6 +71,7 @@ smapp.use('/api/staff', salespersonRouter);
 smapp.use('/api/quote', quoteRouter);
 smapp.use('/api/port', portRouter);
 smapp.use('/api/utils', utilsRouter);
+// **** UNCOMMENT NEXT LINE **** //
 // smapp.use('/', express.static(path.join(__dirname, './client/index.html')));
 
 smapp.use(function(req, res, next) {
