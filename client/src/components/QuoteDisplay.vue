@@ -4,6 +4,9 @@
       <div class="flex-grid">
         <span class="col hilite">Request for {{ customer.fname }} {{ customer.lname }}</span>
       </div>
+      <div class="flex-grid">
+        <span class="col small-print">Status: {{ capitalizeFirst(quote.status) }}</span>
+      </div>
       <hr></hr>
       <div class="flex-grid">
         <span class="col">Address: {{ customer.address }}</span>
@@ -199,6 +202,9 @@ export default {
         inputField.value !== undefined &&
         inputField.value !== ''
     },
+    capitalizeFirst (inputText) {
+      return inputText.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())
+    },
     goBack () {
       if (['Quotes', 'Customers', 'StaffList'].includes(this.callerName)) {
         this.$router.replace({name: this.callerName})
@@ -276,6 +282,10 @@ hr.solid {
 .hilite {
   font-weight: bold;
   font-size: 40px; 
+}
+
+.small-print {
+  font-size: 18px; 
 }
 
 span {

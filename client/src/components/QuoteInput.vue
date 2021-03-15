@@ -54,40 +54,45 @@
         <div class="flex-grid-halfs">
           <div class="col">
             <p>Quote Type:</p>
-            <input type="checkbox" name="new_sail" value="new sail"  v-model="quoteFields.quote_type">
+            <input class="status_input" type="checkbox" name="new_sail" value="new sail"  v-model="quoteFields.quote_type">
               New Sail
             </input>
-            <input type="checkbox" name="sail_repair" value="sail repair" v-model="quoteFields.quote_type">
+            <input class="status_input" type="checkbox" name="sail_repair" value="sail repair" v-model="quoteFields.quote_type">
               Sail Repair
             </input>
-            <input type="checkbox" name="winter_service" value="winter service" v-model="quoteFields.quote_type">
+            <input class="status_input" type="checkbox" name="winter_service" value="winter service" v-model="quoteFields.quote_type">
               Winter Service
             </input>
-            <input type="checkbox" name="sail_cover" value="sail cover" v-model="quoteFields.quote_type">
+            <br/>
+            <input class="status_input" type="checkbox" name="sail_cover" value="sail cover" v-model="quoteFields.quote_type">
               Sail Cover
             </input>
-            <input type="checkbox" name="other" value="other" v-model="quoteFields.quote_type">
+            <input class="status_input" type="checkbox" name="other" value="other" v-model="quoteFields.quote_type">
               Other
             </input>
           </div>
           <div v-if="isEditing" class="col">
             <p>Status:</p>
-            <input type="radio" name="status" value="quote request" v-model="quoteFields.status">
+            <input class="status_input" type="radio" name="status" value="quote request" v-model="quoteFields.status">
               Quote Request
             </input>
-            <input type="radio" name="status" value="pending" v-model="quoteFields.status">
+            <input class="status_input" type="radio" name="status" value="pending" v-model="quoteFields.status">
               Pending
             </input>
-            <input type="radio" name="status" value="production" v-model="quoteFields.status">
+            <input class="status_input" type="radio" name="status" value="production" v-model="quoteFields.status">
               Production
             </input>
-            <input type="radio" name="status" value="ready" v-model="quoteFields.status">
+            <br/>
+            <input class="status_input" type="radio" name="status" value="ready" v-model="quoteFields.status">
               Ready
             </input>
-            <input type="radio" name="status" value="delivered" v-model="quoteFields.status">
+            <input class="status_input" type="radio" name="status" value="follow up" v-model="quoteFields.status">
+              Follow Up
+            </input>
+            <input class="status_input" type="radio" name="status" value="delivered" v-model="quoteFields.status">
               Delivered
             </input>
-            <input type="radio" name="status" value="no sale" v-model="quoteFields.status">
+            <input class="status_input" type="radio" name="status" value="no sale" v-model="quoteFields.status">
               No Sale
             </input>
           </div>
@@ -431,5 +436,9 @@ input[type=checkbox] {
 .textarea {
   display: flex;
   flex-direction: column;
+}
+
+.status_input {
+  margin-left: 15px;
 }
 </style>

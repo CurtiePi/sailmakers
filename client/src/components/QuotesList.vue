@@ -57,6 +57,13 @@
            v-model="f_registry.statusFilter.status_list" />
            Ready
        </label>
+       <br/>
+       <label>
+         <input type="checkbox" name="status" value="follow up"
+           @change="filterQuoteStatus()"
+           v-model="f_registry.statusFilter.status_list" />
+           Follow Up
+       </label>
        <label>
          <input type="checkbox" name="status" value="delivered"
            @change="filterQuoteStatus()"
@@ -70,7 +77,7 @@
            No Sale
        </label>
       </span>
-      <span class="stat_controller"
+      <span class="stat_controller">
         <label>
           <input type="radio" name="s_control" value="all" 
             @change="updateStatusView()"
@@ -182,7 +189,7 @@ export default {
           break
         case 'active': this.f_registry.statusFilter.status_list = ['quote request', 'pending', 'production', 'ready']
           break
-        case 'inactive': this.f_registry.statusFilter.status_list = ['delivered', 'no sale']
+        case 'inactive': this.f_registry.statusFilter.status_list = ['follow up', 'delivered', 'no sale']
           break
       }
       this.filterQuoteStatus()
@@ -320,8 +327,13 @@ label {
 
 .status {
   margin-top: 3px;
-  margin-right: 5px;
+  margin-right: 35px;
   padding: 2px;
+}
+
+.stat_controller {
+  margin-left: 20px;
+  padding: 20px;
 }
 
 .quote_types {
