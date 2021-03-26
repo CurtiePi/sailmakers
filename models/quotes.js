@@ -64,6 +64,9 @@ var QuoteSchema = new mongoose.Schema({
     },
     doc_path: {
         type: [String]
+    },
+    due_date: {
+        type: Date 
     }
 }, {
     timestamps: true
