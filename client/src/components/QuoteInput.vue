@@ -9,6 +9,12 @@
             <label>Customer Name:
               <span> {{ custFields.customer }}</span>
             </label>
+            <br/>
+            <label>Due Date:</label>
+            <datepicker name="due-date"
+              @selected="dateSelected()"
+              v-model="quoteFields.due_date"
+              :disabled-dates="state.disabledDates"></datepicker>
           </div>
           <div v-if="isEditing" class="col">
             <label class="col">Quote Price:
@@ -158,10 +164,13 @@
 
 <script>
 import AuthenticationService from '@/services/AuthenticationService'
-
+import Datepicker from 'vuejs-datepicker'
 export default {
   name: 'createQuote',
   props: ['create_payload', 'edit_payload'],
+  components: {
+    Datepicker
+  },
   data () {
     return {
       origQuoteFields: {},
@@ -181,6 +190,12 @@ export default {
         boat_name: null,
         cnotes: null
       },
+      state: {
+        date: new Date(2021, 2, 26),
+        disabledDates: {
+          to: new Date()
+        }
+      },
       quoteFields: {
         sail_request: null,
         battens: null,
@@ -194,7 +209,8 @@ export default {
         status: null,
         amount_paid: null,
         quote_price: null,
-        quote_type: []
+        quote_type: [],
+        due_date: new Date()
       },
       isFetching: true
     }
@@ -219,6 +235,11 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    dateSelected () {
+      console.log(`Quote Fields ${this.quoteFields.due_date}`)
+      console.log(`State Date ${this.state.date}`)
+      this.$nextTick(() => console.log(`Quote Fields after nextTick ${this.quoteFields.due_date}`))
     },
     checkForChanges () {
       var formData = {}

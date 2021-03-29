@@ -7,6 +7,7 @@
             <th>Quote Type(s)</th>
             <th>Sail Request</th>
             <th>Status</th>
+            <th>Due Date</th>
             <th>Price</th>
         </tr>
         <tr v-for= "quote in quotes"
@@ -15,6 +16,7 @@
             <td>{{ formatType(quote.quote_type) }}</td>
             <td>{{ quote.sail_request }}</td>
             <td>{{ quote.status }}</td>
+            <td>{{ formatDate(quote.due_date) }}</td>
             <td>{{ quote.quote_price.toFixed(2) }}</td>
         </tr>
     </div>
@@ -38,12 +40,16 @@ export default {
     formatType: function (quoteTypes) {
       return quoteTypes.join(', ')
     },
-    formatDate: function (dateStr) {
-      const d = new Date(dateStr)
-      const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
-      const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d)
-      const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
-      return `${da}-${mo}-${ye}`
+    formatDate: function (dateString) {
+      let result = ''
+      if (dateString) {
+        const d = new Date(dateString)
+        const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d)
+        const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d)
+        const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d)
+        result = `${da}-${mo}-${ye}`
+      }
+      return result
     },
     temporalSort: function (a, b) {
       return (a.createdAt > b.createdAt) ? -1 : (a.createdAt < b.createdAt) ? 1 : 0

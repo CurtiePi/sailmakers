@@ -6,6 +6,7 @@
       </div>
       <div class="flex-grid">
         <span class="col small-print">Status: {{ capitalizeFirst(quote.status) }}</span>
+        <span class="col small-print">Due Date: {{ formatDate(quote.due_date) }}</span>
       </div>
       <hr></hr>
       <div class="flex-grid">
@@ -205,6 +206,17 @@ export default {
     capitalizeFirst (inputText) {
       return inputText.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())
     },
+    formatDate (dateString) {
+      let result = ''
+      if (dateString) {
+        let dte = new Date(dateString)
+        let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(dte)
+        let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(dte)
+        let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(dte)
+        result = `${da}-${mo}-${ye}`
+      }
+      return result
+    },
     goBack () {
       if (['Quotes', 'Customers', 'StaffList'].includes(this.callerName)) {
         this.$router.replace({name: this.callerName})
@@ -286,6 +298,7 @@ hr.solid {
 
 .small-print {
   font-size: 18px; 
+  margin-right: 20px;
 }
 
 span {

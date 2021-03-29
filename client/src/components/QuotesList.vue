@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-xl">
     <div class="row filter-div">
       Request Filter 
       <span class="quote_types">
@@ -101,17 +101,16 @@
         </label>
       </span>
     </div>
-    <div class="t_container">
+    <div>
       <h1>Requests List</h1>
-      <div>
+      <table>
         <tr>
           <th>Customer</th>
           <th>Request Type</th>
           <th>Email</th>
           <th>Phone</th>
-          <th>Sail</th>
-          <th>Home Port</th>
           <th>Status</th>
+          <th>Due Date</th>
           <th></th>
         </tr>
         <tr v-for= "quote in quotes_display"
@@ -125,14 +124,13 @@
           <td>{{ quote.quote_type.join(', ') }}</td>
           <td><router-link :to="{ name: 'CreateMessage', params: { 'targets': [quote.customer.email], 'caller': 'Quotes' } }">{{ quote.customer.email }}</router-link></td>
           <td class='phone'>{{ quote.customer.phone }}</td>
-          <td>{{ quote.sail_request }}</td>
-          <td>{{ quote.boat_home }}</td>
           <td>{{ quote.status }}</td>
+          <td>{{ formatDate(quote.due_date) }}</td>
           <td>
             <button @click="viewQuote(quote)">View</button>
           </td>
         </tr>
-      </div>
+      </table>
     </div>
   </div>
 </template>
@@ -166,7 +164,18 @@ export default {
     }
   },
   methods: {
-    getQuotes: async function () {
+    formatDate (dateString) {
+      let result = ''
+      if (dateString) {
+        let dte = new Date(dateString)
+        let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(dte)
+        let mo = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(dte)
+        let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(dte)
+        result = `${mo}-${da}-${ye}`
+      }
+      return result
+    },
+    async getQuotes () {
       let response = await AuthenticationService.quoteList()
       this.quotes = response.data
       this.quotes_display = response.data
@@ -176,14 +185,14 @@ export default {
     viewQuote (quoteObj) {
       this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': quoteObj, 'caller': 'Quotes' } })
     },
-    temporalSort: function (a, b) {
+    temporalSort (a, b) {
       return (a.createdAt < b.createdAt) ? 1 : (a.createdAt > b.createdAt) ? -1 : 0
     },
     sortList () {
       const ftn = this.temporalSort
       this.quotes_display.sort(ftn)
     },
-    updateStatusView: function () {
+    updateStatusView () {
       switch (this.status_view) {
         case 'all': this.f_registry.statusFilter.status_list = []
           break
@@ -194,8 +203,7 @@ export default {
       }
       this.filterQuoteStatus()
     },
-    filterQuoteType: function () {
-      console.log(this.quote_type)
+    filterQuoteType () {
       if (this.quote_type.length !== 0) {
         this.f_registry.typeFilter.filter = this.quotes.filter((quote) => { return quote.quote_type.reduce((acc, val) => { return acc || this.quote_type.includes(val) }, false) })
         this.f_registry.typeFilter.status = true
@@ -204,7 +212,7 @@ export default {
       }
       this.applyFilters()
     },
-    filterQuoteStatus: function () {
+    filterQuoteStatus () {
       if (this.f_registry.statusFilter.status_list.length !== 0) {
         this.f_registry.statusFilter.filter = this.quotes.filter((quote) => { return this.f_registry.statusFilter.status_list.includes(quote.status) })
         this.f_registry.statusFilter.status = true
@@ -214,7 +222,7 @@ export default {
       }
       this.applyFilters()
     },
-    applyFilters: function () {
+    applyFilters () {
       var filterObj = {}
       var haveEmptyFilter = false
       var hasActiveFilters = false
@@ -222,11 +230,9 @@ export default {
       for (var key in this.f_registry) {
         var filterLength = this.f_registry[key].filter.length
         if (this.f_registry[key].status && filterLength > 0) {
-          console.log(`${key} filter has a length of ${filterLength}`)
           filterObj[key] = this.f_registry[key].filter
           hasActiveFilters = true
         } else if (this.f_registry[key].status && filterLength === 0) {
-          console.log(`${key} filter has a length of ${filterLength}`)
           haveEmptyFilter = true
           hasActiveFilters = true
         }
@@ -275,9 +281,8 @@ li {
   margin: 0 10px;
 }
 
-.t_container {
+table {
   width: 100%;
-    padding:0;
 }
 
 a {
