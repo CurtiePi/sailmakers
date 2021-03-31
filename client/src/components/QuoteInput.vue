@@ -14,7 +14,7 @@
             <datepicker name="due-date"
               @selected="dateSelected()"
               v-model="quoteFields.due_date"
-              :disabled-dates="state.disabledDates"></datepicker>
+              :disabled-dates="setDisabledDates"></datepicker>
           </div>
           <div v-if="isEditing" class="col">
             <label class="col">Quote Price:
@@ -190,12 +190,6 @@ export default {
         boat_name: null,
         cnotes: null
       },
-      state: {
-        date: new Date(2021, 2, 26),
-        disabledDates: {
-          to: new Date()
-        }
-      },
       quoteFields: {
         sail_request: null,
         battens: null,
@@ -221,6 +215,11 @@ export default {
     },
     headerText: function () {
       return this.isEditing ? 'Update Request' : 'Create Request'
+    },
+    setDisabledDates: function () {
+      let d = new Date()
+      d.setDate(d.getDate() - 1)
+      return {to: d}
     }
   },
   methods: {
@@ -237,8 +236,6 @@ export default {
       }
     },
     dateSelected () {
-      console.log(`Quote Fields ${this.quoteFields.due_date}`)
-      console.log(`State Date ${this.state.date}`)
       this.$nextTick(() => console.log(`Quote Fields after nextTick ${this.quoteFields.due_date}`))
     },
     checkForChanges () {
