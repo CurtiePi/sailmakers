@@ -6,6 +6,6 @@ const phone = '646-48305898';
 const site = '<a href="www.uksailmakers-ne.com">www.uksailmakers-ne.com</a>';
 const embedded = '<img src="cid:dave@uk-sailmakers-ne.com"/>'
 
-signature = `${glyph}${name}<p>${email}</p>${phone}<p>${site}</p><br/>${embedded}`;
+signature = `${glyph}${name}<br/>${email}<br/>${phone}<br/>${site}<br/>${embedded}`;
 
 module.exports = signature;
