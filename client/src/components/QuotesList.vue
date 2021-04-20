@@ -57,7 +57,6 @@
            v-model="f_registry.statusFilter.status_list" />
            Ready
        </label>
-       <br/>
        <label>
          <input type="checkbox" name="status" value="follow up"
            @change="filterQuoteStatus()"
@@ -100,6 +99,13 @@
           </input>
         </label>
       </span>
+      <br/>
+    </div>
+    <div class="row filter-div">
+      Pick Up Filter 
+      <span>
+        <v-select class="pickdropselect" :options="pickdrop" v-model="pick_drop_view" @input="filterPickDrop"/>
+      </span>
     </div>
     <div>
       <h1>Requests List</h1>
@@ -107,9 +113,9 @@
         <tr>
           <th>Customer</th>
           <th>Request Type</th>
-          <th>Email</th>
           <th>Phone</th>
           <th>Status</th>
+          <th>Pick Up</th>
           <th>Due Date</th>
           <th></th>
         </tr>
@@ -122,9 +128,9 @@
             </router-link>
           </td>
           <td>{{ quote.quote_type.join(', ') }}</td>
-          <td><router-link :to="{ name: 'CreateMessage', params: { 'targets': [quote.customer.email], 'caller': 'Quotes' } }">{{ quote.customer.email }}</router-link></td>
           <td class='phone'>{{ quote.customer.phone }}</td>
           <td>{{ quote.status }}</td>
+          <td>{{ quote.pick_drop }}</td>
           <td>{{ formatDate(quote.due_date) }}</td>
           <td>
             <button @click="viewQuote(quote)">View</button>
@@ -145,13 +151,19 @@ export default {
       quotes: [],
       quotes_display: [],
       quote_type: [],
+      pickdrop: [],
       status_view: 'active',
+      pick_drop_view: null,
       f_registry: {
         activeFilter: {
           filter: [],
           status: false
         },
         typeFilter: {
+          filter: [],
+          status: false
+        },
+        pickDropFilter: {
           filter: [],
           status: false
         },
@@ -181,6 +193,7 @@ export default {
       this.quotes_display = response.data
       this.sortList()
       this.filterQuoteStatus()
+      this.populateDropDown()
     },
     viewQuote (quoteObj) {
       this.$router.replace({ name: 'QuoteDisplay', params: { 'payload': quoteObj, 'caller': 'Quotes' } })
@@ -192,6 +205,14 @@ export default {
       const ftn = this.temporalSort
       this.quotes_display.sort(ftn)
     },
+    populateDropDown () {
+      for (var idx = 0; idx < this.quotes.length; idx++) {
+        var quote = this.quotes[idx]
+        if (this.f_registry.statusFilter.status_list.includes(quote.status) && !(this.pickdrop.includes(quote.pick_drop) || quote.pick_drop === '')) {
+          this.pickdrop.push(quote.pick_drop)
+        }
+      }
+    },
     updateStatusView () {
       switch (this.status_view) {
         case 'all': this.f_registry.statusFilter.status_list = []
@@ -202,6 +223,15 @@ export default {
           break
       }
       this.filterQuoteStatus()
+    },
+    filterPickDrop () {
+      if (this.pick_drop_view !== null) {
+        this.f_registry.pickDropFilter.filter = this.quotes.filter((quote) => { return quote.pick_drop === this.pick_drop_view })
+        this.f_registry.pickDropFilter.status = true
+      } else {
+        this.f_registry.pickDropFilter.status = false
+      }
+      this.applyFilters()
     },
     filterQuoteType () {
       if (this.quote_type.length !== 0) {
@@ -337,12 +367,17 @@ label {
 }
 
 .stat_controller {
-  margin-left: 20px;
-  padding: 20px;
+  margin-top: 3px;
+  margin-left: 30px;
+  padding: 2px;
 }
 
 .quote_types {
   margin-bottom: 3px;
   padding: 2px;
+}
+
+.pickdropselect {
+  width: 25em;
 }
 </style>
