@@ -104,7 +104,7 @@
     <div class="row filter-div">
       Pick Up Filter 
       <span>
-        <v-select class="pickdropselect" :options="pickdrop" v-model="pick_drop_view" @input="filterPickDrop"/>
+        <v-select class="pickdropselect" :options="pickDropOptions" v-model="pickDropSelection" @input="filterPickDrop"/>
       </span>
     </div>
     <div>
@@ -151,9 +151,9 @@ export default {
       quotes: [],
       quotes_display: [],
       quote_type: [],
-      pickdrop: [],
+      pickDropOptions: [],
       status_view: 'active',
-      pick_drop_view: null,
+      pickDropSelection: null,
       f_registry: {
         activeFilter: {
           filter: [],
@@ -208,10 +208,11 @@ export default {
     populateDropDown () {
       for (var idx = 0; idx < this.quotes.length; idx++) {
         var quote = this.quotes[idx]
-        if (this.f_registry.statusFilter.status_list.includes(quote.status) && !(this.pickdrop.includes(quote.pick_drop) || quote.pick_drop === '')) {
-          this.pickdrop.push(quote.pick_drop)
+        if (this.f_registry.statusFilter.status_list.includes(quote.status) && !(this.pickDropOptions.includes(quote.pick_drop) || quote.pick_drop === '')) {
+          this.pickDropOptions.push(quote.pick_drop)
         }
       }
+      this.pickDropOptions.sort((a, b) => { return (a < b) ? -1 : (a < b) ? 1 : 0 })
     },
     updateStatusView () {
       switch (this.status_view) {
@@ -225,8 +226,8 @@ export default {
       this.filterQuoteStatus()
     },
     filterPickDrop () {
-      if (this.pick_drop_view !== null) {
-        this.f_registry.pickDropFilter.filter = this.quotes.filter((quote) => { return quote.pick_drop === this.pick_drop_view })
+      if (this.pickDropSelection !== null) {
+        this.f_registry.pickDropFilter.filter = this.quotes.filter((quote) => { return quote.pick_drop === this.pickDropSelection })
         this.f_registry.pickDropFilter.status = true
       } else {
         this.f_registry.pickDropFilter.status = false
