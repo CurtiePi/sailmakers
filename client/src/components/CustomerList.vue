@@ -182,11 +182,9 @@ export default {
       for (var key in this.f_registry) {
         var filterLength = this.f_registry[key].filter.length
         if (this.f_registry[key].status && filterLength > 0) {
-          console.log(`${key} filter has a length of ${filterLength}`)
           filterObj[key] = this.f_registry[key].filter
           hasActiveFilters = true
         } else if (this.f_registry[key].status && filterLength === 0) {
-          console.log(`${key} filter has a length of ${filterLength}`)
           haveEmptyFilter = true
           hasActiveFilters = true
         }
