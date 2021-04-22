@@ -109,13 +109,15 @@ export default {
   methods: {
     checkForChanges () {
       var changeLog = {}
-      console.log('Check for changes')
       for (var key in this.custFields) {
         if (this.origCustFields[key] !== this.custFields[key]) {
           changeLog[key] = this.custFields[key]
         }
+        if (key === 'club' && this.needOther && this.otherValue !== this.origCustFields[key]) {
+          changeLog[key] = this.otherValue
+        }
       }
-      console.log(changeLog)
+      // console.log(changeLog)
       return changeLog
     },
     cancel () {
@@ -145,12 +147,16 @@ export default {
     checkForOther (event) {
       if (event.target.value === 'other') {
         this.needOther = true
-        this.custFields.boat_home = ''
+        if (!this.isEditing) {
+          this.custFields.boat_home = ''
+        }
       } else {
         this.needOther = false
         this.otherValue = ''
         this.custFields.club = event.target.value
-        this.custFields.boat_home = event.target.value
+        if (!this.isEditing) {
+          this.custFields.boat_home = event.target.value
+        }
       }
     },
     async updateCustomer () {
@@ -170,7 +176,7 @@ export default {
 
       for (var key in this.custFields) {
         var value = this.custFields[key]
-        if (value === 'other') {
+        if (key === 'club' && this.needOther) {
           data[key] = this.otherValue
         } else {
           data[key] = value
