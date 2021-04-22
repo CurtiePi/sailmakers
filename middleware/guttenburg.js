@@ -16,6 +16,14 @@ const writeQuoteDoc = async (req, res, next) => {
         return [year, month, day].join('-');
     }
 
+    const formatQuoteType = function formatText(someString) {
+        var result = '';
+        if (someString) {
+            result = someString.toUpperCase();
+        }
+        return result;
+    }
+
     let quote = req.body.payload;
     const doc = await PDFDocument.create();
     let page = doc.addPage();
@@ -62,7 +70,7 @@ const writeQuoteDoc = async (req, res, next) => {
     const workEmailText = 'dave@uksailmakers-ne.com';
     const officePhoneText ='914.600.8800';
     const webSiteText = 'www.uksailmakers-ny.com';
-    const subHdrText = (quote.quote_type.length > 1) ? 'NEW CUSTOMER REQUEST' : `NEW ${quote.quote_type[0].toUpperCase()} REQUEST`;
+    const subHdrText = (quote.quote_type.length > 1) ? 'NEW CUSTOMER REQUEST' : `NEW ${formatQuoteType(quote.quote_type[0])} REQUEST`;
     const nameText = `Name: ${txtVals["name"]}`;
     const phoneText = `Phone#: ${txtVals["phone"]}`;
     const emailText = `Email: ${txtVals["email"]}`;
