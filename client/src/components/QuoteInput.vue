@@ -46,15 +46,15 @@
             <span>{{ custFields.club }}</span>
           </label>
           <label class="col">Boat Port:
-            <input type="text" name="boat_home" v-model="custFields.boat_home" />
+            <input type="text" name="boat_home" v-model="quoteFields.boat_home" />
           </label>
         </div>
         <div class="flex-grid-halfs">
           <label class="col">Boat Model:
-            <input type="text" name="boat_model" v-model="custFields.boat_model" />
+            <input type="text" name="boat_model" v-model="quoteFields.boat_model" />
           </label>
           <label class="col">Boat Name:
-            <input type="text" name="boat_name" v-model="custFields.boat_name" />
+            <input type="text" name="boat_name" v-model="quoteFields.boat_name" />
           </label>
         </div>
         <div class="flex-grid-halfs">
@@ -185,13 +185,13 @@ export default {
         phone: null,
         email: null,
         club: null,
-        boat_home: null,
-        boat_model: null,
-        boat_name: null,
         cnotes: null
       },
       quoteFields: {
         sail_request: null,
+        boat_model: null,
+        boat_name: null,
+        boat_home: null,
         battens: null,
         reefing_pts: null,
         num_logo: null,
@@ -247,15 +247,6 @@ export default {
         }
       }
 
-      const boatFields = ['boat_name', 'boat_home', 'boat_model']
-      for (var idx = 0; idx < boatFields.length; idx++) {
-        var field = boatFields[idx]
-        if (this.custFields[field] !== this.origQuoteFields[field]) {
-          formData[field] = this.custFields[field]
-        }
-      }
-
-      console.log(formData)
       return formData
     },
     cancel () {
@@ -295,13 +286,18 @@ export default {
     },
     async updateQuote () {
       let data = this.checkForChanges()
-      let payload = {
-        criteria: {'_id': this.quote._id},
-        update: data}
 
-      var response = await AuthenticationService.quoteUpdate(payload)
-      this.quote = response.data
-      this.clearInputs()
+      if (Object.keys(data).length) {
+        let payload = {
+          criteria: {'_id': this.quote._id},
+          update: data}
+
+        console.log(payload)
+        var response = await AuthenticationService.quoteUpdate(payload)
+        this.quote = response.data
+        this.clearInputs()
+      }
+
       this.$router.push({ name: 'QuoteDisplay', params: {'payload': this.quote} })
     },
     async createQuote () {
@@ -332,12 +328,12 @@ export default {
           this.quoteFields[key] = this.quote[key]
           this.origQuoteFields[key] = this.quote[key]
         }
+      } else {
         const boatFields = ['boat_name', 'boat_home', 'boat_model']
         for (var idx = 0; idx < boatFields.length; idx++) {
           var field = boatFields[idx]
-          this.origQuoteFields[field] = this.quote[field]
+          this.quoteFields[field] = this.customer[field]
         }
-      } else {
         this.quoteFields['pick_drop'] = this.customer.boat_home
         this.original_customer_notes = this.customer.cnotes
       }
