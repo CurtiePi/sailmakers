@@ -102,7 +102,7 @@ export default {
   methods: {
     createMessage: function () {
       if (this.selectees.length > 0) {
-        this.$router.push({ name: 'CreateMessage', params: { 'targets': this.selectees } })
+        this.$router.push({ name: 'CreateMessage', params: { 'targets': this.selectees, 'isBulk': true } })
       } else {
         this.errorMsg = 'Please select recipients before trying to email your message!'
       }

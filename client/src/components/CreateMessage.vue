@@ -44,7 +44,7 @@ import Editor from '@tinymce/tinymce-vue'
 
 export default {
   name: 'customerMessage',
-  props: ['targets', 'attachment', 'caller', 'cbdata'],
+  props: ['targets', 'attachment', 'caller', 'cbdata', 'isBulk'],
   components: {
     'editor': Editor
   },
@@ -59,7 +59,8 @@ export default {
       errorMsg: null,
       recipients: null,
       callback_data: null,
-      callerName: 'Customers'
+      callerName: 'Customers',
+      isBulkEmail: false
     }
   },
   methods: {
@@ -74,7 +75,12 @@ export default {
           payload['attachment'] = this.message.file_attachment
         }
 
-        let response = await AuthenticationService.sendEmail(payload)
+        let response = null
+        if (this.isBulkEmail) {
+          response = await AuthenticationService.sendEmail(payload)
+        } else {
+          response = await AuthenticationService.bulkEmail(payload)
+        }
         if (response.status === 200) {
           this.$router.replace({ name: 'Customers' })
         }
@@ -103,6 +109,9 @@ export default {
     }
     if (this.attachment) {
       this.message.file_attachment = this.attachment
+    }
+    if (this.isBulk) {
+      this.isBulkMail = true
     }
     if (this.caller) {
       this.callerName = this.caller

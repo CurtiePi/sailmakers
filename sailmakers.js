@@ -10,15 +10,12 @@ const cors              = require('cors');
 const bodyParser        = require('body-parser');
 const cookieParser      = require('cookie-parser');
 const mongoose          = require('mongoose');
+const amqpConnection    = require('amqplib');
 const config            = require('./config/config');
 const passport          = require('passport');
 global.Blob             = function() {};
-//require('./lib/strategies')(passport)
 
-/*
- * TODO DECIDE ON DATABASE, MONGO OR MYSQL
- * Set up the database connection
- */ 
+//require('./lib/strategies')(passport)
 
 let db_host = config.db.host;
 let db_port = config.db.port;
@@ -43,10 +40,22 @@ mongoose.connect(conn_str, {useNewUrlParser: true,
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 
+/* 
+ * Get a connection to RabbitMQ for the whole application
+ *
+
+let channel = null;
+amqpConnection.connect('amqp://localhost')
+              .then(conn => conn.createChannel())
+              .then(ch => {
+                  channel = ch;
+              });
+*/
+
 console.log(`Database: ${conn_str}`)
 
 var smapp = express();
-smapp.use(cors({credentials: true, origin: 'http://192.168.1.9:8080'}));
+smapp.use(cors({credentials: true, origin: 'http://192.168.1.2:8080'}));
 smapp.use(cookieParser());
 
 smapp.use(bodyParser.json());
@@ -65,12 +74,23 @@ salespersonRouter = require('./routes/apiSalesForce');
 quoteRouter = require('./routes/apiQuote');
 portRouter = require('./routes/apiPort');
 utilsRouter = require('./routes/apiUtils');
+emailRouter = require('./routes/apiEmail');
 
 smapp.use('/api/customer', customerRouter);
 smapp.use('/api/staff', salespersonRouter);
 smapp.use('/api/quote', quoteRouter);
 smapp.use('/api/port', portRouter);
 smapp.use('/api/utils', utilsRouter);
+smapp.use('/api/email', emailRouter);
+/*
+ * Include the RabbitMQ channel in requests to send an email
+ *
+
+smapp.use('/api/email',(req, res, next) => {
+    req.channel = channel;
+    next();
+    }, emailRouter);
+*/
 // **** UNCOMMENT NEXT LINE **** //
 // smapp.use('/', express.static(path.join(__dirname, './client/index.html')));
 

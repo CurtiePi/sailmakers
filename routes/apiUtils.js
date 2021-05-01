@@ -28,10 +28,6 @@ module.exports  = apiUtilsRouter;
  * Utility routes
  */
 
-apiUtilsRouter.post('/email', mailman.deliverEmail, (req, res, next) => {
-  res.status(200).json({'message': req.message});
-});
-
 apiUtilsRouter.post('/upload', upload.single('file'), uploadFilter.checkUpload, uploadFilter.renameUpload, routeController.uploadFile);
 
 apiUtilsRouter.get('/download/:name', (req, res, next) => {

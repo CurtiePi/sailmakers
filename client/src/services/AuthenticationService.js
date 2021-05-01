@@ -23,7 +23,10 @@ export default {
     return Api().insecure.get(`/api/quote/customer/${payload}`)
   },
   sendEmail (payload) {
-    return Api().insecure.post('/api/utils/email', payload)
+    return Api().insecure.post('/api/email', payload)
+  },
+  bulkEmail (payload) {
+    return Api().insecure.post('/api/email/bulk', payload)
   },
   printQuote (payload) {
     return Api().insecure.post('/api/quote/print', payload)
