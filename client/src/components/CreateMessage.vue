@@ -69,18 +69,17 @@ export default {
         var payload = {
           'subject': this.message.subject,
           'body': this.message.body,
-          'recipients': this.recipients.split(',')
+          'recipients': this.recipients.split(','),
+          'isBulk': this.isBulkEmail
         }
+
         if (this.message.file_attachment) {
           payload['attachment'] = this.message.file_attachment
         }
 
-        let response = null
-        if (this.isBulkEmail) {
-          response = await AuthenticationService.sendEmail(payload)
-        } else {
-          response = await AuthenticationService.bulkEmail(payload)
-        }
+        console.log(payload)
+
+        let response = await AuthenticationService.sendEmail(payload)
         if (response.status === 200) {
           this.$router.replace({ name: 'Customers' })
         }
@@ -111,7 +110,7 @@ export default {
       this.message.file_attachment = this.attachment
     }
     if (this.isBulk) {
-      this.isBulkMail = true
+      this.isBulkEmail = true
     }
     if (this.caller) {
       this.callerName = this.caller

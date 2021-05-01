@@ -15,10 +15,6 @@ apiEmailRouter.post('/', mailman.deliverEmail, (req, res, next) => {
   res.status(200).json({'message': req.message});
 });
 
-apiEmailRouter.post('/bulk', mailman.deliverBulkEmail, (req, res, next) => {
-  res.status(200).json({'message': req.message});
-});
-
 /*
 apiEmailRouter.post('/', (req, res, next) => {
   console.log(req.channel);

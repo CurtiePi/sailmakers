@@ -25,9 +25,6 @@ export default {
   sendEmail (payload) {
     return Api().insecure.post('/api/email', payload)
   },
-  bulkEmail (payload) {
-    return Api().insecure.post('/api/email/bulk', payload)
-  },
   printQuote (payload) {
     return Api().insecure.post('/api/quote/print', payload)
   },

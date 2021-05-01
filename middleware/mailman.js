@@ -53,9 +53,9 @@ const deliverEmail = (req, res, next) => {
 
     var messageBody = `${data.body}<p>${signature}</p>`;
     var recipients = data.recipients.join(', ');
+
     var mailOptions = {
         from: 'dave@uksailmakers-ne.com;',
-        to: recipients,
         subject: data.subject,
         html: messageBody,
         attachments: [{
@@ -65,39 +65,11 @@ const deliverEmail = (req, res, next) => {
         }]
     };
 
-    if (data.attachment) {
-        var filepath = `./public/files/pdf/${data.attachment}`;
-        mailOptions['attachments'].push({path: filepath});
+    if (data.isBulk) {
+        mailOptions['bcc'] = recipients;
+    } else {
+        mailOptions['to'] = recipients;
     }
-
-    transporter.sendMail(mailOptions, function (error, info) {
-           if (error){
-               console.log('Error: ' + error);
-               next(error);
-           }
-
-           console.log(`Message ${info.messageId} sent: ${info.response}`);
-           req.infoMessage = info.messageId
-           next();
-    })
-}
-
-const deliverBulkEmail = (req, res, next) => {
-    var data = req.body
-
-    var messageBody = `${data.body}<p>${signature}</p>`;
-    var recipients = data.recipients.join(', ');
-    var mailOptions = {
-        from: 'dave@uksailmakers-ne.com;',
-        bcc: recipients,
-        subject: data.subject,
-        html: messageBody,
-        attachments: [{
-            filename: 'sailmakers_logo.jpg',
-            path: './public/images/sailmakers_logo.jpg',
-            cid: 'dave@uk-sailmakers-ne.com'
-        }]
-    };
 
     if (data.attachment) {
         var filepath = `./public/files/pdf/${data.attachment}`;
@@ -118,6 +90,5 @@ const deliverBulkEmail = (req, res, next) => {
 
 module.exports = {
     deliverQuoteEmail,
-    deliverEmail,
-    deliverBulkEmail
+    deliverEmail
 }
