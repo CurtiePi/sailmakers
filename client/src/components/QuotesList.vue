@@ -102,9 +102,49 @@
       <br/>
     </div>
     <div class="row filter-div">
-      Pick Up Filter 
       <span>
-        <v-select class="pickdropselect" :options="pickDropOptions" v-model="pickDropSelection" @input="filterPickDrop"/>
+        <div v-if="col_view === 'PICK'">
+          Pick Up Filter 
+          <span>
+            <v-select class="pickdropselect" :options="pickDropOptions" v-model="pickDropSelection" @input="filterPickDrop"/>
+          </span>
+        </div>
+        <div v-if="col_view === 'CLUB'">
+          Customer Club Filter 
+          <span>
+            <v-select class="pickdropselect" :options="custClubOptions" v-model="custClubSelection" @input="filterCustClub"/>
+          </span>
+        </div>
+        <div v-if="col_view === 'PORT'">
+          Boat Port Filter 
+          <span>
+            <v-select class="pickdropselect" :options="boatPortOptions" v-model="boatPortSelection" @input="filterBoatPort"/>
+          </span>
+        </div>
+      </span>
+      <span class="col_view_controller">
+        Column Select:
+        <label>
+          <input type="radio" name="c_control" value="PICK" 
+            @change="updateColumnView()"
+            v-model="col_view">
+            Pick-Up 
+          </input>
+        </label>
+        <label>
+          <input type="radio" name="c_control" value="CLUB"
+            @change="updateColumnView()"
+            v-model="col_view">
+            Customer Club
+          </input>
+        </label>
+        <label>
+          <input type="radio" name="c_control" value="PORT" 
+            @change="updateColumnView()"
+            v-model="col_view">
+            Boat Port
+          </input>
+        </label>
       </span>
     </div>
     <div>
@@ -115,8 +155,10 @@
           <th>Request Type</th>
           <th>Phone</th>
           <th>Status</th>
-          <th>Pick Up</th>
-          <th>Due Date</th>
+          <th v-if="col_view === 'PICK'">Pick Up</th>
+          <th v-else-if="col_view === 'CLUB'">Customer Club</th>
+          <th v-else-if="col_view === 'PORT'">Boat Port</th>
+          <th>Created Date</th>
           <th></th>
         </tr>
         <tr v-for= "quote in quotes_display"
@@ -130,8 +172,10 @@
           <td>{{ quote.quote_type.join(', ') }}</td>
           <td class='phone'>{{ quote.customer.phone }}</td>
           <td>{{ quote.status }}</td>
-          <td>{{ quote.pick_drop }}</td>
-          <td>{{ formatDate(quote.due_date) }}</td>
+          <td v-if="col_view === 'PICK'">{{ quote.pick_drop }}</td>
+          <td v-else-if="col_view === 'CLUB'">{{ quote.customer.club }}</td>
+          <td v-else-if="col_view === 'PORT'">{{ quote.boat_home }}</td>
+          <td>{{ formatDate(quote.createdAt) }}</td>
           <td>
             <button @click="viewQuote(quote)">View</button>
           </td>
@@ -152,8 +196,13 @@ export default {
       quotes_display: [],
       quote_type: [],
       pickDropOptions: [],
+      boatPortOptions: [],
+      custClubOptions: [],
       status_view: 'active',
       pickDropSelection: null,
+      custClubSelection: null,
+      boatPortSelection: null,
+      col_view: 'PICK',
       f_registry: {
         activeFilter: {
           filter: [],
@@ -164,6 +213,14 @@ export default {
           status: false
         },
         pickDropFilter: {
+          filter: [],
+          status: false
+        },
+        boatPortFilter: {
+          filter: [],
+          status: false
+        },
+        custClubFilter: {
           filter: [],
           status: false
         },
@@ -211,8 +268,16 @@ export default {
         if (this.f_registry.statusFilter.status_list.includes(quote.status) && !(this.pickDropOptions.includes(quote.pick_drop) || quote.pick_drop === '')) {
           this.pickDropOptions.push(quote.pick_drop)
         }
+        if (this.f_registry.statusFilter.status_list.includes(quote.status) && !(this.custClubOptions.includes(quote.customer.club) || quote.customer.club === '')) {
+          this.custClubOptions.push(quote.customer.club)
+        }
+        if (this.f_registry.statusFilter.status_list.includes(quote.status) && !(this.boatPortOptions.includes(quote.boat_home) || quote.boat_home === '')) {
+          this.boatPortOptions.push(quote.boat_home)
+        }
       }
       this.pickDropOptions.sort((a, b) => { return (a < b) ? -1 : (a < b) ? 1 : 0 })
+      this.custClubOptions.sort((a, b) => { return (a < b) ? -1 : (a < b) ? 1 : 0 })
+      this.boatPortOptions.sort((a, b) => { return (a < b) ? -1 : (a < b) ? 1 : 0 })
     },
     updateStatusView () {
       switch (this.status_view) {
@@ -225,12 +290,56 @@ export default {
       }
       this.filterQuoteStatus()
     },
+    updateColumnView () {
+      switch (this.col_view) {
+        case 'PICK': this.f_registry.custClubFilter.filter = []
+          this.f_registry.boatPortFilter.filter = []
+          this.f_registry.custClubFilter.status = false
+          this.f_registry.boatPortFilter.status = false
+          this.boatPortSelection = null
+          this.custClubSelection = null
+          break
+        case 'CLUB': this.f_registry.pickDropFilter.filter = []
+          this.f_registry.boatPortFilter.filter = []
+          this.f_registry.pickDropFilter.status = false
+          this.f_registry.boatPortFilter.status = false
+          this.boatPortSelection = null
+          this.pickDropSelection = null
+          break
+        case 'PORT': this.f_registry.custClubFilter.filter = []
+          this.f_registry.pickDropFilter.filter = []
+          this.f_registry.custClubFilter.status = false
+          this.f_registry.pickDropFilter.status = false
+          this.pickDropSelection = null
+          this.custClubSelection = null
+          break
+      }
+      this.applyFilters()
+    },
     filterPickDrop () {
       if (this.pickDropSelection !== null) {
         this.f_registry.pickDropFilter.filter = this.quotes.filter((quote) => { return quote.pick_drop === this.pickDropSelection })
         this.f_registry.pickDropFilter.status = true
       } else {
         this.f_registry.pickDropFilter.status = false
+      }
+      this.applyFilters()
+    },
+    filterCustClub () {
+      if (this.custClubSelection !== null) {
+        this.f_registry.custClubFilter.filter = this.quotes.filter((quote) => { return quote.customer.club === this.custClubSelection })
+        this.f_registry.custClubFilter.status = true
+      } else {
+        this.f_registry.custClubFilter.status = false
+      }
+      this.applyFilters()
+    },
+    filterBoatPort () {
+      if (this.boatPortSelection !== null) {
+        this.f_registry.boatPortFilter.filter = this.quotes.filter((quote) => { return quote.boat_home === this.boatPortSelection })
+        this.f_registry.boatPortFilter.status = true
+      } else {
+        this.f_registry.boatPortFilter.status = false
       }
       this.applyFilters()
     },
@@ -328,11 +437,11 @@ label {
   margin-left: 5px;
   margin-right: 3px;
 }
-
-.row span {
-  margin: 0 8px;
-}
-
+/*
+#.row span {
+#  margin: 0 8px;
+#}
+*/
 .phone {
   width: 12%;
 }
@@ -370,6 +479,12 @@ label {
 .stat_controller {
   margin-top: 3px;
   margin-left: 30px;
+  padding: 2px;
+}
+
+.col_view_controller {
+  margin-top: 30px;
+  margin-left: 45px;
   padding: 2px;
 }
 
