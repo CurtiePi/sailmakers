@@ -139,6 +139,22 @@ module.exports = {
             console.log('Received an error creating quote');
         }
     },
+    deleteQuote: async (quote) => {
+        var q_id = mongoose.Types.ObjectId(quote._id);
+        var c_id = mongoose.Types.ObjectId(quote.customer._id);
+        var s_id = mongoose.Types.ObjectId(quote.salesperson._id);
+
+        try {
+            // Need to remove quote from the customer and salesperson
+            await Customer.findOneAndUpdate({_id: c_id}, {$pull: {quotes: q_id}});
+            await Salesperson.findOneAndUpdate({_id: s_id}, {$pull: {quotes: q_id}});
+            
+            await Quote.deleteOne({_id: q_id});
+        }
+        catch(err) {
+            console.log('Received an error getting quote');
+        }
+    },
     /**
      * Update specific quote
      *

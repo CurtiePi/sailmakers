@@ -101,6 +101,7 @@
             type="file"
             ref="file"
             @change="onSelect" />
+        <button @click="deleteQuote()">Delete</button>
         <button @click="goBack()">Back</button>
       </p>
     </div>     
@@ -154,6 +155,17 @@ export default {
       let response = await AuthenticationService.printQuote(payload)
       if (response.status === 200) {
         this.quote = response.data
+      }
+    },
+    async deleteQuote () {
+      let payload = {
+        'quote': this.quote
+      }
+      let response = await AuthenticationService.deleteQuote(payload)
+      if (response.status === 200) {
+        this.goBack()
+      } else {
+        console.log(`Response: ${response.message}`)
       }
     },
     emailDocument (filename) {

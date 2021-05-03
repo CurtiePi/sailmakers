@@ -25,6 +25,7 @@ apiQuoteRouter.get('/customer/:cid', routeController.getQuotesByCustomer);
 
 apiQuoteRouter.post('/create', routeController.createQuote);
 apiQuoteRouter.post('/update', routeController.updateQuote);
+apiQuoteRouter.post('/delete', routeController.deleteQuote);
 apiQuoteRouter.post('/print', printpress.writeQuoteDoc, routeController.addQuoteDoc);
 apiQuoteRouter.post('/modify', lycanthrope.modifyQuote, (req, res, next) => {
     var totalPrice = req.totalprice;

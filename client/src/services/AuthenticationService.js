@@ -28,6 +28,9 @@ export default {
   printQuote (payload) {
     return Api().insecure.post('/api/quote/print', payload)
   },
+  deleteQuote (payload) {
+    return Api().insecure.post('/api/quote/delete', payload)
+  },
   salespersonByName (nameParam) {
     let url = `/api/staff/name/${nameParam}`
     console.log(url)

@@ -114,6 +114,17 @@ module.exports = {
             });
         }
     },
+    deleteQuote: async (req, res, next) => {
+        try{
+            await dataAccess.deleteQuote(req.body.quote);
+            res.status(200).json({messsage: 'ok'});
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: `Error deleting quote ${err}`
+            });
+        }
+    },
     addQuoteDoc: async (req, res, next) => {
         var filename = req.attachment;
         var quote = req.body.payload;
