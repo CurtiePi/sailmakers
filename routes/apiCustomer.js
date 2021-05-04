@@ -17,4 +17,5 @@ apiCustomerRouter.get('/:id', routeController.getCustomerById);
 
 apiCustomerRouter.post('/update', routeController.updateCustomer);
 apiCustomerRouter.post('/create', routeController.createCustomer);
+apiCustomerRouter.post('/delete', routeController.deleteCustomer);
 

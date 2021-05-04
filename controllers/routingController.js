@@ -49,6 +49,17 @@ module.exports = {
             });
         }
     },
+    deleteCustomer: async (req, res, next) => {
+        try{
+            await dataAccess.deleteCustomer(req.body.customer);
+            res.status(200).json({messsage: 'ok'});
+        }
+        catch(err) {
+            return res.status(500).json({
+                message: `Error deleting customer ${err}`
+            });
+        }
+    },
     /*
      * Quotes
      *

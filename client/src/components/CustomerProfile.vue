@@ -37,6 +37,7 @@
         <button @click="timeToEdit()">Edit</button>
         <button @click="createQuote()">Create Request</button>
         <button @click="seeQuotes()">Requests</button>
+        <button @click="deleteCustomer()">Delete</button>
         <button @click="goBack()">Back</button>
       </p>
     </div>     
@@ -103,6 +104,35 @@ export default {
     },
     seeQuotes () {
       this.$router.replace({ name: 'CustomerQuotes', params: { 'payload': this.customer_data } })
+    },
+    cancelCallback () {
+      this.$dialog.close()
+    },
+    async deleteCustomer () {
+      let message = {
+        title: 'Delete Customer',
+        body: `Deleting this customer will also delete their ${this.customer_data.quotes.length} request(s)!\nDo you really want to delete this customer?`
+      }
+      let customer = this.customer_data
+      let leavePage = this.goBack
+
+      this.$dialog
+        .confirm(message)
+        .then(async function (dialog) {
+          let payload = {
+            'customer': customer
+          }
+          let response = await AuthenticationService.customerDelete(payload)
+
+          if (response.status === 200) {
+            leavePage()
+          } else {
+            console.log(response.message)
+          }
+        })
+        .catch(function () {
+          console.log('Clicked on cancel')
+        })
     },
     goBack () {
       if (['Quotes', 'Customers', 'StaffList'].includes(this.callerName)) {

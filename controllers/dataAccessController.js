@@ -74,6 +74,37 @@ module.exports = {
             console.log('Received an error updating customer');
         }
     },
+    /**
+     * Delete Customer
+     *
+     */
+    deleteCustomer: async (customer) => {
+        var c_id = mongoose.Types.ObjectId(customer._id);
+        var c_quotes = customer.quotes;
+        var quote_ids = [];
+        var sales_ids = [];
+        var sales_controller = [];
+        for (var idx=0; idx < c_quotes.length; idx++) {
+            var quote = c_quotes[idx];
+            quote_ids.push(mongoose.Types.ObjectId(quote._id));
+            if (! sales_controller.includes(quote.salesperson._id)) {
+                sales_controller.push(quote.salesperson._id);
+                sales_ids.push(mongoose.Types.ObjectId(quote.salesperson._id));
+            }
+        }
+
+        try {
+            // Need to remove quote from the and salesperson
+            if (quote_ids.length > 0) {
+              await Quote.deleteMany({_id: {$in: quote_ids}});
+              await Salesperson.updateMany({_id: {$in: sales_ids}}, {$pull: {quotes: {$in:quote_ids}}});
+            }
+            await Customer.deleteOne({_id: c_id});
+        }
+        catch(err) {
+            console.log('Received an error deleting customer');
+        }
+    },
 
     listQuotes: async () => {
         try {
@@ -98,7 +129,6 @@ module.exports = {
         }
     },
     getCustomerQuotes: async (cid) => {
-        console.log('getting customer quotes');
         try {
             var customer_id = mongoose.Types.ObjectId(cid);
             let quotes = await Quote.find({customer: customer_id})
@@ -152,7 +182,7 @@ module.exports = {
             await Quote.deleteOne({_id: q_id});
         }
         catch(err) {
-            console.log('Received an error getting quote');
+            console.log('Received an error deleting quote');
         }
     },
     /**
@@ -177,7 +207,6 @@ module.exports = {
     addQuoteDoc: async (quoteId, filePath ) => {
         const criteria = { '_id': mongoose.Types.ObjectId(quoteId) };
 
-        console.log('Adding the quote');
         try {
             let quote = await Quote.findByIdAndUpdate(criteria, { $push: { doc_path: filePath} }, {new: true});
             await Quote.populate(quote, { path: "customer" });

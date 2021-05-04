@@ -10,6 +10,9 @@ export default {
   customerUpdate (payload) {
     return Api().insecure.post('/api/customer/update', payload)
   },
+  customerDelete (payload) {
+    return Api().insecure.post('/api/customer/delete', payload)
+  },
   quoteList () {
     return Api().insecure.get('/api/quote')
   },
