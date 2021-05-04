@@ -158,15 +158,40 @@ export default {
       }
     },
     async deleteQuote () {
-      let payload = {
-        'quote': this.quote
+      let quote = this.quote
+      let leavePage = this.goBack
+
+      let message = {
+        title: 'Delete Request',
+        body: `Deleting request will also delete all associated PDFs!<p><strong>This action cannot be undone!Are you sure?</strong></p>`
       }
-      let response = await AuthenticationService.deleteQuote(payload)
-      if (response.status === 200) {
-        this.goBack()
-      } else {
-        console.log(`Response: ${response.message}`)
+
+      let options = {
+        html: true,
+        okText: 'I\'m Sure! Delete!',
+        cancelText: 'Cancel',
+        animation: 'fade',
+        type: 'hard',
+        verification: 'delete'
       }
+
+      this.$dialog
+        .confirm(message, options)
+        .then(async function (dialog) {
+          let payload = {
+            'quote': quote
+          }
+          let response = await AuthenticationService.deleteQuote(payload)
+
+          if (response.status === 200) {
+            leavePage()
+          } else {
+            console.log(`Response: ${response.message}`)
+          }
+        })
+        .catch(function () {
+          console.log('Clicked on cancel')
+        })
     },
     emailDocument (filename) {
       let regex = new RegExp(`${this.customer.lname}_${this.customer.fname}.+\\d{4}-\\d{1,2}-\\d{1,2}.pdf`)

@@ -296,9 +296,20 @@ export default {
         var response = await AuthenticationService.quoteUpdate(payload)
         this.quote = response.data
         this.clearInputs()
-      }
+        this.$router.push({ name: 'QuoteDisplay', params: {'payload': this.quote} })
+      } else {
+        var message = 'No values have been changed!\nChange a value before updating or Cancel'
+        let options = {
+          okText: 'Understood',
+          animation: 'fade'
+        }
 
-      this.$router.push({ name: 'QuoteDisplay', params: {'payload': this.quote} })
+        this.$dialog
+          .alert(message, options)
+          .then(function (dialog) {
+            console.log('Closed!')
+          })
+      }
     },
     async createQuote () {
       let payload = {}

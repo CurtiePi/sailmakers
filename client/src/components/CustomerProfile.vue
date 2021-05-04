@@ -105,19 +105,26 @@ export default {
     seeQuotes () {
       this.$router.replace({ name: 'CustomerQuotes', params: { 'payload': this.customer_data } })
     },
-    cancelCallback () {
-      this.$dialog.close()
-    },
     async deleteCustomer () {
       let message = {
         title: 'Delete Customer',
-        body: `Deleting this customer will also delete their ${this.customer_data.quotes.length} request(s)!\nDo you really want to delete this customer?`
+        body: `Deleting this customer will also delete their ${this.customer_data.quotes.length} request(s)!<p><strong>This action cannot be undone! Are you sure?</strong></p>`
       }
+
+      let options = {
+        html: true,
+        okText: 'I\'m Sure! Delete!',
+        cancelText: 'Cancel',
+        animation: 'fade',
+        type: 'hard',
+        verification: 'delete'
+      }
+
       let customer = this.customer_data
       let leavePage = this.goBack
 
       this.$dialog
-        .confirm(message)
+        .confirm(message, options)
         .then(async function (dialog) {
           let payload = {
             'customer': customer
