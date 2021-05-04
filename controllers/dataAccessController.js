@@ -84,9 +84,11 @@ module.exports = {
         var quote_ids = [];
         var sales_ids = [];
         var sales_controller = [];
+        var pdf_list = [];
         for (var idx=0; idx < c_quotes.length; idx++) {
             var quote = c_quotes[idx];
             quote_ids.push(mongoose.Types.ObjectId(quote._id));
+            pdf_list.push(...quote.doc_path);
             if (! sales_controller.includes(quote.salesperson._id)) {
                 sales_controller.push(quote.salesperson._id);
                 sales_ids.push(mongoose.Types.ObjectId(quote.salesperson._id));
@@ -100,6 +102,9 @@ module.exports = {
               await Salesperson.updateMany({_id: {$in: sales_ids}}, {$pull: {quotes: {$in:quote_ids}}});
             }
             await Customer.deleteOne({_id: c_id});
+
+
+            return pdf_list;
         }
         catch(err) {
             console.log('Received an error deleting customer');
@@ -175,11 +180,14 @@ module.exports = {
         var s_id = mongoose.Types.ObjectId(quote.salesperson._id);
 
         try {
+            var pdf_list = quote.doc_path;
+
             // Need to remove quote from the customer and salesperson
             await Customer.findOneAndUpdate({_id: c_id}, {$pull: {quotes: q_id}});
             await Salesperson.findOneAndUpdate({_id: s_id}, {$pull: {quotes: q_id}});
             
             await Quote.deleteOne({_id: q_id});
+            return pdf_list
         }
         catch(err) {
             console.log('Received an error deleting quote');

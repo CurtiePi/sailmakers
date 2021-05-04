@@ -51,8 +51,9 @@ module.exports = {
     },
     deleteCustomer: async (req, res, next) => {
         try{
-            await dataAccess.deleteCustomer(req.body.customer);
-            res.status(200).json({messsage: 'ok'});
+            var pdf_list = await dataAccess.deleteCustomer(req.body.customer);
+            req.pdf_list = pdf_list;
+            next();
         }
         catch(err) {
             return res.status(500).json({
@@ -127,8 +128,9 @@ module.exports = {
     },
     deleteQuote: async (req, res, next) => {
         try{
-            await dataAccess.deleteQuote(req.body.quote);
-            res.status(200).json({messsage: 'ok'});
+            var pdf_list = await dataAccess.deleteQuote(req.body.quote);
+            req.pdf_list = pdf_list;
+            next();
         }
         catch(err) {
             return res.status(500).json({
