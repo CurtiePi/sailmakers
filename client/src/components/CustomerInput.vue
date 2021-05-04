@@ -110,11 +110,16 @@ export default {
     checkForChanges () {
       var changeLog = {}
       for (var key in this.custFields) {
-        if (this.origCustFields[key] !== this.custFields[key]) {
-          changeLog[key] = this.custFields[key]
-        }
-        if (key === 'club' && this.needOther && this.otherValue !== this.origCustFields[key]) {
-          changeLog[key] = this.otherValue
+        if (key === 'club') {
+          if (this.needOther && this.otherValue !== this.origCustFields[key]) {
+            changeLog[key] = this.otherValue
+          } else if (!this.needOther) {
+            changeLog[key] = this.custFields[key]
+          }
+        } else {
+          if (this.origCustFields[key] !== this.custFields[key]) {
+            changeLog[key] = this.custFields[key]
+          }
         }
       }
       // console.log(changeLog)
@@ -161,15 +166,31 @@ export default {
     },
     async updateCustomer () {
       let data = this.checkForChanges()
-      let payload = {
-        criteria: {'_id': this.customer._id},
-        update: data}
 
-      console.log('Updating customer')
-      var response = await AuthenticationService.customerUpdate(payload)
-      this.customer = response.data
-      this.clearInputs()
-      this.$router.push({ name: 'CustomerProfile', params: {'payload': this.customer} })
+      console.log(Object.keys(data).length)
+      console.log(data)
+      if (Object.keys(data).length) {
+        let payload = {
+          criteria: {'_id': this.customer._id},
+          update: data}
+
+        var response = await AuthenticationService.customerUpdate(payload)
+        this.customer = response.data
+        this.clearInputs()
+        this.$router.push({ name: 'CustomerProfile', params: {'payload': this.customer} })
+      } else {
+        var message = 'No values have been changed!\nChange a value before updating or Cancel'
+        let options = {
+          okText: 'Understood',
+          animation: 'fade'
+        }
+
+        this.$dialog
+          .alert(message, options)
+          .then(function (dialog) {
+            console.log('Closed!')
+          })
+      }
     },
     async createCustomer () {
       let data = {}
@@ -207,7 +228,7 @@ export default {
       if (this.isEditing) {
         for (var key in this.custFields) {
           if (key === 'club') {
-            var scan = (par) => par.name.indexOf(this.customer[key]) !== -1
+            var scan = (par) => par.name === this.customer[key]
             if (!ports.some(scan)) {
               this.custFields[key] = 'other'
               this.origCustFields[key] = this.customer[key]

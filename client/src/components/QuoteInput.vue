@@ -292,7 +292,6 @@ export default {
           criteria: {'_id': this.quote._id},
           update: data}
 
-        console.log(payload)
         var response = await AuthenticationService.quoteUpdate(payload)
         this.quote = response.data
         this.clearInputs()
