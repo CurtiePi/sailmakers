@@ -6,7 +6,7 @@
       </div>
       <div class="flex-grid">
         <span class="col small-print">Status: {{ capitalizeFirst(quote.status) }}</span>
-        <span class="col small-print">Due Date: {{ formatDate(quote.due_date) }}</span>
+        <span class="col small-print">Create Date: {{ formatDate(quote.createdAt) }}</span>
       </div>
       <hr></hr>
       <div class="flex-grid">
