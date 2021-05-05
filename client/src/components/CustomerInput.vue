@@ -112,8 +112,10 @@ export default {
       for (var key in this.custFields) {
         if (key === 'club') {
           if (this.needOther && this.otherValue !== this.origCustFields[key]) {
+            console.log('Key is Club: Using the other value which is different from original value')
             changeLog[key] = this.otherValue
           } else if (!this.needOther && this.custFields[key] !== this.origCustFields[key]) {
+            console.log('Key is Club: Using the customer field value which is different from original value')
             changeLog[key] = this.custFields[key]
           }
         } else {
