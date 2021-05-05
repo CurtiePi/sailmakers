@@ -10,7 +10,6 @@ const cors              = require('cors');
 const bodyParser        = require('body-parser');
 const cookieParser      = require('cookie-parser');
 const mongoose          = require('mongoose');
-const amqpConnection    = require('amqplib');
 const config            = require('./config/config');
 const passport          = require('passport');
 global.Blob             = function() {};
