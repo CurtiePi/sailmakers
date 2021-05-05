@@ -110,13 +110,10 @@ export default {
     checkForChanges () {
       var changeLog = {}
       for (var key in this.custFields) {
-        console.log(`key: ${key} | needOther: ${this.needOther} | CustFieldValue: ${this.custFields[key]} | Original Value: ${this.origCustFields[key]} | otherValue: ${this.otherValue}`)
         if (key === 'club') {
           if (this.needOther && this.otherValue !== this.origCustFields[key]) {
-            console.log('Key is Club: Using the other value which is different from original value')
             changeLog[key] = this.otherValue
           } else if (!this.needOther && this.custFields[key] !== this.origCustFields[key]) {
-            console.log('Key is Club: Using the customer field value which is different from original value')
             changeLog[key] = this.custFields[key]
           }
         } else {
