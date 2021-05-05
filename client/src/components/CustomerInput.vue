@@ -113,7 +113,7 @@ export default {
         if (key === 'club') {
           if (this.needOther && this.otherValue !== this.origCustFields[key]) {
             changeLog[key] = this.otherValue
-          } else if (!this.needOther) {
+          } else if (!this.needOther && this.custFields[key] !== this.origCustFields[key]) {
             changeLog[key] = this.custFields[key]
           }
         } else {
@@ -167,8 +167,6 @@ export default {
     async updateCustomer () {
       let data = this.checkForChanges()
 
-      console.log(Object.keys(data).length)
-      console.log(data)
       if (Object.keys(data).length) {
         let payload = {
           criteria: {'_id': this.customer._id},
@@ -188,7 +186,7 @@ export default {
         this.$dialog
           .alert(message, options)
           .then(function (dialog) {
-            console.log('Closed!')
+            console.log('Cancelling!')
           })
       }
     },
