@@ -34,13 +34,22 @@
                 <option value='other'>Other</option>
               </select>
             </label>
-            <label v-if="needOther">Specify Other
-              <input type="text" size="20" v-model="otherValue" />
+            <label v-if="needOtherClub">Specify Club 
+              <input type="text" size="20" v-model="otherClubValue" />
             </label>
             </div>
             <div class="col">
               <label>Boat Port
-                <input type="text" size="20" name="boat_home" v-model="custFields.boat_home" />
+                <select name="port" @change="checkForOther($event)" v-model="custFields.boat_home">
+                  <option v-for="option in selectOptions">
+                    {{ option.name }}
+                  </option>
+                  <option value='other'>Other</option>
+                </select>
+                <!-- input type="text" size="20" name="boat_home" v-model="custFields.boat_home" / -->
+              </label>
+              <label v-if="needOtherPort">Specify Port
+                <input type="text" size="20" v-model="otherPortValue" />
               </label>
             </div>
           </div>
@@ -81,8 +90,10 @@ export default {
       isEditing: false,
       form: {},
       singleOp: false,
-      needOther: false,
-      otherValue: null,
+      needOtherClub: false,
+      otherClubValue: null,
+      needOtherPort: false,
+      otherPortValue: null,
       origCustFields: {},
       custFields: {
         fname: null,
@@ -111,9 +122,15 @@ export default {
       var changeLog = {}
       for (var key in this.custFields) {
         if (key === 'club') {
-          if (this.needOther && this.otherValue !== this.origCustFields[key]) {
-            changeLog[key] = this.otherValue
-          } else if (!this.needOther && this.custFields[key] !== this.origCustFields[key]) {
+          if (this.needOtherClub && this.otherClubValue !== this.origCustFields[key]) {
+            changeLog[key] = this.otherClubValue
+          } else if (!this.needOtherClub && this.custFields[key] !== this.origCustFields[key]) {
+            changeLog[key] = this.custFields[key]
+          }
+        } else if (key === 'boat_home') {
+          if (this.needOtherPort && this.otherPortValue !== this.origCustFields[key]) {
+            changeLog[key] = this.otherPortValue
+          } else if (!this.needOtherPort && this.custFields[key] !== this.origCustFields[key]) {
             changeLog[key] = this.custFields[key]
           }
         } else {
@@ -139,7 +156,7 @@ export default {
         var inputValue = this.custFields[key]
         if (inputValue) {
           if (inputValue === 'other') {
-            data[key] = this.otherValue
+            data[key] = (key === 'club') ? this.otherClubValue : this.otherPortValue
           } else {
             data[key] = inputValue
           }
@@ -151,15 +168,19 @@ export default {
     },
     checkForOther (event) {
       if (event.target.value === 'other') {
-        this.needOther = true
-        if (!this.isEditing) {
-          this.custFields.boat_home = ''
+        if (event.target.name === 'club') {
+          this.needOtherClub = true
+        } else if (event.target.name === 'port') {
+          this.needOtherPort = true
         }
       } else {
-        this.needOther = false
-        this.otherValue = ''
-        this.custFields.club = event.target.value
-        if (!this.isEditing) {
+        if (event.target.name === 'club') {
+          this.needOtherClub = false
+          this.otherClubValue = ''
+          this.custFields.club = event.target.value
+        } else if (event.target.name === 'port') {
+          this.needOtherPort = false
+          this.otherPortValue = ''
           this.custFields.boat_home = event.target.value
         }
       }
@@ -195,8 +216,10 @@ export default {
 
       for (var key in this.custFields) {
         var value = this.custFields[key]
-        if (key === 'club' && this.needOther) {
-          data[key] = this.otherValue
+        if (key === 'club' && this.needOtherClub) {
+          data[key] = this.otherClubValue
+        } else if (key === 'boat_home' && this.needOtherPort) {
+          data[key] = this.otherPortValue
         } else {
           data[key] = value
         }
@@ -225,13 +248,19 @@ export default {
 
       if (this.isEditing) {
         for (var key in this.custFields) {
-          if (key === 'club') {
+          if (['club', 'boat_home'].includes(key)) {
             var scan = (par) => par.name === this.customer[key]
+
             if (!ports.some(scan)) {
               this.custFields[key] = 'other'
               this.origCustFields[key] = this.customer[key]
-              this.otherValue = this.customer[key]
-              this.needOther = true
+              if (key === 'club') {
+                this.otherClubValue = this.customer[key]
+                this.needOtherClub = true
+              } else if (key === 'boat_home') {
+                this.otherPortValue = this.customer[key]
+                this.needOtherPort = true
+              }
               continue
             }
           }
@@ -243,8 +272,8 @@ export default {
     clearInputs () {
       for (var key in this.custFields) {
         this.custFields[key] = null
-        if (this.otherValue) {
-          this.otherValue = ''
+        if (this.otherClubValue) {
+          this.otherClubValue = ''
         }
       }
     }
