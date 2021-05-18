@@ -122,19 +122,19 @@ export default {
       for (var key in this.custFields) {
         if (key === 'club') {
           if (this.needOtherClub && this.otherClubValue !== this.origCustFields[key]) {
-            changeLog[key] = this.otherClubValue
+            changeLog[key] = this.otherClubValue.trim()
           } else if (!this.needOtherClub && this.custFields[key] !== this.origCustFields[key]) {
-            changeLog[key] = this.custFields[key]
+            changeLog[key] = this.custFields[key].trim()
           }
         } else if (key === 'boat_home') {
           if (this.needOtherPort && this.otherPortValue !== this.origCustFields[key]) {
-            changeLog[key] = this.otherPortValue
+            changeLog[key] = this.otherPortValue.trim()
           } else if (!this.needOtherPort && this.custFields[key] !== this.origCustFields[key]) {
-            changeLog[key] = this.custFields[key]
+            changeLog[key] = this.custFields[key].trim()
           }
         } else {
           if (this.origCustFields[key] !== this.custFields[key]) {
-            changeLog[key] = this.custFields[key]
+            changeLog[key] = (this.custFields[key].constructor === String) ? this.custFields[key].trim() : this.custFields[key]
           }
         }
       }
@@ -216,11 +216,11 @@ export default {
       for (var key in this.custFields) {
         var value = this.custFields[key]
         if (key === 'club' && this.needOtherClub) {
-          data[key] = this.otherClubValue
+          data[key] = this.otherClubValue.trim()
         } else if (key === 'boat_home' && this.needOtherPort) {
-          data[key] = this.otherPortValue
+          data[key] = this.otherPortValue.trim()
         } else {
-          data[key] = value
+          data[key] = (value.constructor === String) ? value.trim() : value
         }
       }
 

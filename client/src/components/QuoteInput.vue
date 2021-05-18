@@ -242,7 +242,7 @@ export default {
       var formData = {}
       for (var key in this.quoteFields) {
         if (this.quoteFields[key] !== this.origQuoteFields[key]) {
-          var value = this.quoteFields[key]
+          var value = (this.quoteFields[key].constructor === String) ? this.quoteFields[key].trim() : this.quoteFields[key]
           formData[key] = (['amount_paid', 'quote_price'].includes(key)) ? parseFloat(value) : value
         }
       }
@@ -261,14 +261,14 @@ export default {
 
       for (var key in this.quoteFields) {
         if (this.hasValue(this.quoteFields[key])) {
-          data[key] = this.quoteFields[key]
+          data[key] = (this.quoteFields[key].constructor === String) ? this.quoteFields[key].trim() : this.quoteFields[key]
         }
       }
 
       const boatFields = ['boat_name', 'boat_home', 'boat_model']
       for (key in this.custFields) {
         if (this.hasValue(this.custFields[key]) && boatFields.includes(key)) {
-          data[key] = this.custFields[key]
+          data[key] = this.custFields[key].trim()
         }
       }
 
@@ -278,7 +278,7 @@ export default {
 
       let payload = {'quoteObj': data}
       if (this.original_customer_notes !== this.custFields.cnotes) {
-        payload['customerObj'] = { 'criteria': { '_id': this.customer._id }, 'data': { 'cnotes': this.custFields.cnotes } }
+        payload['customerObj'] = { 'criteria': { '_id': this.customer._id }, 'data': { 'cnotes': this.custFields.cnotes.trim() } }
       }
 
       console.log(payload)
