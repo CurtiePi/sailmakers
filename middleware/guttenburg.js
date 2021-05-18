@@ -24,6 +24,36 @@ const writeQuoteDoc = async (req, res, next) => {
         return result;
     }
 
+    const parseMultiLine = function formatLongText(longString) {
+
+        var lines = [];
+        if (longString) {
+            var maxLength = 55;
+
+            var startIdx = 0;
+
+            for (var idx=0; idx < longString.length; idx++){
+                if (55 < idx - startIdx) {
+                    if (longString[idx] == ' ') {
+                        lines.push(longString.slice(startIdx, idx));
+                        startIdx = idx+1;
+                    } else if (longString[idx] != ' ') {
+                        var blankIdx = longString.lastIndexOf(' ', idx);
+                        lines.push(longString.slice(startIdx, blankIdx));
+                        idx = blankIdx;
+                        startIdx = blankIdx + 1;
+                    }
+                } else if (longString[idx] === '\n') {
+                    lines.push(longString.slice(startIdx, idx));
+                    startIdx = idx+1;
+                } else if (idx == longString.length - 1){
+                    lines.push(longString.slice(startIdx));
+                }
+            }
+        }
+        return lines.join('\n');
+    }
+
     let quote = req.body.payload;
     const doc = await PDFDocument.create();
     let page = doc.addPage();
@@ -47,7 +77,7 @@ const writeQuoteDoc = async (req, res, next) => {
       'address': quote.customer.address,
       'boatType': quote.boat_model,
       'boatName': quote.boat_name,
-      'sailReq': quote.sail_request,
+      'sailReq': parseMultiLine(quote.sail_request),
       'battens': quote.battens,
       'reefPt': quote.reefing_pts,
       'numLogo': quote.num_logo,
@@ -55,8 +85,8 @@ const writeQuoteDoc = async (req, res, next) => {
       'uvColor': quote.uv_color,
       'homePort': quote.home_port,
       'pickUp': quote.delivery_type,
-      'sailType': quote.sailing_type,
-      'notes': quote.notes
+      'sailType': parseMultiLine(quote.sailing_type),
+      'notes': parseMultiLine(quote.notes)
     }
 
     Object.keys(txtVals).map((key, index) => {
@@ -118,9 +148,9 @@ const writeQuoteDoc = async (req, res, next) => {
         {'text': homePortText, 'multi': false, 'length': 76},
         {'text': pickUpText, 'multi': false, 'length': 148},
         {'text': sailTypeTitle, 'multi': false, 'length': 105},
-        {'text': sailTypeText, 'multi': false, 'length': 0},
+        {'text': sailTypeText, 'multi': true, 'length': 0, 'indent': 0},
         {'text': notesTitle, 'multi': false, 'length': 115},
-        {'text': notesText, 'multi': false, 'length': 0}
+        {'text': notesText, 'multi': true, 'length': 0, 'indent': 0}
     ];
 
     // Create the Banner
