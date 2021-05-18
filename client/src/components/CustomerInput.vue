@@ -46,7 +46,6 @@
                   </option>
                   <option value='other'>Other</option>
                 </select>
-                <!-- input type="text" size="20" name="boat_home" v-model="custFields.boat_home" / -->
               </label>
               <label v-if="needOtherPort">Specify Port
                 <input type="text" size="20" v-model="otherPortValue" />
