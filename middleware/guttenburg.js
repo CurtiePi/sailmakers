@@ -249,7 +249,7 @@ const writeQuoteDoc = async (req, res, next) => {
 
 removeQuoteDoc = (req, res, next) => {
 
-    var pdf_list = req.pdf_list;
+    var pdf_list = (req.pdf_list) ? req.pdf_list : req.body.pdf_list;
 
     const removeFtn = function removeFile(fileList, callback) {
         var size = fileList.length;

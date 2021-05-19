@@ -37,3 +37,5 @@ apiQuoteRouter.post('/price', upload.single('file'),  lycanthrope.modifyQuote, (
     var totalPrice = req.totalprice;
     res.status(200).json({message: 'File has been uploaded.', quote_price: totalPrice});
 });
+apiQuoteRouter.post('/removePdf', printpress.removeQuoteDoc, routeController.updateQuote);
+

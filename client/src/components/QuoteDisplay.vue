@@ -80,11 +80,18 @@
               </router-link>
             </td>
             <td style="width: 5%;">
-              <button @click='emailDocument(doc)'>Email</button>
+              <a @click='emailDocument(doc)'>
+                <ion-icon name="mail"></ion-icon>
+              </a>
             </td>
             <td style="width: 5%;">
               <a @click="getFile(doc)">
                 <ion-icon name="download"></ion-icon>
+              </a>
+            </td>
+            <td style="width: 5%;">
+              <a @click='deleteDocument(doc)'>
+                <ion-icon name="trash"></ion-icon>
               </a>
             </td>
           </tr>
@@ -93,15 +100,16 @@
       <hr></hr>
       <span class="error" v-if="errorMsg">{{ errorMsg }}</span>
       <p>
-        <button @click="timeToEdit()">Edit</button>
-        <button v-if="!haveDocs" @click="printQuote()">Create PDF</button>
-        <button 
+        <button class="edit_btn" @click="timeToEdit()">Edit</button>
+        <button class="pdf_btn" v-if="!haveDocs" @click="printQuote()">Create PDF</button>
+        <button
+          class="upload_btn" 
           @click="uploadFile">Upload File</button>
           <input
             type="file"
             ref="file"
             @change="onSelect" />
-        <button @click="deleteQuote()">Delete</button>
+        <button class="delete_btn" @click="deleteQuote()">Delete</button>
         <button @click="goBack()">Back</button>
       </p>
     </div>     
@@ -200,6 +208,31 @@ export default {
         this.$router.replace({ name: 'CreateMessage', params: { 'attachment': filename, 'targets': this.salesRecipients } })
       } else {
         this.$router.replace({ name: 'CreateMessage', params: { 'attachment': filename, 'targets': [this.quote.customer.email] } })
+      }
+    },
+    async deleteDocument (filename) {
+      var newDocPath = this.quote.doc_path.filter((value, index, arr) => {
+        return value !== filename
+      })
+
+      var payload = {
+        'pdf_list': [filename],
+        'criteria': {
+          '_id': this.quote._id
+        },
+        'update': {
+          'doc_path': newDocPath
+        }
+      }
+
+      try {
+        var response = await AuthenticationService.deleteQuoteDocument(payload)
+        var result = response
+        if (result.status === 200) {
+          this.quote = result.data
+        }
+      } catch (err) {
+        console.log(err)
       }
     },
     onSelect () {
@@ -345,6 +378,24 @@ span {
 
 button {
   margin: 5px 5px;
+  border-radius: 25px;
+  font-weight: bold;
+}
+
+.edit_btn {
+  background: #ffff00;
+}
+
+.pdf_btn {
+  background: #36b0ea;
+}
+
+.upload_btn {
+  background: #b936ea;
+}
+
+.delete_btn {
+  background: #ff0000;
 }
 
 button:hover, a:hover {

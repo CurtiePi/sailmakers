@@ -34,6 +34,9 @@ export default {
   deleteQuote (payload) {
     return Api().insecure.post('/api/quote/delete', payload)
   },
+  deleteQuoteDocument (payload) {
+    return Api().insecure.post('/api/quote/removePdf', payload)
+  },
   salespersonByName (nameParam) {
     let url = `/api/staff/name/${nameParam}`
     console.log(url)

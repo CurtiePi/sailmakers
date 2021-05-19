@@ -34,10 +34,10 @@
       </div>
       <hr></hr>
       <p>
-        <button @click="timeToEdit()">Edit</button>
-        <button @click="createQuote()">Create Request</button>
-        <button @click="seeQuotes()">Requests</button>
-        <button @click="deleteCustomer()">Delete</button>
+        <button class="edit_btn" @click="timeToEdit()">Edit</button>
+        <button class="create_btn" @click="createQuote()">Create Request</button>
+        <button class="request_btn" @click="seeQuotes()">Requests</button>
+        <button class="delete_btn" @click="deleteCustomer()">Delete</button>
         <button @click="goBack()">Back</button>
       </p>
     </div>     
@@ -224,7 +224,26 @@ span {
 
 button {
   margin: 5px 5px;
+  border-radius: 25px;
+  font-weight: bold;
 }
+
+.edit_btn {
+  background: #ffff00;
+}
+
+.create_btn {
+  background: #36b0ea;
+}
+
+.request_btn {
+  background: #b936ea;
+}
+
+.delete_btn {
+  background: #ff0000;
+}
+
 
 button:hover, a:hover {
   opacity: 0.7;
