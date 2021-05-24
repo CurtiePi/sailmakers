@@ -219,7 +219,7 @@ export default {
           data[key] = this.otherClubValue.trim()
         } else if (key === 'boat_home' && this.needOtherPort) {
           data[key] = this.otherPortValue.trim()
-        } else {
+        } else if (value) {
           data[key] = (value.constructor === String) ? value.trim() : value
         }
       }
