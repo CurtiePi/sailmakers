@@ -122,13 +122,13 @@ export default {
       for (var key in this.custFields) {
         if (key === 'club') {
           if (this.needOtherClub && this.otherClubValue !== this.origCustFields[key]) {
-            changeLog[key] = this.otherClubValue.trim()
+            changeLog[key] = (this.otherClubValue) ? this.otherClubValue.trim() : 'Unspecified'
           } else if (!this.needOtherClub && this.custFields[key] !== this.origCustFields[key]) {
             changeLog[key] = this.custFields[key].trim()
           }
         } else if (key === 'boat_home') {
           if (this.needOtherPort && this.otherPortValue !== this.origCustFields[key]) {
-            changeLog[key] = this.otherPortValue.trim()
+            changeLog[key] = (this.otherPortValue) ? this.otherPortValue.trim() : 'Unspecified'
           } else if (!this.needOtherPort && this.custFields[key] !== this.origCustFields[key]) {
             changeLog[key] = this.custFields[key].trim()
           }
@@ -216,9 +216,9 @@ export default {
       for (var key in this.custFields) {
         var value = this.custFields[key]
         if (key === 'club' && this.needOtherClub) {
-          data[key] = this.otherClubValue.trim()
+          data[key] = (this.otherClubValue) ? this.otherClubValue.trim() : 'Unspecified'
         } else if (key === 'boat_home' && this.needOtherPort) {
-          data[key] = this.otherPortValue.trim()
+          data[key] = (this.otherPortValue) ? this.otherPortValue.trim() : 'Unspecified'
         } else if (value) {
           data[key] = (value.constructor === String) ? value.trim() : value
         }
