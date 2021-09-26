@@ -10,6 +10,7 @@ const cors              = require('cors');
 const bodyParser        = require('body-parser');
 const cookieParser      = require('cookie-parser');
 const mongoose          = require('mongoose');
+// const amqpConnection    = require('amqplib');
 const config            = require('./config/config');
 const passport          = require('passport');
 global.Blob             = function() {};
@@ -54,7 +55,7 @@ amqpConnection.connect('amqp://localhost')
 console.log(`Database: ${conn_str}`)
 
 var smapp = express();
-smapp.use(cors({credentials: true, origin: 'http://192.168.1.2:8080'}));
+smapp.use(cors({credentials: true, origin: 'http://192.168.1.5:8080'}));
 smapp.use(cookieParser());
 
 smapp.use(bodyParser.json());
