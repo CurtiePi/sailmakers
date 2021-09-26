@@ -9,6 +9,11 @@
      </label>
      <span v-if="message.file_attachment">Attachment: {{ message.file_attachment }} </span>
      <br />
+     <input type="file" id="myFileInput" @change="addAttachment()" />
+     <button type="button" class="attachBtn"
+       @click="getAttachment()">
+       Attach File
+     </button>
      <button type="button" class="sendBtn"
        @click="sendMessage()">
        Send Mail
@@ -77,8 +82,6 @@ export default {
           payload['attachment'] = this.message.file_attachment
         }
 
-        console.log(payload)
-
         let response = await AuthenticationService.sendEmail(payload)
         if (response.status === 200) {
           this.$router.replace({ name: 'Customers' })
@@ -92,6 +95,26 @@ export default {
         this.errorMsg = 'You must have a subject and a message to send to proceed!'
       } else {
         this.$router.push({ name: 'SelectCustomers', params: { 'payload': this.message } })
+      }
+    },
+    getAttachment: function () {
+      document.getElementById('myFileInput').click()
+    },
+    addAttachment: async function () {
+      var attachEl = document.getElementById('myFileInput')
+      var filename = attachEl.value.split(/(\\|\/)/g).pop()
+
+      var uploadedFile = attachEl.files[0]
+      let formData = new FormData()
+      formData.append('attachment', uploadedFile)
+
+      try {
+        var response = await AuthenticationService.addAttachment(formData)
+        if (response.status === 200) {
+          this.message.file_attachment = filename
+        }
+      } catch (err) {
+        this.errorMsg = 'Error adding attachment!'
       }
     },
     cancelEmail: function () {
@@ -128,11 +151,21 @@ export default {
   font-size: 22px;
 }
 
+.attachBtn {
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
 .cancelBtn {
   margin-left:25px;
 }
 
 .sendBtn {
   margin-right: 5px;
+  margin-left: 5px;
+}
+
+#myFileInput {
+  display: none;
 }
 </style>
