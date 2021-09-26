@@ -19,7 +19,7 @@ const transporter = nodemail.createTransport(smtpTransport({
 
 const deliverQuoteEmail = (req, res, next) => {
     var data = req.body
-    var filepath = './public/files/pdf/';
+    var filepath = req.attachment_path;   // './public/files/pdf/';
     var file_attachment = data.attachment;
 
     var recipients = data.recipients.join(', ');
@@ -72,7 +72,7 @@ const deliverEmail = (req, res, next) => {
     }
 
     if (data.attachment) {
-        var filepath = `./public/files/pdf/${data.attachment}`;
+        var filepath = `${req.attachment_path}/${data.attachment}`;
         mailOptions['attachments'].push({path: filepath});
     }
 
