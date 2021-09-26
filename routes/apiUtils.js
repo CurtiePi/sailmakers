@@ -1,5 +1,4 @@
 const express               = require('express');
-const mailman               = require('../middleware/mailman.js');
 const uploadFilter          = require('../middleware/uploadfilter.js');
 const routeController       = require('../controllers/routingController');
 const multer                = require('multer');
@@ -22,6 +21,10 @@ const upload = multer({
     fileFilter
 });
 
+const attachment = multer({
+    dest: './public/files/attachment'
+});
+
 module.exports  = apiUtilsRouter;
 
 /*
@@ -29,6 +32,11 @@ module.exports  = apiUtilsRouter;
  */
 
 apiUtilsRouter.post('/upload', upload.single('file'), uploadFilter.checkUpload, uploadFilter.renameUpload, routeController.uploadFile);
+
+apiUtilsRouter.post('/attach', attachment.single('attachment'), uploadFilter.renameUpload,
+  (req, res, next) => {
+      res.status(200).json({ 'attachment': req.file.originalName });
+});
 
 apiUtilsRouter.get('/download/:name', (req, res, next) => {
     var filepath = `./public/files/pdf/${req.params.name}`;

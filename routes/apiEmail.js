@@ -1,5 +1,6 @@
 const express               = require('express');
 const mailman               = require('../middleware/mailman.js');
+const uploadFilter          = require('../middleware/uploadfilter.js');
 const routeController       = require('../controllers/routingController');
 const apiEmailRouter        = express.Router();
 
@@ -11,7 +12,7 @@ module.exports  = apiEmailRouter;
  */
 
 
-apiEmailRouter.post('/', mailman.deliverEmail, (req, res, next) => {
+apiEmailRouter.post('/', uploadFilter.findPath, mailman.deliverEmail, (req, res, next) => {
   res.status(200).json({'message': req.message});
 });
 
