@@ -33,7 +33,13 @@ const deliverQuoteEmail = (req, res, next) => {
             filename: 'sailmakers_logo.png',
             path: './public/images/sailmakers_logo.jpg',
             cid: 'dave@uk-sailmakers-ne.com'
-        }, {path: file_attachment}]
+        },
+        {
+            filename: 'signature.png',
+            path: './public/images/signature.jpg',
+            cid: 'dave-signature'
+        },
+        {path: file_attachment}]
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
@@ -62,7 +68,13 @@ const deliverEmail = (req, res, next) => {
             filename: 'sailmakers_logo.jpg',
             path: './public/images/sailmakers_logo.jpg',
             cid: 'dave@uk-sailmakers-ne.com'
-        }]
+        },
+        {
+            filename: 'signature.png',
+            path: './public/images/signature.jpg',
+            cid: 'dave-signature'
+        },
+        ]
     };
 
     if (data.isBulk) {
