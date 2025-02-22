@@ -321,7 +321,7 @@ export default {
     },
     hasValue (value) {
       return value != null &&
-        value !== undefined &&
+        value !== 'undefined' &&
         value !== ''
     },
     prepareInputs () {
