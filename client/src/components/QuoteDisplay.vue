@@ -15,7 +15,7 @@
       <div class="flex-grid-halfs">
         <span class="col">
           Email:
-          <router-link :to="{ name: 'CreateMessage', params: {'targets': [customer.email], 'cbdata': quote, 'caller': ['QuoteDisplay', callerName]} }">
+	  <router-link :to="{ name: 'CreateMessage', params: {'targets': [customer.email], 'cbdata': quote, 'caller': ['QuoteDisplay', callerName]} }">
             {{ customer.email }}
           </router-link>
         </span>
@@ -80,14 +80,16 @@
               </router-link>
             </td>
             <td style="width: 5%;">
-              <a @click='emailDocument(doc)'>
-                <ion-icon name="mail"></ion-icon>
-              </a>
+              <button @click='emailDocument(doc)'>Email</button>
+              <!-- a @click='emailDocument(doc)'>
+                <ion-icon name="heart"></ion-icon>
+              </a -->
             </td>
             <td style="width: 5%;">
-              <a @click="getFile(doc)">
-                <ion-icon name="download"></ion-icon>
-              </a>
+              <button @click='getFile(doc)'>Download</button>
+              <!-- a @click="getFile(doc)">
+                <ion-icon name="trash"></ion-icon>
+              </a -->
             </td>
             <td style="width: 5%;">
               <a @click='deleteDocument(doc)'>

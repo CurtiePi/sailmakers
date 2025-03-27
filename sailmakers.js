@@ -55,7 +55,8 @@ amqpConnection.connect('amqp://localhost')
 console.log(`Database: ${conn_str}`)
 
 var smapp = express();
-smapp.use(cors({credentials: true, origin: 'http://192.168.1.5:8080'}));
+//smapp.use(cors({credentials: true, origin: 'http://192.168.1.6:8080'}));
+smapp.use(cors({credentials: true, origin: 'http://192.168.12.110:8080'}));
 smapp.use(cookieParser());
 
 smapp.use(bodyParser.json());
