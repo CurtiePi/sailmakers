@@ -92,9 +92,10 @@
               </a -->
             </td>
             <td style="width: 5%;">
-              <a @click='deleteDocument(doc)'>
+              <button @click='deleteDocument(doc)'>Delete</button>
+              <!-- a @click='deleteDocument(doc)'>
                 <ion-icon name="trash"></ion-icon>
-              </a>
+              </a -->
             </td>
           </tr>
         </div> 
